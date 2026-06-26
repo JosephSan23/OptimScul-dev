@@ -1,0 +1,57 @@
+# ─── SISTEMA OPERATIVO ────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+*.lnk
+
+# ─── IDEs Y EDITORES ──────────────────────────────────────────────────────────
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.iml
+*.iws
+*.ipr
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ─── BACKEND (Spring Boot / Java / Maven) ─────────────────────────────────────
+backend/target/
+backend/.mvn/wrapper/maven-wrapper.jar
+backend/*.jar
+backend/*.war
+backend/*.ear
+backend/hs_err_pid*
+backend/.env
+backend/logs/
+
+# ─── FRONTEND (Angular / Node) ────────────────────────────────────────────────
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/.env
+frontend/coverage/
+
+# ─── DOCKER ───────────────────────────────────────────────────────────────────
+infra/.env
+infra/postgres_data/
+
+# ─── VARIABLES DE ENTORNO (nunca subir credenciales) ─────────────────────────
+.env
+.env.local
+.env.dev
+.env.prod
+*.env
+
+# ─── LOGS ─────────────────────────────────────────────────────────────────────
+*.log
+logs/
+
+# ─── ARCHIVOS TEMPORALES ──────────────────────────────────────────────────────
+*.tmp
+*.temp
+*.bak
+*.swp
