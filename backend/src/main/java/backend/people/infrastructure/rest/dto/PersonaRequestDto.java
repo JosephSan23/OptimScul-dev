@@ -1,0 +1,93 @@
+package backend.people.infrastructure.rest.dto;
+
+import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
+import backend.people.domain.model.Sexo;
+import backend.people.domain.model.TipoDocumentoPersona;
+
+public class PersonaRequestDto {
+
+    @NotNull
+    private TipoDocumentoPersona tipoDocumento;
+
+    @NotNull
+    private String numeroDocumento;
+
+    @NotNull
+    private String primerNombre;
+
+    private String segundoNombre;
+
+    @NotNull
+    private String primerApellido;
+
+    private String segundoApellido;
+
+    private LocalDate fechaNacimiento;
+
+    private Sexo sexo;
+
+    private String nacionalidad;
+
+    private String telefono;
+
+    private String telefonoAlternativo;
+
+    private String correo;
+
+    private String direccion;
+
+    private String barrio;
+
+    private String ciudad;
+
+    private String departamento;
+
+    @NotNull
+    private String pais;
+
+    private String fotoUrl;
+
+    private String observaciones;
+
+    public PersonaRequestDto() {}
+
+    public TipoDocumentoPersona getTipoDocumento() { return tipoDocumento; }
+    public void setTipoDocumento(TipoDocumentoPersona tipoDocumento) { this.tipoDocumento = tipoDocumento; }
+    public String getNumeroDocumento() { return numeroDocumento; }
+    public void setNumeroDocumento(String numeroDocumento) { this.numeroDocumento = numeroDocumento; }
+    public String getPrimerNombre() { return primerNombre; }
+    public void setPrimerNombre(String primerNombre) { this.primerNombre = primerNombre; }
+    public String getSegundoNombre() { return segundoNombre; }
+    public void setSegundoNombre(String segundoNombre) { this.segundoNombre = segundoNombre; }
+    public String getPrimerApellido() { return primerApellido; }
+    public void setPrimerApellido(String primerApellido) { this.primerApellido = primerApellido; }
+    public String getSegundoApellido() { return segundoApellido; }
+    public void setSegundoApellido(String segundoApellido) { this.segundoApellido = segundoApellido; }
+    public LocalDate getFechaNacimiento() { return fechaNacimiento; }
+    public void setFechaNacimiento(LocalDate fechaNacimiento) { this.fechaNacimiento = fechaNacimiento; }
+    public Sexo getSexo() { return sexo; }
+    public void setSexo(Sexo sexo) { this.sexo = sexo; }
+    public String getNacionalidad() { return nacionalidad; }
+    public void setNacionalidad(String nacionalidad) { this.nacionalidad = nacionalidad; }
+    public String getTelefono() { return telefono; }
+    public void setTelefono(String telefono) { this.telefono = telefono; }
+    public String getTelefonoAlternativo() { return telefonoAlternativo; }
+    public void setTelefonoAlternativo(String telefonoAlternativo) { this.telefonoAlternativo = telefonoAlternativo; }
+    public String getCorreo() { return correo; }
+    public void setCorreo(String correo) { this.correo = correo; }
+    public String getDireccion() { return direccion; }
+    public void setDireccion(String direccion) { this.direccion = direccion; }
+    public String getBarrio() { return barrio; }
+    public void setBarrio(String barrio) { this.barrio = barrio; }
+    public String getCiudad() { return ciudad; }
+    public void setCiudad(String ciudad) { this.ciudad = ciudad; }
+    public String getDepartamento() { return departamento; }
+    public void setDepartamento(String departamento) { this.departamento = departamento; }
+    public String getPais() { return pais; }
+    public void setPais(String pais) { this.pais = pais; }
+    public String getFotoUrl() { return fotoUrl; }
+    public void setFotoUrl(String fotoUrl) { this.fotoUrl = fotoUrl; }
+    public String getObservaciones() { return observaciones; }
+    public void setObservaciones(String observaciones) { this.observaciones = observaciones; }
+}
