@@ -1,1 +1,23 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&display=swap');
+
+:root {
+  --azul-oscuro: #0a2540;
+  --naranja-optim: #f36f21;
+  --blanco: #ffffff;
+  --azul-head: #078ac3;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
