@@ -1,0 +1,34 @@
+<header class="navbar" [class.header-active]="isScrolled">
+  <div class="inline">
+    <h2 class="logo-title">
+      <img src="assets/img/logo.png" class="logo-icon" alt="OptimScul logo">
+      <span class="text-left">Optim<span class="text-right">Scul</span></span>
+    </h2>
+  </div>
+
+  <div class="nav-actions">
+    <nav>
+      <ul>
+        <li><a routerLink="/" fragment="inicio" class="nav-link">Inicio</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropbtn nav-link">
+            Plataforma <i class="fas fa-chevron-down"></i>
+          </a>
+          <ul class="dropdown-content">
+            <li><a routerLink="/" fragment="problem">El Desafío</a></li>
+            <li><a routerLink="/" fragment="solutions">Soluciones</a></li>
+            <li><a routerLink="/" fragment="features">Características</a></li>
+            <li><a routerLink="/" fragment="capabilities">Infraestructura</a></li>
+          </ul>
+        </li>
+        <li><a routerLink="/" fragment="contacto" class="nav-link">Contacto</a></li>
+        <li><a routerLink="/primeros-pasos" class="nav-link">Primeros Pasos</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="auth-buttons">
+    <a routerLink="/login" class="btn-login">Iniciar sesión</a>
+    <a routerLink="/primeros-pasos" class="btn-register">Registrarse</a>
+  </div>
+</header>
