@@ -1,1 +1,91 @@
-<p>primeros-pasos works!</p>
+<!-- ══════════════════════════════════════════════
+     HERO OSCURO
+     ══════════════════════════════════════════════ -->
+<app-navbar [estatico]="true"></app-navbar>
+<section class="steps-hero-dark">
+  <div class="container-steps">
+    <span class="badge-consultive">Proceso Guiado</span>
+    <h1>¿Cómo unirse a la red de OptimScul?</h1>
+    <p>
+      Ya seas una institución buscando modernizar sus procesos o un padre
+      buscando el mejor futuro para su hijo, el camino es simple y seguro.
+    </p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     PASOS PARA INSTITUCIONES
+     ══════════════════════════════════════════════ -->
+<section class="section-dark-bg">
+  <div class="container-steps">
+    <h2 class="section-title">Para Instituciones Educativas</h2>
+    <div class="steps-path-grid">
+
+      <!-- *ngFor recorre el array pasosInstituciones del .ts       -->
+      <!-- [class.card-center] agrega esa clase cuando centrado=true -->
+      <div class="path-card"
+           *ngFor="let paso of pasosInstituciones"
+           [class.card-center]="paso.centrado">
+        <div class="path-step">{{ paso.numero }}</div>
+        <div class="path-icon">
+          <i [class]="paso.icono"></i>
+        </div>
+        <h3>{{ paso.titulo }}</h3>
+        <p>{{ paso.descripcion }}</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     PASOS PARA PADRES Y ACUDIENTES
+     alt-bg cambia el color de fondo para diferenciar
+     visualmente las dos secciones
+     ══════════════════════════════════════════════ -->
+<section class="section-dark-bg alt-bg">
+  <div class="container-steps">
+    <h2 class="section-title">Para Padres y Acudientes</h2>
+    <div class="steps-path-grid">
+
+      <div class="path-card"
+           *ngFor="let paso of pasosPadres"
+           [class.card-center]="paso.centrado">
+        <div class="path-step">{{ paso.numero }}</div>
+        <div class="path-icon">
+          <i [class]="paso.icono"></i>
+        </div>
+        <h3>{{ paso.titulo }}</h3>
+        <p>{{ paso.descripcion }}</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     CTA FINAL — llamado a la acción
+     Lleva al login porque para hacer una solicitud
+     el usuario debe estar autenticado
+     ══════════════════════════════════════════════ -->
+<section class="final-cta-dark">
+  <div class="cta-overlay-graphics"></div>
+  <div class="cta-content">
+    <span class="cta-tag">Último paso</span>
+    <h2>¿Listo para transformar tu institución?</h2>
+    <p>
+      Para garantizar la seguridad de la información, todas las
+      solicitudes deben realizarse desde una cuenta.
+    </p>
+    <div class="cta-actions">
+      <a routerLink="/login" class="btn-primary-orange">
+        Comenzar Solicitud <i class="fas fa-arrow-right"></i>
+      </a>
+      <p class="cta-note">
+        ¿Ya tienes cuenta?
+        <a routerLink="/login">Inicia sesión aquí</a>
+      </p>
+    </div>
+  </div>
+</section>
+<app-footer></app-footer>
