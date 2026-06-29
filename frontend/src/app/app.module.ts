@@ -14,7 +14,8 @@ import { PrimerosPasosComponent } from './features/primeros-pasos/primeros-pasos
     NavbarComponent,
     FooterComponent,
     LandingComponent,
-    PrimerosPasosComponent
+    PrimerosPasosComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
