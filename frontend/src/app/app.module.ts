@@ -7,6 +7,8 @@ import { NavbarComponent } from './core/components/navbar/navbar.component';
 import { FooterComponent } from './core/components/footer/footer.component';
 import { LandingComponent } from './features/landing/landing.component';
 import { PrimerosPasosComponent } from './features/primeros-pasos/primeros-pasos.component';
+import { ContactoComponent } from './features/contacto/contacto.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -15,11 +17,14 @@ import { PrimerosPasosComponent } from './features/primeros-pasos/primeros-pasos
     FooterComponent,
     LandingComponent,
     PrimerosPasosComponent,
-    NavbarComponent
+    NavbarComponent,
+    ContactoComponent,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule
+
   ],
   providers: [],
   bootstrap: [AppComponent]

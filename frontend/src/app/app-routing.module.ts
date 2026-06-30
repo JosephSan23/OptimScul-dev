@@ -2,10 +2,12 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LandingComponent } from './features/landing/landing.component';
 import { PrimerosPasosComponent } from './features/primeros-pasos/primeros-pasos.component';
+import { ContactoComponent } from './features/contacto/contacto.component';
 
 const routes: Routes = [
   { path: '', component: LandingComponent },
   { path: 'primeros-pasos', component: PrimerosPasosComponent },
+  { path: 'contacto', component: ContactoComponent },
   { path: '**', redirectTo: '' }
 ];
 
