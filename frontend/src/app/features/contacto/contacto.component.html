@@ -1,0 +1,472 @@
+<app-navbar [estatico]="true"></app-navbar>
+
+<!-- ══════════════════════════════════════════════════
+     HERO PEQUEÑO
+     ══════════════════════════════════════════════════ -->
+<!-- <section class="contacto-hero">
+  <div class="contacto-hero-inner">
+    <span class="contacto-badge">Contáctanos</span>
+    <h1>Conecta con <span>OptimScul</span></h1>
+    <p>
+      Ya seas una institución buscando modernizar sus procesos o un padre
+      buscando el mejor futuro para tu hijo — el primer paso es simple.
+    </p>
+  </div>
+</section> -->
+
+<!-- ══════════════════════════════════════════════════
+     CUERPO PRINCIPAL
+     ══════════════════════════════════════════════════ -->
+<section class="contacto-body">
+  <div class="contacto-container">
+
+    <!-- ── SELECTOR DE TIPO ──────────────────────────
+         Se muestra cuando tipoUsuario es null
+         *ngIf oculta este bloque cuando ya eligió
+         ─────────────────────────────────────────── -->
+    <div class="tipo-selector" *ngIf="tipoUsuario === null">
+
+      <div class="tipo-intro">
+        <h2>¿Cómo podemos ayudarte?</h2>
+        <p>Selecciona el perfil que mejor te describe para
+          mostrarte el formulario adecuado.</p>
+      </div>
+
+      <div class="tipo-cards">
+        <!-- (click) llama al método elegirTipo() del .ts -->
+        <div class="tipo-card" (click)="elegirTipo('institucion')">
+          <div class="tipo-card-icon">
+            <i class="fas fa-school"></i>
+          </div>
+          <h3>Soy una Institución</h3>
+          <p>Quiero vincular mi colegio a la plataforma OptimScul
+            y modernizar mi gestión educativa.</p>
+          <span class="tipo-card-pasos">2 pasos · ~3 minutos</span>
+          <div class="tipo-card-arrow">
+            <i class="fas fa-arrow-right"></i>
+          </div>
+        </div>
+
+        <div class="tipo-card" (click)="elegirTipo('padre')">
+          <div class="tipo-card-icon padre">
+            <i class="fas fa-user"></i>
+          </div>
+          <h3>Soy Padre / Acudiente</h3>
+          <p>Quiero postular a mi hijo a un colegio vinculado
+            a OptimScul.</p>
+          <span class="tipo-card-pasos">3 pasos · ~5 minutos</span>
+          <div class="tipo-card-arrow">
+            <i class="fas fa-arrow-right"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STEPPER ────────────────────────────────────
+         Se muestra cuando tipoUsuario ya fue elegido
+         ─────────────────────────────────────────── -->
+    <div class="stepper-wrapper" *ngIf="tipoUsuario !== null">
+
+      <!-- Cabecera del stepper — botón volver + indicador de pasos -->
+      <div class="stepper-header">
+        <button class="btn-volver" (click)="volverAlSelector()">
+          <i class="fas fa-arrow-left"></i> Cambiar perfil
+        </button>
+
+        <!-- Indicador visual de pasos -->
+        <div class="stepper-indicador">
+          <!-- ngFor genera un círculo por cada paso -->
+          <!-- El índice i+1 se compara con pasoActual para saber cuál está activo -->
+          <ng-container *ngFor="let paso of [].constructor(totalPasos); let i = index">
+            <div class="step-circulo"
+                 [class.activo]="pasoActual === i + 1"
+                 [class.completado]="pasoActual > i + 1">
+              <span *ngIf="pasoActual <= i + 1">{{ i + 1 }}</span>
+              <i *ngIf="pasoActual > i + 1" class="fas fa-check"></i>
+            </div>
+            <div class="step-linea"
+                 *ngIf="i + 1 < totalPasos"
+                 [class.completada]="pasoActual > i + 1">
+            </div>
+          </ng-container>
+        </div>
+
+        <span class="stepper-progreso">
+          Paso {{ pasoActual }} de {{ totalPasos }}
+        </span>
+      </div>
+
+      <!-- ── FORMULARIO INSTITUCIÓN ──────────────── -->
+      <div class="stepper-form" *ngIf="tipoUsuario === 'institucion'">
+
+        <!-- PASO 1 — Datos de la institución -->
+        <div *ngIf="pasoActual === 1">
+          <div class="paso-intro">
+            <h2>Datos de la institución</h2>
+            <p>Cuéntanos sobre tu colegio. Esta información
+              nos ayuda a preparar la mejor propuesta para ti.</p>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Nombre del colegio <span class="requerido">*</span></label>
+              <input type="text"
+                     placeholder="Ej: Colegio San José"
+                     [(ngModel)]="formInstitucion.nombreColegio">
+              <!-- [(ngModel)] es two-way binding:
+                   lee el valor del input Y actualiza la variable del .ts
+                   simultáneamente -->
+            </div>
+
+            <div class="form-group">
+              <label>NIT <span class="requerido">*</span></label>
+              <input type="text"
+                     placeholder="Ej: 900.123.456-7"
+                     [(ngModel)]="formInstitucion.nit">
+            </div>
+
+            <div class="form-group">
+              <label>Ciudad <span class="requerido">*</span></label>
+              <input type="text"
+                     placeholder="Ej: Bogotá"
+                     [(ngModel)]="formInstitucion.ciudad">
+            </div>
+
+            <div class="form-group">
+              <label>Teléfono <span class="requerido">*</span></label>
+              <input type="tel"
+                     placeholder="Ej: 300 123 4567"
+                     [(ngModel)]="formInstitucion.telefono">
+            </div>
+
+            <div class="form-group full-width">
+              <label>Dirección</label>
+              <input type="text"
+                     placeholder="Dirección del colegio (opcional)"
+                     [(ngModel)]="formInstitucion.direccion">
+            </div>
+          </div>
+        </div>
+
+        <!-- PASO 2 — Contacto y mensaje -->
+        <div *ngIf="pasoActual === 2">
+          <div class="paso-intro">
+            <h2>Datos de contacto</h2>
+            <p>¿Con quién nos comunicamos? Queremos hablar
+              directamente con la persona indicada.</p>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label>Nombre del rector o coordinador <span class="requerido">*</span></label>
+              <input type="text"
+                     placeholder="Nombre completo"
+                     [(ngModel)]="formInstitucion.nombreContacto">
+            </div>
+
+            <div class="form-group full-width">
+              <label>Correo institucional <span class="requerido">*</span></label>
+              <input type="email"
+                     placeholder="correo@colegio.edu.co"
+                     [(ngModel)]="formInstitucion.correo">
+            </div>
+
+            <div class="form-group full-width">
+              <label>Mensaje <span class="requerido">*</span></label>
+              <textarea rows="5"
+                        placeholder="Cuéntanos sobre tu institución, cuántos estudiantes tienen, qué necesitas..."
+                        [(ngModel)]="formInstitucion.mensaje"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── FORMULARIO PADRE / ACUDIENTE ───────── -->
+      <div class="stepper-form" *ngIf="tipoUsuario === 'padre'">
+
+        <!-- PASO 1 — Datos del acudiente -->
+        <div *ngIf="pasoActual === 1">
+          <div class="paso-intro">
+            <h2>Tus datos como acudiente</h2>
+            <p>Esta información nos permite identificarte y
+              mantenerte informado sobre el proceso de admisión.</p>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Tipo de documento <span class="requerido">*</span></label>
+              <select [(ngModel)]="formAcudiente.tipoDocumento">
+                <option value="">Seleccionar...</option>
+                <option value="CC">Cédula de Ciudadanía</option>
+                <option value="CE">Cédula de Extranjería</option>
+                <option value="PASAPORTE">Pasaporte</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Número de documento <span class="requerido">*</span></label>
+              <input type="text"
+                     placeholder="Número de documento"
+                     [(ngModel)]="formAcudiente.numeroDocumento">
+            </div>
+
+            <div class="form-group">
+              <label>Primer nombre <span class="requerido">*</span></label>
+              <input type="text"
+                     placeholder="Primer nombre"
+                     [(ngModel)]="formAcudiente.primerNombre">
+            </div>
+
+            <div class="form-group">
+              <label>Segundo nombre</label>
+              <input type="text"
+                     placeholder="Segundo nombre (opcional)"
+                     [(ngModel)]="formAcudiente.segundoNombre">
+            </div>
+
+            <div class="form-group">
+              <label>Primer apellido <span class="requerido">*</span></label>
+              <input type="text"
+                     placeholder="Primer apellido"
+                     [(ngModel)]="formAcudiente.primerApellido">
+            </div>
+
+            <div class="form-group">
+              <label>Segundo apellido</label>
+              <input type="text"
+                     placeholder="Segundo apellido (opcional)"
+                     [(ngModel)]="formAcudiente.segundoApellido">
+            </div>
+
+            <div class="form-group">
+              <label>Teléfono <span class="requerido">*</span></label>
+              <input type="tel"
+                     placeholder="Teléfono principal"
+                     [(ngModel)]="formAcudiente.telefono">
+            </div>
+
+            <div class="form-group">
+              <label>Teléfono alternativo</label>
+              <input type="tel"
+                     placeholder="Teléfono alternativo (opcional)"
+                     [(ngModel)]="formAcudiente.telefonoAlternativo">
+            </div>
+
+            <div class="form-group full-width">
+              <label>Correo electrónico <span class="requerido">*</span></label>
+              <input type="email"
+                     placeholder="tu@correo.com"
+                     [(ngModel)]="formAcudiente.correo">
+            </div>
+          </div>
+        </div>
+
+        <!-- PASO 2 — Datos del estudiante -->
+        <div *ngIf="pasoActual === 2">
+          <div class="paso-intro">
+            <h2>Datos del estudiante</h2>
+            <p>Información sobre tu hijo o acudido.
+              Estos datos se envían directamente al departamento
+              de admisiones del colegio.</p>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Tipo de documento <span class="requerido">*</span></label>
+              <select [(ngModel)]="formAcudiente.tipoDocumentoEstudiante">
+                <option value="">Seleccionar...</option>
+                <option value="RC">Registro Civil</option>
+                <option value="TI">Tarjeta de Identidad</option>
+                <option value="PASAPORTE">Pasaporte</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Número de documento <span class="requerido">*</span></label>
+              <input type="text"
+                     placeholder="Número de documento"
+                     [(ngModel)]="formAcudiente.numeroDocumentoEstudiante">
+            </div>
+
+            <div class="form-group">
+              <label>Primer nombre <span class="requerido">*</span></label>
+              <input type="text"
+                     placeholder="Primer nombre"
+                     [(ngModel)]="formAcudiente.primerNombreEstudiante">
+            </div>
+
+            <div class="form-group">
+              <label>Segundo nombre</label>
+              <input type="text"
+                     placeholder="Segundo nombre (opcional)"
+                     [(ngModel)]="formAcudiente.segundoNombreEstudiante">
+            </div>
+
+            <div class="form-group">
+              <label>Primer apellido <span class="requerido">*</span></label>
+              <input type="text"
+                     placeholder="Primer apellido"
+                     [(ngModel)]="formAcudiente.primerApellidoEstudiante">
+            </div>
+
+            <div class="form-group">
+              <label>Segundo apellido</label>
+              <input type="text"
+                     placeholder="Segundo apellido (opcional)"
+                     [(ngModel)]="formAcudiente.segundoApellidoEstudiante">
+            </div>
+
+            <div class="form-group">
+              <label>Fecha de nacimiento <span class="requerido">*</span></label>
+              <input type="date"
+                     [(ngModel)]="formAcudiente.fechaNacimiento">
+            </div>
+
+            <div class="form-group">
+              <label>Sexo <span class="requerido">*</span></label>
+              <select [(ngModel)]="formAcudiente.sexo">
+                <option value="">Seleccionar...</option>
+                <option value="MASCULINO">Masculino</option>
+                <option value="FEMENINO">Femenino</option>
+                <option value="OTRO">Otro</option>
+                <option value="NO_ESPECIFICA">Prefiero no decir</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Ciudad <span class="requerido">*</span></label>
+              <input type="text"
+                     placeholder="Ciudad de residencia"
+                     [(ngModel)]="formAcudiente.ciudad">
+            </div>
+
+            <div class="form-group">
+              <label>Departamento</label>
+              <input type="text"
+                     placeholder="Departamento"
+                     [(ngModel)]="formAcudiente.departamento">
+            </div>
+
+            <div class="form-group">
+              <label>Colegio actual</label>
+              <input type="text"
+                     placeholder="Colegio de procedencia (opcional)"
+                     [(ngModel)]="formAcudiente.colegioActual">
+            </div>
+
+            <div class="form-group">
+              <label>Grado al que aspira <span class="requerido">*</span></label>
+              <select [(ngModel)]="formAcudiente.gradoAspira">
+                <option value="">Seleccionar...</option>
+                <option value="PREESCOLAR">Preescolar</option>
+                <option value="1">Primero</option>
+                <option value="2">Segundo</option>
+                <option value="3">Tercero</option>
+                <option value="4">Cuarto</option>
+                <option value="5">Quinto</option>
+                <option value="6">Sexto</option>
+                <option value="7">Séptimo</option>
+                <option value="8">Octavo</option>
+                <option value="9">Noveno</option>
+                <option value="10">Décimo</option>
+                <option value="11">Once</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- PASO 3 — Postulación y documentos -->
+        <div *ngIf="pasoActual === 3">
+          <div class="paso-intro">
+            <h2>Postulación y documentos</h2>
+            <p>Último paso — indícanos a qué colegio quieres
+              aplicar y adjunta los documentos necesarios.</p>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label>Colegio de interés <span class="requerido">*</span></label>
+              <input type="text"
+                     placeholder="¿A qué colegio quieres aplicar?"
+                     [(ngModel)]="formAcudiente.colegioInteres">
+            </div>
+
+            <div class="form-group full-width">
+              <label>Mensaje <span class="requerido">*</span></label>
+              <textarea rows="4"
+                        placeholder="Cuéntanos sobre lo que buscas para tu hijo/a..."
+                        [(ngModel)]="formAcudiente.mensaje"></textarea>
+            </div>
+
+            <div class="form-group full-width">
+              <label>Documentos adjuntos</label>
+              <p class="campo-nota">
+                Puedes adjuntar: documento de identidad del estudiante,
+                certificado de notas y documento del acudiente.
+              </p>
+              <div class="file-upload-area"
+                   (click)="fileInput.click()">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Haz clic para seleccionar archivos</p>
+                <span>PDF, JPG, PNG — máx. 5MB por archivo</span>
+                <!-- input oculto — el área de arriba lo activa -->
+                <input #fileInput
+                       type="file"
+                       multiple
+                       accept=".pdf,.jpg,.jpeg,.png"
+                       (change)="onDocumentosCargados($event)"
+                       style="display: none">
+              </div>
+
+              <!-- Lista de archivos cargados -->
+              <div class="archivos-cargados"
+                   *ngIf="formAcudiente.documentos.length > 0">
+                <div class="archivo-item"
+                     *ngFor="let archivo of formAcudiente.documentos">
+                  <i class="fas fa-file"></i>
+                  <span>{{ archivo.name }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── NAVEGACIÓN DEL STEPPER ─────────────────
+           Botones anterior / siguiente / enviar
+           ─────────────────────────────────────── -->
+      <div class="stepper-nav">
+
+        <!-- Mensaje de error si el paso está incompleto -->
+        <!-- Se muestra solo cuando intentan avanzar con campos vacíos -->
+        <p class="error-msg" *ngIf="mostrarError">
+          <i class="fas fa-exclamation-circle"></i>
+          Por favor completa todos los campos obligatorios antes de continuar.
+        </p>
+
+        <div class="stepper-nav-btns">
+          <button class="btn-anterior"
+                  *ngIf="pasoActual > 1"
+                  (click)="anterior()">
+            <i class="fas fa-arrow-left"></i> Anterior
+          </button>
+
+          <button class="btn-siguiente"
+                  *ngIf="pasoActual < totalPasos"
+                  (click)="intentarSiguiente()">
+            Siguiente <i class="fas fa-arrow-right"></i>
+          </button>
+
+          <button class="btn-enviar"
+                  *ngIf="pasoActual === totalPasos"
+                  (click)="enviar()">
+            Enviar solicitud <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<app-footer></app-footer>
