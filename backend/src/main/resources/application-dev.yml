@@ -26,3 +26,7 @@ logging:
   level:
     com.optimscul: DEBUG
     org.flywaydb: INFO
+
+jwt:
+  secret: dev-secret-clave-local-no-importa-seguridad-aqui-1234
+  expiration-ms: 86400000
