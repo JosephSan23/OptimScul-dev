@@ -1,13 +1,17 @@
 package backend.security.infrastructure.persistence.entity;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import backend.security.domain.model.EstadoUsuario;
 import backend.security.domain.model.TipoContextoUsuario;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "usuario", schema = "optimscul")
 public class UsuarioEntity {
@@ -46,7 +50,7 @@ public class UsuarioEntity {
     private Boolean dobleFactorHabilitado;
 
     @Column(name = "intentos_fallidos")
-    private Integer intentosFallidos;
+    private Short intentosFallidos;
 
     @Column(name = "bloqueado_hasta")
     private LocalDateTime bloqueadoHasta;
@@ -62,39 +66,4 @@ public class UsuarioEntity {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    public UsuarioEntity() {}
-
-    public UUID getId() { return id; }
-    public void setId(UUID id) { this.id = id; }
-    public UUID getPersonaId() { return personaId; }
-    public void setPersonaId(UUID personaId) { this.personaId = personaId; }
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
-    public String getPasswordHash() { return passwordHash; }
-    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
-    public String getEmailLogin() { return emailLogin; }
-    public void setEmailLogin(String emailLogin) { this.emailLogin = emailLogin; }
-    public TipoContextoUsuario getTipoContexto() { return tipoContexto; }
-    public void setTipoContexto(TipoContextoUsuario tipoContexto) { this.tipoContexto = tipoContexto; }
-    public EstadoUsuario getEstado() { return estado; }
-    public void setEstado(EstadoUsuario estado) { this.estado = estado; }
-    public Boolean getRequiereCambioPassword() { return requiereCambioPassword; }
-    public void setRequiereCambioPassword(Boolean requiereCambioPassword) { this.requiereCambioPassword = requiereCambioPassword; }
-    public Boolean getEmailVerificado() { return emailVerificado; }
-    public void setEmailVerificado(Boolean emailVerificado) { this.emailVerificado = emailVerificado; }
-    public Boolean getDobleFactorHabilitado() { return dobleFactorHabilitado; }
-    public void setDobleFactorHabilitado(Boolean dobleFactorHabilitado) { this.dobleFactorHabilitado = dobleFactorHabilitado; }
-    public Integer getIntentosFallidos() { return intentosFallidos; }
-    public void setIntentosFallidos(Integer intentosFallidos) { this.intentosFallidos = intentosFallidos; }
-    public LocalDateTime getBloqueadoHasta() { return bloqueadoHasta; }
-    public void setBloqueadoHasta(LocalDateTime bloqueadoHasta) { this.bloqueadoHasta = bloqueadoHasta; }
-    public LocalDateTime getUltimoLogin() { return ultimoLogin; }
-    public void setUltimoLogin(LocalDateTime ultimoLogin) { this.ultimoLogin = ultimoLogin; }
-    public LocalDateTime getUltimoCambioPassword() { return ultimoCambioPassword; }
-    public void setUltimoCambioPassword(LocalDateTime ultimoCambioPassword) { this.ultimoCambioPassword = ultimoCambioPassword; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 }
