@@ -1,0 +1,82 @@
+<div class="login-container">
+  <div class="brand-panel">
+    <div class="brand-content">
+      <span class="welcome-tag">Bienvenido</span>
+      <h1>Transformando el futuro de la educación.</h1>
+      <p>Únete a las instituciones que ya están optimizando sus procesos con tecnología de vanguardia.</p>
+      <div class="brand-decoration"></div>
+    </div>
+  </div>
+
+  <div class="form-panel">
+    <form class="login-form" #loginForm="ngForm" (ngSubmit)="login()" novalidate>
+
+      <div class="header-login">
+        <a routerLink="/" class="btn-back">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+          </svg>
+          <span>Volver</span>
+        </a>
+        <h2 class="logo-title">
+          <img src="assets/img/logo.png" alt="Logo" class="logo-icon">
+          <span class="text-left">Optim<span class="text-right">Scul</span></span>
+        </h2>
+      </div>
+
+      <div class="message-login error" *ngIf="errorMsg">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <span>{{ errorMsg }}</span>
+      </div>
+
+      <h2>Ingresa</h2>
+      <p class="welcome-text">Introduce tus credenciales para acceder.</p>
+
+      <div class="input-group">
+        <label for="user">Correo o Usuario</label>
+        <input
+          type="text"
+          id="user"
+          name="usernameOrEmail"
+          placeholder="ejemplo@dominio.com"
+          [(ngModel)]="credentials.usernameOrEmail"
+          required
+          autocomplete="username">
+      </div>
+
+      <div class="input-group">
+        <div class="password-header">
+          <label for="pass">Contraseña</label>
+          <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
+        </div>
+        <div class="password-wrapper">
+          <input
+            [type]="mostrarPass ? 'text' : 'password'"
+            id="pass"
+            name="password"
+            placeholder="********"
+            [(ngModel)]="credentials.password"
+            required
+            autocomplete="current-password">
+          <button
+            type="button"
+            class="toggle-pass"
+            (click)="mostrarPass = !mostrarPass"
+            [attr.aria-label]="mostrarPass ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+            <i class="fa-solid" [ngClass]="mostrarPass ? 'fa-eye-slash' : 'fa-eye'"></i>
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-log" [disabled]="cargando">
+        <span *ngIf="!cargando">Iniciar Sesión</span>
+        <span *ngIf="cargando">Ingresando...</span>
+      </button>
+
+      <p class="visitor-text">¿No formas parte de una institución?
+        <a href="#">Contáctanos o postula a un estudiante aquí</a>
+      </p>
+
+    </form>
+  </div>
+</div>
