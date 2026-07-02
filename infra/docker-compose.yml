@@ -1,12 +1,24 @@
 services:
-
+  backend:
+    image: optimscul-backend
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION_MS: 86400000
+      DB_URL: jdbc:postgresql://postgres:5432/optimscul
+      DB_USERNAME: optimscul
+      DB_PASSWORD: ${DB_PASSWORD}
+    depends_on:
+      - postgres
+    networks:
+      - optimscul_net
   postgres:
     image: postgres:16-alpine
     container_name: optimscul_db
     restart: unless-stopped
     environment:
       POSTGRES_USER: optimscul
-      POSTGRES_PASSWORD: optimscul1234
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: optimscul
     ports:
       - "5433:5432"
@@ -22,7 +34,7 @@ services:
     restart: unless-stopped
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@optimscul.com
-      PGADMIN_DEFAULT_PASSWORD: admin1234
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD} 
     ports:
       - "5050:80"
     depends_on:
