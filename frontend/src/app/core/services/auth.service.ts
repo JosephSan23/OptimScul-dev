@@ -13,18 +13,18 @@ export interface LoginResponse {
   usuarioId: string;
   username: string;
   tipoContexto: string;
+  roles: string[];
 }
 
-// hace que el servicio este disponible en toda la aplicacion angular
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly API = 'http://localhost:8080/api/auth';
-  private readonly TOKEN_KEY = 'optimscul_token';
-  private readonly USER_KEY  = 'optimscul_user';
+
+  private readonly API        = 'http://localhost:8080/api/auth';
+  private readonly TOKEN_KEY  = 'optimscul_token';
+  private readonly USER_KEY   = 'optimscul_user';
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  // metodo login que hace una peticion HTTP POST al backend enviando el usuario y contraseña
   login(credentials: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.API}/login`, credentials).pipe(
       tap(response => {
@@ -32,20 +32,33 @@ export class AuthService {
         localStorage.setItem(this.USER_KEY, JSON.stringify({
           usuarioId:    response.usuarioId,
           username:     response.username,
-          tipoContexto: response.tipoContexto
+          tipoContexto: response.tipoContexto,
+          roles:        response.roles
         }));
+        this.redirigirSegunRol(response.tipoContexto, response.roles);
       })
     );
   }
 
-  // Borra el token y los datos del usuario del navegador y lo redirige al login
+  private redirigirSegunRol(tipoContexto: string, roles: string[]): void {
+    if (tipoContexto === 'PLATAFORMA') {
+      this.router.navigate(['/dashboard/admin']);
+      return;
+    }
+    // Usuario de institución — el rol específico decide el dashboard
+    if (roles.includes('ADMIN_INSTITUCION'))   this.router.navigate(['/dashboard/colegio']);
+    else if (roles.includes('DOCENTE'))   this.router.navigate(['/dashboard/profesor']);
+    else if (roles.includes('ESTUDIANTE')) this.router.navigate(['/dashboard/estudiante']);
+    else if (roles.includes('ACUDIENTE'))  this.router.navigate(['/dashboard/acudiente']);
+    else this.router.navigate(['/']);
+  }
+
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);
     this.router.navigate(['/login']);
   }
 
-  // compara la fecha de expiracion con la hora actual
   getToken(): string | null {
     return localStorage.getItem(this.TOKEN_KEY);
   }
@@ -54,7 +67,6 @@ export class AuthService {
     const token = this.getToken();
     if (!token) return false;
     try {
-      // Verificar expiración leyendo el payload del JWT
       const payload = JSON.parse(atob(token.split('.')[1]));
       return payload.exp * 1000 > Date.now();
     } catch {
@@ -62,7 +74,6 @@ export class AuthService {
     }
   }
 
-  // permite saber que usuario inicio sesion y asi mismo mostrarle informacion
   getUsuarioActual(): any {
     const user = localStorage.getItem(this.USER_KEY);
     return user ? JSON.parse(user) : null;
@@ -72,5 +83,11 @@ export class AuthService {
     return this.getUsuarioActual()?.tipoContexto ?? null;
   }
 
+  getRoles(): string[] {
+    return this.getUsuarioActual()?.roles ?? [];
+  }
 
+  tieneRol(rol: string): boolean {
+    return this.getRoles().includes(rol);
+  }
 }
