@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import backend.security.domain.model.EstadoUsuario;
 import backend.security.domain.model.TipoContextoUsuario;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Getter
 @Setter
@@ -33,11 +35,13 @@ public class UsuarioEntity {
     private String emailLogin;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "tipo_contexto")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "tipo_contexto", columnDefinition = "tipo_contexto_usuario_enum")
     private TipoContextoUsuario tipoContexto;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "estado")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "estado", columnDefinition = "estado_usuario_enum")
     private EstadoUsuario estado;
 
     @Column(name = "requiere_cambio_password")
