@@ -11,4 +11,5 @@ public interface UsuarioRepository {
     Optional<Usuario> findById(UUID id);
     List<Usuario> findAll();
     void deleteById(UUID id);
+    Optional<Usuario> findByUsernameOrEmail(String usernameOrEmail);
 }
