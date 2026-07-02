@@ -3,7 +3,6 @@ package backend.security.infrastructure.rest.dto;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import backend.security.domain.model.EstadoUsuario;
-import backend.security.domain.model.TipoContextoUsuario;
 
 public class UsuarioResponseDto {
 
