@@ -1,0 +1,7 @@
+<div>
+  <h1>Dashboard de prueba</h1>
+  <p *ngIf="usuario">Bienvenido, <strong>{{ usuario.username }}</strong></p>
+  <p *ngIf="usuario">Contexto: {{ usuario.tipoContexto }}</p>
+  <p *ngIf="usuario">Roles: {{ usuario.roles?.join(', ') }}</p>
+  <button (click)="cerrarSesion()">Cerrar sesión</button>
+</div>
