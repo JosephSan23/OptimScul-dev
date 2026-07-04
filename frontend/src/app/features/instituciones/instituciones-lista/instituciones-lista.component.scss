@@ -1,0 +1,176 @@
+:host { display: block; }
+
+/* ---------- Encabezado ---------- */
+.page-header { margin-bottom: 24px; }
+.page-header h1 { font-size: 1.6rem; color: #101828; font-weight: 700; margin: 0; }
+.page-header p { color: #667085; font-size: 0.95rem; margin: 4px 0 0; }
+
+/* ---------- Mensajes de estado ---------- */
+.estado-msg { color: #667085; padding: 20px 0; }
+.estado-msg.error { color: #b42318; }
+
+/* ---------- Cuadrícula ---------- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+
+/* ---------- Card ---------- */
+.inst-card {
+  background: #fff;
+  border: 1px solid #e5e3dc;
+  border-radius: 14px;
+  overflow: hidden;
+  transition: box-shadow 0.25s ease, transform 0.2s ease;
+}
+.inst-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+/* Card expandida: ocupa TODO el ancho y empuja las demás hacia abajo */
+.inst-card.expanded {
+  grid-column: 1 / -1;
+}
+/* Al expandirse ya no queremos el efecto de levantar */
+.inst-card.expanded:hover {
+  transform: none;
+}
+
+/* Zona clicable (solo la parte de arriba abre/cierra la edición) */
+.card-clickable { cursor: pointer; }
+
+/* ---------- Banner con ícono por tipo ---------- */
+.card-media {
+  position: relative;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card-media i { font-size: 44px; }
+
+.card-media.tipo-colegio   { background: #eaf3de; color: #3b6d11; }
+.card-media.tipo-jardin    { background: #fdf0e6; color: #b5651d; }
+.card-media.tipo-instituto { background: #e6f1fb; color: #185fa5; }
+.card-media.tipo-academia  { background: #efe9fb; color: #5b3fa5; }
+.card-media.tipo-otra      { background: #f1efe8; color: #5f5e5a; }
+
+/* ---------- Cuerpo de la card ---------- */
+.card-body { padding: 14px 18px 18px; }
+
+.inst-name {
+  font-weight: 600;
+  font-size: 16px;
+  margin: 0 0 4px;
+  color: #1a1a1a;
+}
+
+.inst-type {
+  font-size: 13px;
+  color: #6b6b68;
+  margin: 0 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+.dot.tipo-colegio   { background: #3b6d11; }
+.dot.tipo-jardin    { background: #b5651d; }
+.dot.tipo-instituto { background: #185fa5; }
+.dot.tipo-academia  { background: #5b3fa5; }
+.dot.tipo-otra      { background: #5f5e5a; }
+
+/* ---------- Meta (ciudad / estudiantes) ---------- */
+.card-meta {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #eeece5;
+  padding-top: 12px;
+  font-size: 13px;
+  color: #6b6b68;
+}
+.card-meta i { font-size: 15px; vertical-align: middle; }
+
+/* ---------- Badges de estado ---------- */
+.badge {
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-weight: 500;
+}
+.badge-overlay {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+.badge-activa     { color: #3b6d11; }
+.badge-inactiva   { color: #5f5e5a; }
+.badge-suspendida { color: #a32d2d; }
+.badge-prueba     { color: #185fa5; }
+
+/* ---------- Zona expandible (formulario + acciones) ---------- */
+.expand-content {
+  overflow: hidden;
+  animation: expandIn 0.3s ease;
+}
+.expand-inner {
+  padding: 0 18px 18px;
+  border-top: 1px solid #eeece5;
+}
+@keyframes expandIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.form-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 14px 0 0;
+  color: #1a1a1a;
+}
+
+/* ---------- Acciones de estado (suspender / reactivar) ---------- */
+.estado-actions {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid #eeece5;
+}
+.btn-suspender, .btn-reactivar, .btn-activar {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.btn-activar { background: #e6f1fb; color: #185fa5; }
+.btn-suspender { background: #fcebeb; color: #a32d2d; }
+.btn-reactivar { background: #eaf3de; color: #3b6d11; }
+.btn-activar:disabled, .btn-suspender:disabled, .btn-reactivar:disabled { opacity: 0.6; cursor: default; }
+
+/* ---------- Card "Nueva institución" ---------- */
+.nueva-card {
+  border: 1px dashed #cfcdc4;
+  background: transparent;
+}
+/* El centrado va en el trigger (el "+"), NO en la card,
+   para que al expandirse el formulario no quede apretado */
+.nueva-trigger {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #6b6b68;
+  min-height: 200px;
+  cursor: pointer;
+}
+.nueva-trigger i { font-size: 26px; }
+.nueva-trigger span { font-size: 14px; }

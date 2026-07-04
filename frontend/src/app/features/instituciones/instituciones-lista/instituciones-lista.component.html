@@ -1,0 +1,80 @@
+<div class="page-header">
+  <h1>Instituciones</h1>
+  <p>Gestiona los colegios y entidades de la plataforma</p>
+</div>
+
+<div *ngIf="cargando" class="estado-msg">Cargando instituciones...</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+
+<div class="grid" *ngIf="!cargando">
+
+  <div class="inst-card"
+       *ngFor="let inst of instituciones"
+       [class.expanded]="expandidaId === inst.id">
+
+    <div class="card-clickable"
+         (click)="expandidaId === inst.id ? cerrar() : abrirEditar(inst)">
+      <div class="card-media" [ngClass]="claseTipo(inst.tipoInstitucion)">
+        <i [class]="iconoPorTipo(inst.tipoInstitucion)"></i>
+        <span class="badge badge-overlay" [ngClass]="claseEstado(inst.estado)">
+          {{ etiquetaEstado(inst.estado) }}
+        </span>
+      </div>
+      <div class="card-body">
+        <p class="inst-name">{{ inst.nombre }}</p>
+        <p class="inst-type">
+          <span class="dot" [ngClass]="claseTipo(inst.tipoInstitucion)"></span>
+          {{ etiquetaTipo(inst.tipoInstitucion) }}
+        </p>
+        <div class="card-meta">
+          <span><i class="ti ti-map-pin"></i> {{ inst.ciudad || '—' }}</span>
+          <span><i class="ti ti-users"></i> 0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="expand-content" *ngIf="expandidaId === inst.id">
+      <div class="expand-inner">
+        <app-institucion-form
+          [institucion]="inst"
+          (guardado)="onGuardado()"
+          (cancelado)="cerrar()">
+        </app-institucion-form>
+
+        <div class="estado-actions">
+          <button *ngIf="inst.estado === 'PRUEBA'" class="btn-activar"
+                  [disabled]="procesandoId === inst.id" (click)="activar(inst)">
+            Activar
+          </button>
+          <button *ngIf="inst.estado === 'ACTIVA'" class="btn-suspender"
+                  [disabled]="procesandoId === inst.id" (click)="suspender(inst)">
+            Suspender
+          </button>
+          <button *ngIf="inst.estado === 'SUSPENDIDA'" class="btn-reactivar"
+                  [disabled]="procesandoId === inst.id" (click)="reactivar(inst)">
+            Reactivar
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="inst-card nueva-card" [class.expanded]="creando">
+    <div class="nueva-trigger" *ngIf="!creando" (click)="abrirCrear()">
+      <i class="ti ti-plus"></i>
+      <span>Nueva institución</span>
+    </div>
+
+    <div class="expand-content" *ngIf="creando">
+      <div class="expand-inner">
+        <h3 class="form-title">Nueva institución</h3>
+        <app-institucion-form
+          (guardado)="onGuardado()"
+          (cancelado)="cerrar()">
+        </app-institucion-form>
+      </div>
+    </div>
+  </div>
+
+</div>
