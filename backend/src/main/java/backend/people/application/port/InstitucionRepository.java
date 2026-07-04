@@ -11,4 +11,5 @@ public interface InstitucionRepository {
     Optional<Institucion> findById(UUID id);
     List<Institucion> findAll();
     void deleteById(UUID id);
+    boolean existsByCodigo(String codigo);
 }
