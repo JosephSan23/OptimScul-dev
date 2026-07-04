@@ -14,6 +14,9 @@ import { LoginComponent } from './features/auth/login/login.component';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor'; // ajusta la ruta si está en otro lado
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
+import { LayoutComponent } from './core/components/layout/layout.component';
+import { InstitucionesListaComponent } from './features/instituciones/instituciones-lista/instituciones-lista.component';
+import { InstitucionFormComponent } from './features/instituciones/institucion-form/institucion-form.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +28,9 @@ import { DashboardComponent } from './features/dashboard/dashboard.component';
     ContactoComponent,
     LoginComponent,
     DashboardComponent,
+    LayoutComponent,
+    InstitucionesListaComponent,
+    InstitucionFormComponent,
   ],
   imports: [
     BrowserModule,

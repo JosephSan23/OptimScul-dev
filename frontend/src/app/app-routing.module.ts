@@ -6,6 +6,8 @@ import { ContactoComponent } from './features/contacto/contacto.component';
 import { LoginComponent } from './features/auth/login/login.component';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { authGuard } from './core/guards/auth.guard';
+import { LayoutComponent } from './core/components/layout/layout.component';
+import { InstitucionesListaComponent } from './features/instituciones/instituciones-lista/instituciones-lista.component';
 
 const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -13,11 +15,19 @@ const routes: Routes = [
   { path: 'contacto', component: ContactoComponent },
   { path: 'login', component: LoginComponent, data: { animation: 'Login'} },
 
-  { path: 'dashboard/admin',      component: DashboardComponent, canActivate: [authGuard] },
-  { path: 'dashboard/colegio',    component: DashboardComponent, canActivate: [authGuard] },
-  { path: 'dashboard/profesor',   component: DashboardComponent, canActivate: [authGuard] },
-  { path: 'dashboard/estudiante', component: DashboardComponent, canActivate: [authGuard] },
-  { path: 'dashboard/acudiente',  component: DashboardComponent, canActivate: [authGuard] },
+  {
+  path: 'dashboard',
+  component: LayoutComponent,
+  canActivate: [authGuard],
+  children: [
+    { path: 'admin',      component: DashboardComponent },
+    { path: 'instituciones', component: InstitucionesListaComponent },
+    { path: 'colegio',    component: DashboardComponent },
+    { path: 'profesor',   component: DashboardComponent },
+    { path: 'estudiante', component: DashboardComponent },
+    { path: 'acudiente',  component: DashboardComponent },
+  ]
+  },
 
   { path: '**', redirectTo: '' }
 ];
