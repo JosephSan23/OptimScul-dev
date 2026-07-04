@@ -1,0 +1,117 @@
+<div class="app-frame">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar" (mouseleave)="cerrarSubmenus()">
+
+    <div class="sidebar-header">
+      <div class="logo-container">
+        <img src="assets/img/logo.png" alt="OptimScul" class="logo-icon" onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\'ti ti-school\' style=\'font-size:19px;\'></i>'">
+        <span class="logo-text">OptimScul</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <ul>
+        <li class="nav-item active">
+          <a href="#" (click)="$event.preventDefault()">
+            <i class="ti ti-home"></i>
+            <span class="link-name">Inicio</span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a routerLink="/dashboard/instituciones">
+            <i class="ti ti-building-community"></i>
+            <span class="link-name">Instituciones</span>
+          </a>
+        </li>
+
+        <li class="nav-item has-submenu" [class.open]="submenuAbierto === 'usuarios'">
+          <div class="submenu-header" (click)="toggleSubmenu('usuarios')">
+            <i class="ti ti-users"></i>
+            <span class="link-name">Usuarios</span>
+            <i class="ti ti-chevron-down arrow"></i>
+          </div>
+          <ul class="submenu-list">
+            <li><a href="#" (click)="$event.preventDefault()">Estudiantes</a></li>
+            <li><a href="#" (click)="$event.preventDefault()">Profesores</a></li>
+            <li><a href="#" (click)="$event.preventDefault()">Directivos</a></li>
+            <li><a href="#" (click)="$event.preventDefault()">Acudientes</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a href="#" (click)="$event.preventDefault()">
+            <i class="ti ti-clipboard-list"></i>
+            <span class="link-name">Cursos</span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="#" (click)="$event.preventDefault()">
+            <i class="ti ti-chart-bar"></i>
+            <span class="link-name">Reportes</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="#" class="logout-link" (click)="$event.preventDefault(); cerrarSesion()">
+        <i class="ti ti-logout"></i>
+        <span class="link-name">Cerrar Sesión</span>
+      </a>
+    </div>
+
+  </aside>
+
+  <!-- Panel principal -->
+  <div class="main-content">
+
+    <header class="main-header">
+      <div class="header-logo">
+        <div class="school-logo"><i class="ti ti-building-community"></i></div>
+        <span class="school-name">Colegio<span class="accent"> San José</span></span>
+      </div>
+
+      <div class="search-bar">
+        <input type="text" placeholder="Buscar alumnos, cursos...">
+        <button class="search-btn"><i class="ti ti-search"></i></button>
+      </div>
+
+      <div class="header-right">
+        <div class="notifications">
+          <i class="ti ti-bell"></i>
+          <span class="dot"></span>
+        </div>
+
+        <div class="user-info" (click)="toggleDropdown($event)">
+          <div class="user-details">
+            <span class="user-name">{{ usuario?.username }}</span>
+            <span class="user-role">{{ rolPrincipal }}</span>
+          </div>
+          <div class="avatar-wrapper">
+            <div class="avatar">{{ iniciales }}</div>
+            <div class="status-indicator"></div>
+          </div>
+
+          <div class="user-dropdown" [class.active]="dropdownAbierto">
+            <div class="dropdown-header">
+              <p>{{ usuario?.username }}</p>
+              <span>{{ rolPrincipal }}</span>
+            </div>
+            <ul class="dropdown-list">
+              <li><i class="ti ti-user"></i>Mi Perfil</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="dashboard-body">
+      <router-outlet></router-outlet>
+    </div>
+
+  </div>
+
+</div>
