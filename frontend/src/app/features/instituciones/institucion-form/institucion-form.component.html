@@ -1,0 +1,49 @@
+<div class="form-grid">
+  <div>
+    <label>Código *</label>
+    <input [(ngModel)]="form.codigo" [ngModelOptions]="{standalone: true}" placeholder="COL-001">
+  </div>
+  <div>
+    <label>Nombre *</label>
+    <input [(ngModel)]="form.nombre" [ngModelOptions]="{standalone: true}" placeholder="Nombre">
+  </div>
+  <div>
+    <label>Tipo *</label>
+    <select [(ngModel)]="form.tipoInstitucion" [ngModelOptions]="{standalone: true}">
+      <option *ngFor="let t of tipos" [value]="t">{{ etiquetaTipo(t) }}</option>
+    </select>
+  </div>
+  <div>
+    <label>NIT</label>
+    <input [(ngModel)]="form.nit" [ngModelOptions]="{standalone: true}">
+  </div>
+  <div>
+    <label>Ciudad</label>
+    <input [(ngModel)]="form.ciudad" [ngModelOptions]="{standalone: true}">
+  </div>
+  <div>
+    <label>Departamento</label>
+    <input [(ngModel)]="form.departamento" [ngModelOptions]="{standalone: true}">
+  </div>
+  <div>
+    <label>Correo de contacto</label>
+    <input [(ngModel)]="form.correoContacto" [ngModelOptions]="{standalone: true}">
+  </div>
+  <div>
+    <label>Teléfono</label>
+    <input [(ngModel)]="form.telefonoContacto" [ngModelOptions]="{standalone: true}">
+  </div>
+  <div class="form-full">
+    <label>Dirección principal</label>
+    <input [(ngModel)]="form.direccionPrincipal" [ngModelOptions]="{standalone: true}">
+  </div>
+
+  <div class="form-error" *ngIf="errorForm">{{ errorForm }}</div>
+
+  <div class="form-actions">
+    <button type="button" class="btn-cancel" (click)="cancelar()">Cancelar</button>
+    <button type="button" class="btn-save" [disabled]="guardando" (click)="guardar()">
+      {{ guardando ? 'Guardando...' : 'Guardar' }}
+    </button>
+  </div>
+</div>
