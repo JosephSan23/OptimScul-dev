@@ -18,7 +18,8 @@ public class PersonaEntity {
     private UUID id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "tipo_documento")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "tipo_documento", columnDefinition = "tipo_documento_persona_enum")
     private TipoDocumentoPersona tipoDocumento;
 
     @Column(name = "numero_documento")
@@ -40,7 +41,8 @@ public class PersonaEntity {
     private LocalDate fechaNacimiento;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "sexo")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "sexo", columnDefinition = "sexo_enum")
     private Sexo sexo;
 
     @Column(name = "nacionalidad")
