@@ -17,6 +17,9 @@ import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { LayoutComponent } from './core/components/layout/layout.component';
 import { InstitucionesListaComponent } from './features/instituciones/instituciones-lista/instituciones-lista.component';
 import { InstitucionFormComponent } from './features/instituciones/institucion-form/institucion-form.component';
+import { SolicitudesListaComponent } from './features/solicitudes/solicitudes-lista/solicitudes-lista.component';
+import { RegistroComponent } from './features/auth/registro/registro.component';
+import { SeguimientoComponent } from './features/seguimiento/seguimiento/seguimiento.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +34,9 @@ import { InstitucionFormComponent } from './features/instituciones/institucion-f
     LayoutComponent,
     InstitucionesListaComponent,
     InstitucionFormComponent,
+    SolicitudesListaComponent,
+    RegistroComponent,
+    SeguimientoComponent,
   ],
   imports: [
     BrowserModule,

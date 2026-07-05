@@ -4,16 +4,21 @@ import { LandingComponent } from './features/landing/landing.component';
 import { PrimerosPasosComponent } from './features/primeros-pasos/primeros-pasos.component';
 import { ContactoComponent } from './features/contacto/contacto.component';
 import { LoginComponent } from './features/auth/login/login.component';
+import { RegistroComponent } from './features/auth/registro/registro.component';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { authGuard } from './core/guards/auth.guard';
 import { LayoutComponent } from './core/components/layout/layout.component';
 import { InstitucionesListaComponent } from './features/instituciones/instituciones-lista/instituciones-lista.component';
+import { SolicitudesListaComponent } from './features/solicitudes/solicitudes-lista/solicitudes-lista.component';
+import { SeguimientoComponent } from './features/seguimiento/seguimiento/seguimiento.component';
 
 const routes: Routes = [
   { path: '', component: LandingComponent },
   { path: 'primeros-pasos', component: PrimerosPasosComponent },
-  { path: 'contacto', component: ContactoComponent },
+  { path: 'seguimiento', component: SeguimientoComponent, canActivate: [authGuard] },
+  { path: 'contacto', component: ContactoComponent, canActivate: [authGuard] },
   { path: 'login', component: LoginComponent, data: { animation: 'Login'} },
+  { path: 'registro', component: RegistroComponent },
 
   {
   path: 'dashboard',
@@ -22,6 +27,7 @@ const routes: Routes = [
   children: [
     { path: 'admin',      component: DashboardComponent },
     { path: 'instituciones', component: InstitucionesListaComponent },
+    { path: 'solicitudes', component: SolicitudesListaComponent },
     { path: 'colegio',    component: DashboardComponent },
     { path: 'profesor',   component: DashboardComponent },
     { path: 'estudiante', component: DashboardComponent },

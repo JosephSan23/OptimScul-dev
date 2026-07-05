@@ -26,6 +26,13 @@
           </a>
         </li>
 
+        <li class="nav-item">
+          <a routerLink="/dashboard/solicitudes">
+            <i class="ti ti-inbox"></i>
+            <span class="link-name">Solicitudes</span>
+          </a>
+        </li>
+
         <li class="nav-item has-submenu" [class.open]="submenuAbierto === 'usuarios'">
           <div class="submenu-header" (click)="toggleSubmenu('usuarios')">
             <i class="ti ti-users"></i>
