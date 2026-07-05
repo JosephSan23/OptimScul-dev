@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&display=swap");
 
 :root {
   --azul-oscuro: #0a2540;
@@ -27,7 +27,7 @@ header {
 }
 
 .logo-title {
-  font-family: 'Baloo 2', cursive;
+  font-family: "Baloo 2", cursive;
   display: flex;
   align-items: center;
   margin: 0;
@@ -38,8 +38,14 @@ header {
   width: auto;
 }
 
-.text-left { color: #1f4f7a; font-weight: 600; }
-.text-right { color: #f57c00; font-weight: 600; }
+.text-left {
+  color: #1f4f7a;
+  font-weight: 600;
+}
+.text-right {
+  color: #f57c00;
+  font-weight: 600;
+}
 
 .nav-actions {
   display: flex;
@@ -69,10 +75,12 @@ nav > ul > li > a {
   transition: color 0.3s;
 }
 
-nav > ul > li > a:hover { color: #095b80; }
+nav > ul > li > a:hover {
+  color: #095b80;
+}
 
 nav > ul > li > a::after {
-  content: '';
+  content: "";
   position: absolute;
   width: 0;
   height: 2px;
@@ -83,9 +91,13 @@ nav > ul > li > a::after {
   transform: translateX(-50%);
 }
 
-nav > ul > li > a:hover::after { width: 100%; }
+nav > ul > li > a:hover::after {
+  width: 100%;
+}
 
-.dropdown { position: relative; }
+.dropdown {
+  position: relative;
+}
 
 .dropdown-content {
   display: none;
@@ -95,11 +107,11 @@ nav > ul > li > a:hover::after { width: 100%; }
   transform: translateX(-50%);
   background-color: #fff;
   min-width: 220px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
   border-radius: 12px;
   padding: 10px 0;
   z-index: 1000;
-  border: 1px solid rgba(10,37,64,0.05);
+  border: 1px solid rgba(10, 37, 64, 0.05);
 }
 
 .dropdown-content li a {
@@ -123,12 +135,23 @@ nav > ul > li > a:hover::after { width: 100%; }
   animation: slideDown 0.3s ease forwards;
 }
 
-.dropdown:hover .dropbtn i { transform: rotate(180deg); }
-.dropbtn i { font-size: 0.75rem; transition: transform 0.3s ease; }
+.dropdown:hover .dropbtn i {
+  transform: rotate(180deg);
+}
+.dropbtn i {
+  font-size: 0.75rem;
+  transition: transform 0.3s ease;
+}
 
 @keyframes slideDown {
-  from { opacity: 0; transform: translate(-50%, 15px); }
-  to   { opacity: 1; transform: translate(-50%, 0); }
+  from {
+    opacity: 0;
+    transform: translate(-50%, 15px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
 }
 
 .auth-buttons {
@@ -151,7 +174,7 @@ nav > ul > li > a:hover::after { width: 100%; }
 .btn-login {
   color: var(--azul-head);
   background: transparent;
-  border: 1.5px solid rgba(18,124,217,0.7);
+  border: 1.5px solid rgba(18, 124, 217, 0.7);
 }
 
 .btn-login:hover {
@@ -165,34 +188,51 @@ nav > ul > li > a:hover::after { width: 100%; }
   color: #fff;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .btn-register::before {
-  content: '';
+  content: "";
   position: absolute;
-  top: 0; left: -100%;
-  width: 100%; height: 100%;
-  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.6), transparent);
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.6),
+    transparent
+  );
   transition: all 0.6s;
 }
 
-.btn-register:hover { transform: scale(1.05); }
-.btn-register:hover::before { left: 100%; }
+.btn-register:hover {
+  transform: scale(1.05);
+}
+.btn-register:hover::before {
+  left: 100%;
+}
 
 /* Estado activo al hacer scroll */
 header.header-active {
   background-color: #0a2540;
   padding: 18px 40px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   border-bottom: none;
 }
 
 .header-active .text-left,
-.header-active .text-right { color: #fff; }
+.header-active .text-right {
+  color: #fff;
+}
 
-.header-active .logo-icon { filter: brightness(0) invert(1); }
-.header-active .nav-link { color: #fff !important; }
+.header-active .logo-icon {
+  filter: brightness(0) invert(1);
+}
+.header-active .nav-link {
+  color: #fff !important;
+}
 
 .header-active .btn-login {
   color: #fff !important;
@@ -204,6 +244,119 @@ header.header-active {
   color: #095b80 !important;
 }
 
+/* ---------- Menú de usuario (navbar con sesión) ---------- */
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  position: relative;
+}
+
+.user-menu .user-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.2;
+}
+.user-menu .user-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0a2540;
+}
+.user-menu .user-role {
+  font-size: 11px;
+  color: #8a94a6;
+}
+
+.user-menu .avatar-wrapper {
+  position: relative;
+}
+.user-menu .avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #185fa5;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+}
+.user-menu .status-indicator {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #22c55e;
+  border: 2px solid #fff;
+}
+
+.user-menu .user-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(10, 37, 64, 0.15);
+  min-width: 200px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition:
+    opacity 0.2s,
+    transform 0.2s,
+    visibility 0.2s;
+  overflow: hidden;
+  z-index: 100;
+}
+.user-menu .user-dropdown.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.user-menu .dropdown-header {
+  padding: 14px 16px;
+  border-bottom: 1px solid #eef2f8;
+}
+.user-menu .dropdown-header p {
+  margin: 0;
+  font-weight: 600;
+  color: #0a2540;
+  font-size: 14px;
+}
+.user-menu .dropdown-header span {
+  font-size: 11px;
+  color: #8a94a6;
+}
+
+.user-menu .dropdown-list {
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+}
+.user-menu .dropdown-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #334155;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.user-menu .dropdown-list li:hover {
+  background: #f5f7fa;
+}
+.user-menu .dropdown-list .logout-item {
+  color: #dc2626;
+}
+
 /* ── RESPONSIVE ─────────────────────────────────────── */
 @media (max-width: 768px) {
   header {
@@ -213,7 +366,9 @@ header.header-active {
     overflow: visible !important;
   }
 
-  .nav-actions { display: none; }
+  .nav-actions {
+    display: none;
+  }
 
   .auth-buttons {
     gap: 8px;
