@@ -1,0 +1,100 @@
+<div class="registro-wrapper">
+  <div class="registro-card">
+
+    <!-- IZQUIERDA: formulario en tarjeta sobre fondo gris -->
+    <div class="form-side">
+      <div class="form-card">
+        <button class="btn-volver" (click)="volver()">
+          <i class="ti ti-arrow-left"></i> Volver
+        </button>
+
+        <h1 class="form-titulo">Crea tu cuenta</h1>
+        <p class="form-sub">Regístrate para postular o vincular tu institución.</p>
+
+        <div class="social-btns">
+          <button class="btn-social" (click)="proximamente()">
+            <i class="ti ti-brand-google"></i> Google
+          </button>
+          <button class="btn-social" (click)="proximamente()">
+            <i class="ti ti-brand-windows"></i> Microsoft
+          </button>
+        </div>
+        <p class="social-nota">Acceso con Google y Microsoft — disponible pronto</p>
+
+        <div class="divisor"><span>o con tu correo</span></div>
+
+        <!-- Documento: tipo + número -->
+        <div class="campo-row">
+          <div class="campo campo-tipo">
+            <label>Tipo doc.</label>
+            <select [(ngModel)]="form.tipoDocumento" [ngModelOptions]="{standalone: true}">
+              <option value="">Selec.</option>
+              <option *ngFor="let t of tiposDocumento" [value]="t.valor">{{ t.valor }}</option>
+            </select>
+          </div>
+          <div class="campo">
+            <label>Número de documento</label>
+            <input type="text" placeholder="1234567890"
+                   [(ngModel)]="form.numeroDocumento" [ngModelOptions]="{standalone: true}">
+          </div>
+        </div>
+
+        <!-- Nombre + apellido -->
+        <div class="campo-row">
+          <div class="campo">
+            <label>Primer nombre</label>
+            <input type="text" placeholder="María"
+                   [(ngModel)]="form.primerNombre" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="campo">
+            <label>Primer apellido</label>
+            <input type="text" placeholder="Gómez"
+                   [(ngModel)]="form.primerApellido" [ngModelOptions]="{standalone: true}">
+          </div>
+        </div>
+
+        <!-- Correo -->
+        <div class="campo">
+          <label>Correo electrónico</label>
+          <input type="email" placeholder="maria@correo.com"
+                 [(ngModel)]="form.correo" [ngModelOptions]="{standalone: true}">
+        </div>
+
+        <!-- Contraseña + confirmar -->
+        <div class="campo-row">
+          <div class="campo">
+            <label>Contraseña</label>
+            <input type="password" placeholder="Mín. 8"
+                   [(ngModel)]="form.password" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="campo">
+            <label>Confirmar</label>
+            <input type="password" placeholder="Repite"
+                   [(ngModel)]="form.confirmarPassword" [ngModelOptions]="{standalone: true}">
+          </div>
+        </div>
+
+        <p class="form-error" *ngIf="error">{{ error }}</p>
+
+        <button class="btn-crear" [disabled]="cargando" (click)="registrar()">
+          {{ cargando ? 'Creando...' : 'Crear cuenta' }}
+        </button>
+
+        <p class="ir-login">¿Ya tienes cuenta? <span (click)="irALogin()">Inicia sesión</span></p>
+      </div>
+    </div>
+
+    <!-- DERECHA: panel azul -->
+    <div class="info-side">
+      <span class="info-badge">CREA TU CUENTA</span>
+      <h2 class="info-titulo">Empieza tu camino con OptimScul.</h2>
+      <p class="info-texto">Una sola cuenta para postular a un estudiante o vincular tu institución.</p>
+      <div class="info-checks">
+        <div class="check"><i class="ti ti-circle-check"></i>Sigue el estado de tus solicitudes</div>
+        <div class="check"><i class="ti ti-circle-check"></i>Comunicación directa con la plataforma</div>
+        <div class="check"><i class="ti ti-circle-check"></i>Un proceso simple y guiado</div>
+      </div>
+    </div>
+
+  </div>
+</div>
