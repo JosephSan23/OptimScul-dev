@@ -49,4 +49,6 @@ public class UsuarioRepositoryAdapter implements UsuarioRepository {
     public Optional<Usuario> findByUsernameOrEmail(String valor) {
         return jpaRepository.findByUsernameOrCorreo(valor).map(mapper::toDomain);
     }
+
+    
 }
