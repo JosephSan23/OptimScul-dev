@@ -1,0 +1,55 @@
+<app-navbar [estatico]="true"></app-navbar>
+
+<section class="seguimiento-page">
+  <div class="seguimiento-container">
+
+    <div class="page-head">
+      <h1>Seguimiento de solicitudes</h1>
+      <p>Aquí puedes ver el estado de las solicitudes que has enviado.</p>
+    </div>
+
+    <div *ngIf="cargando" class="msg">Cargando tus solicitudes...</div>
+    <div *ngIf="error" class="msg error">{{ error }}</div>
+
+    <!-- Sin solicitudes -->
+    <div *ngIf="!cargando && !error && solicitudes.length === 0" class="vacio">
+      <i class="ti ti-inbox"></i>
+      <h3>Aún no tienes solicitudes</h3>
+      <p>Cuando envíes una solicitud para vincular tu institución, aparecerá aquí.</p>
+      <a routerLink="/contacto" class="btn-nueva">Enviar una solicitud</a>
+    </div>
+
+    <!-- Lista de solicitudes -->
+    <div class="solicitudes-lista" *ngIf="!cargando && solicitudes.length > 0">
+      <div class="sol-card" *ngFor="let s of solicitudes">
+        <div class="sol-top">
+          <div>
+            <h3>{{ s.nombreColegio }}</h3>
+            <span class="sol-fecha">Enviada el {{ s.createdAt | date:'d MMM y' }}</span>
+          </div>
+          <span class="estado-badge" [ngClass]="claseEstado(s.estado)">
+            {{ etiquetaEstado(s.estado) }}
+          </span>
+        </div>
+
+        <p class="sol-estado-texto" [ngClass]="claseEstado(s.estado)">
+          {{ textoEstado(s.estado) }}
+        </p>
+
+        <div class="sol-detalle">
+          <div class="dato" *ngIf="s.mensaje">
+            <span class="dato-label">Tu mensaje</span>
+            <p class="dato-mensaje">"{{ s.mensaje }}"</p>
+          </div>
+          <div class="sol-contacto">
+            <span *ngIf="s.ciudad"><i class="ti ti-map-pin"></i> {{ s.ciudad }}</span>
+            <span *ngIf="s.correo"><i class="ti ti-mail"></i> {{ s.correo }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<app-footer></app-footer>
