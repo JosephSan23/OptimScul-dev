@@ -11,4 +11,5 @@ public interface RolRepository {
     Optional<Rol> findById(UUID id);
     List<Rol> findAll();
     void deleteById(UUID id);
+    Optional<Rol> findByCodigo(String codigo);
 }
