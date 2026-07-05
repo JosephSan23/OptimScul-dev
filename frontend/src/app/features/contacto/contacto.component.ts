@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { SolicitudService } from '../../core/services/solicitud.service';
 
 @Component({
   selector: 'app-contacto',
@@ -8,9 +10,12 @@ import { Component } from '@angular/core';
 export class ContactoComponent {
   tipoUsuario: 'institucion' | 'padre' | null = null;
 
-  // Controla en qué paso del stepper está el usuario
   pasoActual = 1;
   mostrarError = false;
+
+  // Estado del envío al backend
+  enviando = false;
+  errorEnvio = '';
 
   formInstitucion = {
     // Paso 1
@@ -25,7 +30,6 @@ export class ContactoComponent {
     mensaje: ''
   };
 
-  // Datos del formulario de acudiente
   formAcudiente = {
     // Paso 1 — datos del acudiente
     tipoDocumento: '',
@@ -56,20 +60,19 @@ export class ContactoComponent {
     documentos: [] as File[]
   };
 
-  // Total de pasos según el tipo de usuario
+  constructor(private solicitudService: SolicitudService, private router: Router) {}
+
   get totalPasos(): number {
     if (this.tipoUsuario === 'institucion') return 2;
     if (this.tipoUsuario === 'padre') return 3;
     return 0;
   }
 
-  // Elegir tipo de usuario — resetea el paso al 1
   elegirTipo(tipo: 'institucion' | 'padre'): void {
     this.tipoUsuario = tipo;
     this.pasoActual = 1;
   }
 
-  // Volver al selector de tipo
   volverAlSelector(): void {
     this.tipoUsuario = null;
     this.pasoActual = 1;
@@ -142,7 +145,6 @@ export class ContactoComponent {
     this.siguiente();
   }
 
-  // Saber si el paso actual tiene errores para mostrar mensaje
   get pasoInvalido(): boolean {
     return !this.validarPasoActual();
   }
@@ -162,13 +164,35 @@ export class ContactoComponent {
   }
 
   enviar(): void {
-    // Por ahora solo mostramos en consola
-    // Aquí irá la llamada al backend cuando tengamos el login
     if (this.tipoUsuario === 'institucion') {
-      console.log('Formulario institución:', this.formInstitucion);
+      this.enviando = true;
+      this.errorEnvio = '';
+
+      this.solicitudService.crear({
+        nombreColegio: this.formInstitucion.nombreColegio,
+        nit: this.formInstitucion.nit,
+        ciudad: this.formInstitucion.ciudad,
+        direccion: this.formInstitucion.direccion,
+        telefono: this.formInstitucion.telefono,
+        nombreContacto: this.formInstitucion.nombreContacto,
+        correo: this.formInstitucion.correo,
+        mensaje: this.formInstitucion.mensaje
+      }).subscribe({
+        next: () => {
+          this.enviando = false;
+          alert('¡Solicitud enviada! Revisaremos tu información y te contactaremos.');
+          this.router.navigate(['/']);
+        },
+        error: (err) => {
+          this.enviando = false;
+          this.errorEnvio = err?.error?.mensaje || 'No se pudo enviar la solicitud. Intenta de nuevo.';
+        }
+      });
+
     } else {
+      // Flujo acudiente — se conectará más adelante (postulaciones)
       console.log('Formulario acudiente:', this.formAcudiente);
+      alert('El envío de postulaciones estará disponible pronto.');
     }
-    alert('¡Mensaje enviado! Te contactaremos pronto.');
   }
 }

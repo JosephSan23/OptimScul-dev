@@ -483,9 +483,13 @@
 
           <button class="btn-enviar"
                   *ngIf="pasoActual === totalPasos"
+                  [disabled]="enviando"
                   (click)="enviar()">
-            Enviar solicitud <i class="fas fa-paper-plane"></i>
+            {{ enviando ? 'Enviando...' : 'Enviar solicitud' }}
+            <i class="fas fa-paper-plane" *ngIf="!enviando"></i>
           </button>
+
+          <p *ngIf="errorEnvio" class="error-envio">{{ errorEnvio }}</p>
         </div>
       </div>
 
