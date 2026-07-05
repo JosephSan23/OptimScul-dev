@@ -1,0 +1,120 @@
+<div class="page-header">
+  <h1>Solicitudes</h1>
+  <p>Revisa y gestiona las instituciones que quieren unirse a la plataforma</p>
+</div>
+
+<div *ngIf="cargando" class="estado-msg">Cargando solicitudes...</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+
+<div class="layout" *ngIf="!cargando">
+
+  <!-- IZQUIERDA: tablero de columnas -->
+  <div class="kanban">
+
+    <div class="columna">
+      <div class="columna-header">
+        <span class="col-titulo"><span class="dot dot-pendiente"></span>Pendientes</span>
+        <span class="col-count">{{ pendientes.length }}</span>
+      </div>
+      <div class="columna-body">
+        <div class="sol-mini" *ngFor="let s of pendientes"
+             [class.activa]="seleccionada?.id === s.id"
+             (click)="seleccionar(s)">
+          <p class="mini-nombre">{{ s.nombreColegio }}</p>
+          <p class="mini-sub">{{ s.nombreContacto }} · {{ s.ciudad || '—' }}</p>
+        </div>
+        <p *ngIf="pendientes.length === 0" class="col-vacia">Sin pendientes</p>
+      </div>
+    </div>
+
+    <div class="columna">
+      <div class="columna-header">
+        <span class="col-titulo"><span class="dot dot-aprobada"></span>Aprobadas</span>
+        <span class="col-count">{{ aprobadas.length }}</span>
+      </div>
+      <div class="columna-body">
+        <div class="sol-mini resuelta" *ngFor="let s of aprobadas"
+             [class.activa]="seleccionada?.id === s.id"
+             (click)="seleccionar(s)">
+          <p class="mini-nombre">{{ s.nombreColegio }}</p>
+          <p class="mini-sub">{{ s.nombreContacto }} · {{ s.ciudad || '—' }}</p>
+        </div>
+        <p *ngIf="aprobadas.length === 0" class="col-vacia">Sin aprobadas</p>
+      </div>
+    </div>
+
+    <div class="columna">
+      <div class="columna-header">
+        <span class="col-titulo"><span class="dot dot-rechazada"></span>Rechazadas</span>
+        <span class="col-count">{{ rechazadas.length }}</span>
+      </div>
+      <div class="columna-body">
+        <div class="sol-mini resuelta apagada" *ngFor="let s of rechazadas"
+             [class.activa]="seleccionada?.id === s.id"
+             (click)="seleccionar(s)">
+          <p class="mini-nombre">{{ s.nombreColegio }}</p>
+          <p class="mini-sub">{{ s.nombreContacto }} · {{ s.ciudad || '—' }}</p>
+        </div>
+        <p *ngIf="rechazadas.length === 0" class="col-vacia">Sin rechazadas</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- DERECHA: panel de detalle -->
+  <div class="panel">
+    <div *ngIf="!seleccionada" class="panel-vacio">
+      <i class="ti ti-click"></i>
+      <p>Selecciona una solicitud para ver el detalle</p>
+    </div>
+
+    <div *ngIf="seleccionada" class="panel-detalle"
+         [class.borde-pendiente]="seleccionada.estado === 'PENDIENTE'"
+         [class.borde-aprobada]="seleccionada.estado === 'APROBADA'"
+         [class.borde-rechazada]="seleccionada.estado === 'RECHAZADA'">
+
+      <div class="detalle-body">
+        <div class="detalle-header">
+          <div>
+            <p class="detalle-nombre">{{ seleccionada.nombreColegio }}</p>
+            <p class="detalle-sub">
+              {{ seleccionada.ciudad || '—' }}
+              <span *ngIf="seleccionada.nit"> · NIT {{ seleccionada.nit }}</span>
+            </p>
+          </div>
+          <span class="chip-estado"
+                [class.chip-pendiente]="seleccionada.estado === 'PENDIENTE'"
+                [class.chip-aprobada]="seleccionada.estado === 'APROBADA'"
+                [class.chip-rechazada]="seleccionada.estado === 'RECHAZADA'">
+            {{ seleccionada.estado }}
+          </span>
+        </div>
+
+        <p class="detalle-label" *ngIf="seleccionada.mensaje">Mensaje</p>
+        <p class="detalle-mensaje" *ngIf="seleccionada.mensaje">"{{ seleccionada.mensaje }}"</p>
+
+        <p class="detalle-label">Contacto</p>
+        <div class="detalle-datos">
+          <div class="dato"><i class="ti ti-user"></i>{{ seleccionada.nombreContacto }}</div>
+          <div class="dato"><i class="ti ti-mail"></i>{{ seleccionada.correo }}</div>
+          <div class="dato" *ngIf="seleccionada.telefono"><i class="ti ti-phone"></i>{{ seleccionada.telefono }}</div>
+          <div class="dato" *ngIf="seleccionada.direccion"><i class="ti ti-map-pin"></i>{{ seleccionada.direccion }}</div>
+        </div>
+
+        <div class="detalle-convertida" *ngIf="seleccionada.estado === 'APROBADA'">
+          <i class="ti ti-arrow-right"></i>Convertida en institución
+        </div>
+      </div>
+
+      <div class="detalle-acciones" *ngIf="seleccionada.estado === 'PENDIENTE'">
+        <button class="btn-aprobar" [disabled]="procesandoId === seleccionada.id" (click)="aprobar(seleccionada)">
+          <i class="ti ti-check"></i>Aprobar y crear institución
+        </button>
+        <button class="btn-rechazar" [disabled]="procesandoId === seleccionada.id" (click)="rechazar(seleccionada)">
+          Rechazar
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
