@@ -41,11 +41,16 @@ export class AuthService {
   }
 
   private redirigirSegunRol(tipoContexto: string, roles: string[]): void {
+    // El visitante va a la página principal, no a un dashboard
+    if (roles.includes('VISITANTE')) {
+      this.router.navigate(['/primeros-pasos']);
+      return;
+    }
+
     if (tipoContexto === 'PLATAFORMA') {
       this.router.navigate(['/dashboard/admin']);
       return;
     }
-    // Usuario de institución — el rol específico decide el dashboard
     if (roles.includes('ADMIN_INSTITUCION'))   this.router.navigate(['/dashboard/colegio']);
     else if (roles.includes('DOCENTE'))   this.router.navigate(['/dashboard/profesor']);
     else if (roles.includes('ESTUDIANTE')) this.router.navigate(['/dashboard/estudiante']);
