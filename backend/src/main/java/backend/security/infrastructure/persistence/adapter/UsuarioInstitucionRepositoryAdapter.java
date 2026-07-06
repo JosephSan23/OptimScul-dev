@@ -41,4 +41,14 @@ public class UsuarioInstitucionRepositoryAdapter implements UsuarioInstitucionRe
     public void deleteById(UUID id) {
         jpaRepository.deleteById(id);
     }
+
+    @Override
+    public List<UsuarioInstitucion> findByUsuarioId(UUID usuarioId) {
+        return jpaRepository.findByUsuarioId(usuarioId).stream().map(mapper::toDomain).toList();
+    }
+
+    @Override
+    public List<UsuarioInstitucion> findByInstitucionId(UUID institucionId) {
+        return jpaRepository.findByInstitucionId(institucionId).stream().map(mapper::toDomain).toList();
+    }
 }

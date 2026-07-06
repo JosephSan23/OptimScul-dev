@@ -55,5 +55,10 @@ public class UsuarioRepositoryAdapter implements UsuarioRepository {
         return jpaRepository.findRolesByUsuarioId(usuarioId.toString());
     }
 
+    @Override
+    public List<String> findRolesByUsuarioIdAndInstitucion(UUID usuarioId, UUID institucionId) {
+        return jpaRepository.findRolesByUsuarioIdAndInstitucion(usuarioId.toString(), institucionId.toString());
+    }
+
     
 }

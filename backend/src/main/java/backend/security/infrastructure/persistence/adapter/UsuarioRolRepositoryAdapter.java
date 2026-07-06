@@ -40,4 +40,9 @@ public class UsuarioRolRepositoryAdapter implements UsuarioRolRepository {
     public void deleteById(UUID id) {
         jpaRepository.deleteById(id);
     }
+
+    @Override
+    public List<UsuarioRol> findByUsuarioId(UUID usuarioId) {
+        return jpaRepository.findByUsuarioId(usuarioId).stream().map(mapper::toDomain).toList();
+    }
 }
