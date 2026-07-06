@@ -1,0 +1,58 @@
+package backend.security.application;
+
+import backend.security.application.port.UsuarioRepository;
+import backend.security.domain.model.TipoContextoUsuario;
+import backend.security.domain.model.Usuario;
+import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+
+@Service
+public class AutorizacionService {
+
+    private final UsuarioRepository usuarioRepository;
+
+    public AutorizacionService(UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
+    }
+
+    // ---- Super admin: PLATAFORMA y sin rol VISITANTE ----
+    public boolean esSuperAdmin(UUID usuarioId) {
+        Usuario u = usuarioRepository.findById(usuarioId).orElse(null);
+        if (u == null) return false;
+        List<String> roles = usuarioRepository.findRolesByUsuarioId(usuarioId);
+        return u.getTipoContexto() == TipoContextoUsuario.PLATAFORMA && !roles.contains("VISITANTE");
+    }
+
+    public void exigirSuperAdmin(UUID usuarioId) {
+        if (!esSuperAdmin(usuarioId)) {
+            throw new SecurityException("Solo el super administrador puede realizar esta acción.");
+        }
+    }
+
+    // ---- Rol en cualquier institución ----
+    public boolean tieneAlgunRol(UUID usuarioId, String... roles) {
+        List<String> propios = usuarioRepository.findRolesByUsuarioId(usuarioId);
+        return Arrays.stream(roles).anyMatch(propios::contains);
+    }
+
+    public void exigirRol(UUID usuarioId, String... roles) {
+        if (!tieneAlgunRol(usuarioId, roles)) {
+            throw new SecurityException("No tienes el rol necesario para esta acción.");
+        }
+    }
+
+    // ---- Rol DENTRO de una institución específica (scope) ----
+    public boolean tieneRolEnInstitucion(UUID usuarioId, UUID institucionId, String... roles) {
+        List<String> propios = usuarioRepository.findRolesByUsuarioIdAndInstitucion(usuarioId, institucionId);
+        return Arrays.stream(roles).anyMatch(propios::contains);
+    }
+
+    public void exigirRolEnInstitucion(UUID usuarioId, UUID institucionId, String... roles) {
+        if (!tieneRolEnInstitucion(usuarioId, institucionId, roles)) {
+            throw new SecurityException("No tienes permisos sobre esta institución.");
+        }
+    }
+}
