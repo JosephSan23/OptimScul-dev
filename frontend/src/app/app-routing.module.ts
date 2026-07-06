@@ -11,6 +11,8 @@ import { LayoutComponent } from './core/components/layout/layout.component';
 import { InstitucionesListaComponent } from './features/instituciones/instituciones-lista/instituciones-lista.component';
 import { SolicitudesListaComponent } from './features/solicitudes/solicitudes-lista/solicitudes-lista.component';
 import { SeguimientoComponent } from './features/seguimiento/seguimiento/seguimiento.component';
+import { AdministradoresListaComponent } from './features/administradores/administradores-lista/administradores-lista.component';
+import { roleGuard } from './core/guards/role.guard';
 
 const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -25,13 +27,14 @@ const routes: Routes = [
   component: LayoutComponent,
   canActivate: [authGuard],
   children: [
-    { path: 'admin',      component: DashboardComponent },
-    { path: 'instituciones', component: InstitucionesListaComponent },
-    { path: 'solicitudes', component: SolicitudesListaComponent },
-    { path: 'colegio',    component: DashboardComponent },
-    { path: 'profesor',   component: DashboardComponent },
-    { path: 'estudiante', component: DashboardComponent },
-    { path: 'acudiente',  component: DashboardComponent },
+    { path: 'admin',          component: DashboardComponent,          canActivate: [roleGuard], data: { soloSuperAdmin: true } },
+    { path: 'instituciones',  component: InstitucionesListaComponent, canActivate: [roleGuard], data: { soloSuperAdmin: true } },
+    { path: 'solicitudes',    component: SolicitudesListaComponent,   canActivate: [roleGuard], data: { soloSuperAdmin: true } },
+    { path: 'administradores',component: AdministradoresListaComponent, canActivate: [roleGuard], data: { soloSuperAdmin: true } },
+    { path: 'colegio',        component: DashboardComponent,          canActivate: [roleGuard], data: { roles: ['ADMIN_INSTITUCION'] } },
+    { path: 'profesor',       component: DashboardComponent,          canActivate: [roleGuard], data: { roles: ['DOCENTE'] } },
+    { path: 'estudiante',     component: DashboardComponent,          canActivate: [roleGuard], data: { roles: ['ESTUDIANTE'] } },
+    { path: 'acudiente',      component: DashboardComponent,          canActivate: [roleGuard], data: { roles: ['ACUDIENTE'] } },
   ]
   },
 

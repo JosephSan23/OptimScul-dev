@@ -20,6 +20,10 @@ import { InstitucionFormComponent } from './features/instituciones/institucion-f
 import { SolicitudesListaComponent } from './features/solicitudes/solicitudes-lista/solicitudes-lista.component';
 import { RegistroComponent } from './features/auth/registro/registro.component';
 import { SeguimientoComponent } from './features/seguimiento/seguimiento/seguimiento.component';
+import { AdministradorFormComponent } from './features/administradores/administrador-form/administrador-form.component';
+import { AdministradoresListaComponent } from './features/administradores/administradores-lista/administradores-lista.component';
+import { TablaPaginadaComponent } from './core/components/tabla-paginada/tabla-paginada.component';
+import { FilaTablaDirective } from './core/directives/fila-tabla.directive';
 
 @NgModule({
   declarations: [
@@ -37,6 +41,10 @@ import { SeguimientoComponent } from './features/seguimiento/seguimiento/seguimi
     SolicitudesListaComponent,
     RegistroComponent,
     SeguimientoComponent,
+    AdministradorFormComponent,
+    AdministradoresListaComponent,
+    TablaPaginadaComponent,
+    FilaTablaDirective,
   ],
   imports: [
     BrowserModule,
