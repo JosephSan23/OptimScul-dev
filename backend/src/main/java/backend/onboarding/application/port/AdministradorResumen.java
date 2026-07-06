@@ -13,6 +13,8 @@ public interface AdministradorResumen {
     String getPrimerApellido();
     String getNumeroDocumento();
     String getCorreo();
+    String getEmailLogin();
+    String getTipoDocumento();
     UUID getInstitucionId();
     String getInstitucionNombre();
     LocalDateTime getUltimoLogin();
