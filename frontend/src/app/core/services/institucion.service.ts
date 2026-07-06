@@ -16,6 +16,7 @@ export interface Institucion {
   correoContacto?: string;
   telefonoContacto?: string;
   sitioWeb?: string;
+  dominioCorreo?: string;
   direccionPrincipal?: string;
   ciudad?: string;
   departamento?: string;
@@ -39,6 +40,7 @@ export interface InstitucionRequest {
   correoContacto?: string;
   telefonoContacto?: string;
   sitioWeb?: string;
+  dominioCorreo?: string;
   direccionPrincipal?: string;
   ciudad?: string;
   departamento?: string;
