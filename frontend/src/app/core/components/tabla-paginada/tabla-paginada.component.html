@@ -1,0 +1,35 @@
+<div class="tabla-toolbar">
+  <div class="buscador">
+    <i class="ti ti-search"></i>
+    <input type="text" [(ngModel)]="termino" (ngModelChange)="buscar()"
+           [ngModelOptions]="{standalone: true}" [placeholder]="placeholderBusqueda">
+  </div>
+  <div class="toolbar-acciones">
+    <ng-content select="[acciones]"></ng-content>
+  </div>
+</div>
+
+<!-- Tabla del padre con la página actual -->
+<ng-container *ngIf="filtrados.length"
+              [ngTemplateOutlet]="filaTpl" [ngTemplateOutletContext]="{ $implicit: pagina }">
+</ng-container>
+
+<div class="paginador" *ngIf="filtrados.length">
+  <span class="paginador-info">{{ desde }}–{{ hasta }} de {{ filtrados.length }}</span>
+  <div class="paginador-botones">
+    <button type="button" (click)="irA(paginaActual - 1)" [disabled]="paginaActual === 1">
+      <i class="ti ti-chevron-left"></i>
+    </button>
+    <button type="button" *ngFor="let p of paginasVisibles"
+            (click)="irA(p)" [class.activo]="p === paginaActual">{{ p }}</button>
+    <button type="button" (click)="irA(paginaActual + 1)" [disabled]="paginaActual === totalPaginas">
+      <i class="ti ti-chevron-right"></i>
+    </button>
+  </div>
+</div>
+
+<!-- Vacíos -->
+<p *ngIf="items.length === 0" class="estado-msg">{{ mensajeVacio }}</p>
+<p *ngIf="items.length > 0 && !filtrados.length" class="estado-msg">
+  No hay resultados para "{{ termino }}".
+</p>
