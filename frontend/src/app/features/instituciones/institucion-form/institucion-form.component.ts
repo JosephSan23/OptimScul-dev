@@ -37,6 +37,7 @@ export class InstitucionFormComponent implements OnInit {
         correoContacto: this.institucion.correoContacto,
         telefonoContacto: this.institucion.telefonoContacto,
         sitioWeb: this.institucion.sitioWeb,
+        dominioCorreo: this.institucion.dominioCorreo,
         direccionPrincipal: this.institucion.direccionPrincipal,
         ciudad: this.institucion.ciudad,
         departamento: this.institucion.departamento,
