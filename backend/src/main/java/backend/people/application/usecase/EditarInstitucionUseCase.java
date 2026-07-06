@@ -40,6 +40,7 @@ public class EditarInstitucionUseCase {
         existente.setCorreoContacto(datos.getCorreoContacto());
         existente.setTelefonoContacto(datos.getTelefonoContacto());
         existente.setSitioWeb(datos.getSitioWeb());
+        existente.setDominioCorreo(datos.getDominioCorreo());
         existente.setDireccionPrincipal(datos.getDireccionPrincipal());
         existente.setCiudad(datos.getCiudad());
         existente.setDepartamento(datos.getDepartamento());

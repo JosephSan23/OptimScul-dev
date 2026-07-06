@@ -32,6 +32,7 @@ public class InstitucionMapper {
         domain.setEstado(entity.getEstado());
         domain.setCreatedAt(entity.getCreatedAt());
         domain.setUpdatedAt(entity.getUpdatedAt());
+        domain.setDominioCorreo(entity.getDominioCorreo());
         return domain;
     }
 
@@ -50,6 +51,7 @@ public class InstitucionMapper {
         entity.setCorreoContacto(domain.getCorreoContacto());
         entity.setTelefonoContacto(domain.getTelefonoContacto());
         entity.setSitioWeb(domain.getSitioWeb());
+        entity.setDominioCorreo(domain.getDominioCorreo());
         entity.setDireccionPrincipal(domain.getDireccionPrincipal());
         entity.setCiudad(domain.getCiudad());
         entity.setDepartamento(domain.getDepartamento());

@@ -23,6 +23,7 @@ public class InstitucionResponseDto {
     private String correoContacto;
     private String telefonoContacto;
     private String sitioWeb;
+    private String dominioCorreo;
     private String direccionPrincipal;
     private String ciudad;
     private String departamento;

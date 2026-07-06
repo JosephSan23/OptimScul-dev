@@ -30,6 +30,7 @@ public class InstitucionRestMapper {
         dto.setZonaHoraria(i.getZonaHoraria());
         dto.setMoneda(i.getMoneda());
         dto.setEstado(i.getEstado());
+        dto.setDominioCorreo(i.getDominioCorreo());
         return dto;
     }
 
@@ -54,6 +55,7 @@ public class InstitucionRestMapper {
         i.setLogoUrl(dto.getLogoUrl());
         i.setZonaHoraria(dto.getZonaHoraria());
         i.setMoneda(dto.getMoneda());
+        i.setDominioCorreo(dto.getDominioCorreo());
         return i;
     }
 }

@@ -57,6 +57,9 @@ public class InstitucionEntity {
     @Column(name = "sitio_web")
     private String sitioWeb;
 
+    @Column(name = "dominio_correo")
+    private String dominioCorreo;
+
     @Column(name = "direccion_principal")
     private String direccionPrincipal;
 
@@ -88,5 +91,7 @@ public class InstitucionEntity {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    
 
 }

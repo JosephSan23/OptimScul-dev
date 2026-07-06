@@ -35,6 +35,8 @@ public class InstitucionRequestDto {
 
     private String sitioWeb;
 
+    private String dominioCorreo;
+
     private String direccionPrincipal;
 
     private String ciudad;
