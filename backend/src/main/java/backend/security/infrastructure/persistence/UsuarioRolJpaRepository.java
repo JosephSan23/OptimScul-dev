@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.UUID;
 
 public interface UsuarioRolJpaRepository extends JpaRepository<UsuarioRolEntity, UUID> {
+    java.util.List<UsuarioRolEntity> findByUsuarioId(UUID usuarioId);
 }
