@@ -23,4 +23,16 @@ public interface UsuarioJpaRepository extends JpaRepository<UsuarioEntity, UUID>
               AND r.activo = true
             """, nativeQuery = true)
     List<String> findRolesByUsuarioId(@Param("usuarioId") String usuarioId);
+
+    @Query(value = """
+            SELECT r.codigo
+            FROM optimscul.usuario_rol ur
+            JOIN optimscul.rol r ON r.id = ur.rol_id
+            WHERE ur.usuario_id = CAST(:usuarioId AS uuid)
+              AND ur.institucion_id = CAST(:institucionId AS uuid)
+              AND ur.activo = true
+              AND r.activo = true
+            """, nativeQuery = true)
+    List<String> findRolesByUsuarioIdAndInstitucion(@Param("usuarioId") String usuarioId,
+                                                     @Param("institucionId") String institucionId);
 }
