@@ -40,6 +40,10 @@ export class AuthService {
     );
   }
 
+  esSuperAdmin(): boolean {
+    return this.getTipoContexto() === 'PLATAFORMA' && !this.tieneRol('VISITANTE');
+  }
+
   private redirigirSegunRol(tipoContexto: string, roles: string[]): void {
     // El visitante va a la página principal, no a un dashboard
     if (roles.includes('VISITANTE')) {
