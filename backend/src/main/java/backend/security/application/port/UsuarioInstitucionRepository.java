@@ -11,4 +11,6 @@ public interface UsuarioInstitucionRepository {
     Optional<UsuarioInstitucion> findById(UUID id);
     List<UsuarioInstitucion> findAll();
     void deleteById(UUID id);
+    List<UsuarioInstitucion> findByUsuarioId(UUID usuarioId);
+    List<UsuarioInstitucion> findByInstitucionId(UUID institucionId);
 }
