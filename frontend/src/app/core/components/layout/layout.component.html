@@ -19,14 +19,22 @@
           </a>
         </li>
 
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="esSuperAdmin">
+          <a routerLink="/dashboard/administradores">
+            <i class="ti ti-user-shield"></i>
+            <span class="link-name">Administradores</span>
+          </a>
+        </li>
+
+
+        <li class="nav-item" *ngIf="esSuperAdmin">
           <a routerLink="/dashboard/instituciones">
             <i class="ti ti-building-community"></i>
             <span class="link-name">Instituciones</span>
           </a>
         </li>
 
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="esSuperAdmin">
           <a routerLink="/dashboard/solicitudes">
             <i class="ti ti-inbox"></i>
             <span class="link-name">Solicitudes</span>

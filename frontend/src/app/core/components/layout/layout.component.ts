@@ -18,8 +18,17 @@ export class LayoutComponent {
     return (this.usuario?.username ?? '').substring(0, 2).toUpperCase();
   }
 
+  get esSuperAdmin(): boolean {
+    return this.authService.esSuperAdmin();
+  }
+
+
   get rolPrincipal(): string {
     return this.usuario?.roles?.[0] ?? '';
+  }
+
+  tieneRol(rol: string): boolean {
+    return this.authService.tieneRol(rol);
   }
 
   toggleSubmenu(nombre: string): void {
