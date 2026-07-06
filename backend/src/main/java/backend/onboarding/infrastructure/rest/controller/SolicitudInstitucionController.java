@@ -10,6 +10,7 @@ import backend.onboarding.infrastructure.rest.mapper.SolicitudInstitucionRestMap
 import backend.onboarding.application.usecase.AprobarSolicitudUseCase;
 import backend.onboarding.application.usecase.RechazarSolicitudUseCase;
 import backend.onboarding.infrastructure.rest.dto.RechazoRequestDto;
+import backend.security.application.AutorizacionService;
 import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -36,29 +37,37 @@ public class SolicitudInstitucionController {
     private final RechazarSolicitudUseCase rechazarSolicitudUseCase;
     private final ListarMisSolicitudesUseCase listarMisSolicitudesUseCase;
     private final SolicitudInstitucionRestMapper restMapper;
+    private final AutorizacionService autorizacionService;
 
     public SolicitudInstitucionController(ListarSolicitudesUseCase listarSolicitudesUseCase,
                                           RecibirSolicitudUseCase recibirSolicitudUseCase,
                                           AprobarSolicitudUseCase aprobarSolicitudUseCase,
                                           RechazarSolicitudUseCase rechazarSolicitudUseCase,
                                           ListarMisSolicitudesUseCase listarMisSolicitudesUseCase,
-                                          SolicitudInstitucionRestMapper restMapper) {
+                                          SolicitudInstitucionRestMapper restMapper,
+                                          AutorizacionService autorizacionService) {
         this.listarSolicitudesUseCase = listarSolicitudesUseCase;
         this.recibirSolicitudUseCase = recibirSolicitudUseCase;
         this.aprobarSolicitudUseCase = aprobarSolicitudUseCase;
         this.rechazarSolicitudUseCase = rechazarSolicitudUseCase;
         this.listarMisSolicitudesUseCase = listarMisSolicitudesUseCase;
         this.restMapper = restMapper;
+        this.autorizacionService = autorizacionService;
     }
 
     @GetMapping
-    public List<SolicitudInstitucionResponseDto> listar() {
-        return listarSolicitudesUseCase.ejecutar().stream()
-                .map(restMapper::toResponse)
-                .toList();
+    public ResponseEntity<?> listar(@AuthenticationPrincipal UUID usuarioId) {
+        try {
+            autorizacionService.exigirSuperAdmin(usuarioId);
+            List<SolicitudInstitucionResponseDto> lista = listarSolicitudesUseCase.ejecutar().stream()
+                    .map(restMapper::toResponse).toList();
+            return ResponseEntity.ok(lista);
+        } catch (SecurityException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
+        }
     }
 
-     @PostMapping
+    @PostMapping
     public ResponseEntity<?> recibir(@Valid @RequestBody SolicitudInstitucionRequestDto request,
                                      @AuthenticationPrincipal UUID usuarioId) {
         try {
@@ -68,13 +77,16 @@ public class SolicitudInstitucionController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(e.getMessage()));
         }
     }
-    
+
     @PatchMapping("/{id}/aprobar")
     public ResponseEntity<?> aprobar(@PathVariable UUID id,
                                      @AuthenticationPrincipal UUID usuarioId) {
         try {
+            autorizacionService.exigirSuperAdmin(usuarioId);
             SolicitudInstitucion aprobada = aprobarSolicitudUseCase.ejecutar(id, usuarioId);
             return ResponseEntity.ok(restMapper.toResponse(aprobada));
+        } catch (SecurityException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
         }
@@ -85,8 +97,11 @@ public class SolicitudInstitucionController {
                                       @Valid @RequestBody RechazoRequestDto request,
                                       @AuthenticationPrincipal UUID usuarioId) {
         try {
+            autorizacionService.exigirSuperAdmin(usuarioId);
             SolicitudInstitucion rechazada = rechazarSolicitudUseCase.ejecutar(id, request.getMotivo(), usuarioId);
             return ResponseEntity.ok(restMapper.toResponse(rechazada));
+        } catch (SecurityException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
         }
@@ -100,5 +115,4 @@ public class SolicitudInstitucionController {
     }
 
     record ErrorResponse(String mensaje) {}
-
 }
