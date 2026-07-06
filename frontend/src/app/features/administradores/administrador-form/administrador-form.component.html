@@ -1,0 +1,50 @@
+<div class="form-grid">
+  <div>
+    <label>Tipo de documento *</label>
+    <select [(ngModel)]="form.tipoDocumento" [ngModelOptions]="{standalone: true}">
+      <option value="">Selecciona...</option>
+      <option *ngFor="let t of tiposDocumento" [value]="t.valor">{{ t.etiqueta }}</option>
+    </select>
+  </div>
+  <div>
+    <label>Número de documento *</label>
+    <input [(ngModel)]="form.numeroDocumento" [ngModelOptions]="{standalone: true}">
+  </div>
+  <div>
+    <label>Primer nombre *</label>
+    <input [(ngModel)]="form.primerNombre" [ngModelOptions]="{standalone: true}">
+  </div>
+  <div>
+    <label>Primer apellido *</label>
+    <input [(ngModel)]="form.primerApellido" [ngModelOptions]="{standalone: true}">
+  </div>
+  <div>
+    <label>Correo personal *</label>
+    <input [(ngModel)]="form.correo" [ngModelOptions]="{standalone: true}" placeholder="persona@correo.com">
+  </div>
+  <div>
+    <label>Institución *</label>
+    <select [(ngModel)]="form.institucionId" [ngModelOptions]="{standalone: true}">
+      <option value="">Selecciona una institución...</option>
+      <option *ngFor="let i of instituciones" [value]="i.id">{{ i.nombre }}</option>
+    </select>
+  </div>
+
+  <div class="form-full" *ngIf="!esEdicion">
+    <small class="form-hint">
+      El usuario y la contraseña se generan solos: usuario tipo <em>nombre-apellidoNN</em>,
+      correo institucional <em>&#64;dominio</em> y contraseña = número de documento
+      (el admin deberá cambiarla al primer ingreso). El correo personal se guarda para avisos.
+    </small>
+  </div>
+
+  <div class="form-error" *ngIf="error">{{ error }}</div>
+  <div class="form-exito" *ngIf="exito">{{ exito }}</div>
+
+  <div class="form-actions">
+    <button type="button" class="btn-cancel" (click)="cancelar()">Cerrar</button>
+    <button type="button" class="btn-save" [disabled]="guardando" (click)="guardar()">
+      {{ guardando ? 'Guardando...' : (esEdicion ? 'Guardar cambios' : 'Crear administrador') }}
+    </button>
+  </div>
+</div>

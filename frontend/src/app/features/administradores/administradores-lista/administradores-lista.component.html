@@ -1,0 +1,68 @@
+<div class="page-header">
+  <h1>Administradores de institución</h1>
+  <p>Gestiona las cuentas de administrador de cada colegio</p>
+</div>
+
+<!-- Formulario crear/editar -->
+<div *ngIf="creando || editando" class="form-wrapper">
+  <h3 class="form-title">{{ editando ? 'Editar administrador' : 'Nuevo administrador' }}</h3>
+  <app-administrador-form
+    [administrador]="editando"
+    (guardado)="onGuardado()"
+    (cancelado)="cerrar()">
+  </app-administrador-form>
+</div>
+
+<div *ngIf="cargando" class="estado-msg">Cargando administradores...</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+
+<app-tabla-paginada *ngIf="!cargando"
+  [items]="administradores"
+  [camposBusqueda]="['username','emailLogin','primerNombre','primerApellido','numeroDocumento','correo','institucionNombre']"
+  placeholderBusqueda="Buscar por nombre, documento, correo..."
+  mensajeVacio="Aún no hay administradores creados.">
+
+  <!-- Acción a la derecha: div SIN *ngIf, el *ngIf va en el botón interno -->
+  <div acciones>
+    <button type="button" class="btn-save" (click)="abrirCrear()" *ngIf="!creando && !editando">
+      <i class="ti ti-plus"></i> Nuevo administrador
+    </button>
+  </div>
+
+  <!-- Template de filas identificado con filaTabla -->
+  <ng-template filaTabla let-pagina>
+    <table class="tabla-admins">
+      <thead>
+        <tr>
+          <th>Usuario</th><th>Correo institucional</th><th>Nombre</th><th>Documento</th>
+          <th>Correo</th><th>Institución</th><th>Estado</th><th>Último ingreso</th><th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let a of pagina">
+          <td>{{ a.username }}</td>
+          <td>{{ a.emailLogin }}</td>
+          <td>{{ a.primerNombre }} {{ a.primerApellido }}</td>
+          <td>{{ a.numeroDocumento }}</td>
+          <td>{{ a.correo }}</td>
+          <td>{{ a.institucionNombre || '—' }}</td>
+          <td>
+            <span class="badge-estado" [ngClass]="'estado-' + a.estado.toLowerCase()">{{ a.estado }}</span>
+          </td>
+          <td>{{ a.ultimoLogin ? (a.ultimoLogin | date:'short') : 'Nunca' }}</td>
+          <td class="acciones">
+            <button class="btn-icon" title="Editar" (click)="editar(a)"><i class="ti ti-pencil"></i></button>
+            <button *ngIf="a.estado === 'ACTIVO'" class="btn-icon btn-icon--off" title="Inactivar"
+                    [disabled]="procesandoId === a.usuarioId" (click)="inactivar(a)"><i class="ti ti-user-off"></i></button>
+            <button *ngIf="a.estado !== 'ACTIVO'" class="btn-icon btn-icon--on" title="Activar"
+                    [disabled]="procesandoId === a.usuarioId" (click)="activar(a)"><i class="ti ti-user-check"></i></button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-template>
+</app-tabla-paginada>
+
+<p *ngIf="!cargando && !error && !administradores.length" class="estado-msg">
+  Aún no hay administradores creados.
+</p>
