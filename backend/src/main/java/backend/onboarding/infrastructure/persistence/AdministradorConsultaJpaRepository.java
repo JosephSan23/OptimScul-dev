@@ -15,6 +15,8 @@ public interface AdministradorConsultaJpaRepository extends JpaRepository<Usuari
                    u.estado::text             AS "estado",
                    u.requiere_cambio_password AS "requiereCambioPassword",
                    u.ultimo_login             AS "ultimoLogin",
+                   u.email_login              AS "emailLogin",
+                   p.tipo_documento::text     AS "tipoDocumento",
                    u.created_at               AS "createdAt",
                    p.primer_nombre            AS "primerNombre",
                    p.primer_apellido          AS "primerApellido",
