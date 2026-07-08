@@ -1,0 +1,47 @@
+<div class="page-header">
+  <h1>Personal de la institución</h1>
+  <p>Gestiona las cuentas del personal de tu colegio</p>
+</div>
+
+<div *ngIf="creando" class="form-wrapper">
+  <h3 class="form-title">Nuevo usuario</h3>
+  <app-staff-form (guardado)="onGuardado()" (cancelado)="cerrar()"></app-staff-form>
+</div>
+
+<div *ngIf="cargando" class="estado-msg">Cargando personal...</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+
+<app-tabla-paginada *ngIf="!cargando"
+  [items]="staff"
+  [camposBusqueda]="['username','emailLogin','primerNombre','primerApellido','numeroDocumento','correo','rolNombre']"
+  placeholderBusqueda="Buscar por nombre, documento, rol..."
+  mensajeVacio="Aún no hay personal creado.">
+
+  <div acciones>
+    <button type="button" class="btn-save" (click)="abrirCrear()" *ngIf="!creando">
+      <i class="ti ti-plus"></i> Nuevo usuario
+    </button>
+  </div>
+
+  <ng-template filaTabla let-pagina>
+    <table class="tabla-admins">
+      <thead>
+        <tr>
+          <th>Usuario</th><th>Correo institucional</th><th>Nombre</th>
+          <th>Documento</th><th>Rol</th><th>Estado</th><th>Último ingreso</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let s of pagina">
+          <td>{{ s.username }}</td>
+          <td>{{ s.emailLogin }}</td>
+          <td>{{ s.primerNombre }} {{ s.primerApellido }}</td>
+          <td>{{ s.numeroDocumento }}</td>
+          <td>{{ s.rolNombre }}</td>
+          <td><span class="badge-estado" [ngClass]="'estado-' + s.estado.toLowerCase()">{{ s.estado }}</span></td>
+          <td>{{ s.ultimoLogin ? (s.ultimoLogin | date:'short') : 'Nunca' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-template>
+</app-tabla-paginada>
