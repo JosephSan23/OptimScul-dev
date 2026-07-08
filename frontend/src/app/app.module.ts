@@ -24,6 +24,8 @@ import { AdministradorFormComponent } from './features/administradores/administr
 import { AdministradoresListaComponent } from './features/administradores/administradores-lista/administradores-lista.component';
 import { TablaPaginadaComponent } from './core/components/tabla-paginada/tabla-paginada.component';
 import { FilaTablaDirective } from './core/directives/fila-tabla.directive';
+import { StaffListaComponent } from './features/staff/staff-lista/staff-lista.component';
+import { StaffFormComponent } from './features/staff/staff-form/staff-form.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +47,8 @@ import { FilaTablaDirective } from './core/directives/fila-tabla.directive';
     AdministradoresListaComponent,
     TablaPaginadaComponent,
     FilaTablaDirective,
+    StaffListaComponent,
+    StaffFormComponent,
   ],
   imports: [
     BrowserModule,
