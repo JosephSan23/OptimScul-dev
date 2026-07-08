@@ -1,0 +1,46 @@
+<div class="form-grid">
+  <div>
+    <label>Rol *</label>
+    <select [(ngModel)]="form.rolCodigo" [ngModelOptions]="{standalone: true}">
+      <option value="">Selecciona un rol...</option>
+      <option *ngFor="let r of roles" [value]="r.valor">{{ r.etiqueta }}</option>
+    </select>
+  </div>
+  <div>
+    <label>Tipo de documento *</label>
+    <select [(ngModel)]="form.tipoDocumento" [ngModelOptions]="{standalone: true}">
+      <option value="">Selecciona...</option>
+      <option *ngFor="let t of tiposDocumento" [value]="t.valor">{{ t.etiqueta }}</option>
+    </select>
+  </div>
+  <div>
+    <label>Número de documento *</label>
+    <input [(ngModel)]="form.numeroDocumento" [ngModelOptions]="{standalone: true}">
+  </div>
+  <div>
+    <label>Primer nombre *</label>
+    <input [(ngModel)]="form.primerNombre" [ngModelOptions]="{standalone: true}">
+  </div>
+  <div>
+    <label>Primer apellido *</label>
+    <input [(ngModel)]="form.primerApellido" [ngModelOptions]="{standalone: true}">
+  </div>
+  <div>
+    <label>Correo personal *</label>
+    <input [(ngModel)]="form.correo" [ngModelOptions]="{standalone: true}" placeholder="persona@correo.com">
+  </div>
+
+  <div class="form-full">
+    <small class="form-hint">Usuario y contraseña se generan solos (usuario: nombre-apellidoNN · contraseña = documento).</small>
+  </div>
+
+  <div class="form-error" *ngIf="error">{{ error }}</div>
+  <div class="form-exito" *ngIf="exito">{{ exito }}</div>
+
+  <div class="form-actions">
+    <button type="button" class="btn-cancel" (click)="cancelar()">Cerrar</button>
+    <button type="button" class="btn-save" [disabled]="guardando" (click)="guardar()">
+      {{ guardando ? 'Creando...' : 'Crear usuario' }}
+    </button>
+  </div>
+</div>
