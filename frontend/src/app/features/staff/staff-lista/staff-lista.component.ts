@@ -11,7 +11,6 @@ export class StaffListaComponent implements OnInit {
   staff: Staff[] = [];
   cargando = false;
   error = '';
-  creando = false;
 
   constructor(private staffService: StaffService) {}
 
@@ -26,7 +25,20 @@ export class StaffListaComponent implements OnInit {
     });
   }
 
-  abrirCrear(): void { this.creando = true; }
-  cerrar(): void { this.creando = false; }
-  onGuardado(): void { this.cargar(); }
+  procesandoId: string | null = null;
+
+  activar(s: Staff): void {
+    this.procesandoId = s.usuarioId;
+    this.staffService.activar(s.usuarioId).subscribe({
+      next: () => { this.procesandoId = null; this.cargar(); },
+      error: () => { this.procesandoId = null; this.error = 'No se pudo activar.'; }
+    });
+  }
+  inactivar(s: Staff): void {
+    this.procesandoId = s.usuarioId;
+    this.staffService.inactivar(s.usuarioId).subscribe({
+      next: () => { this.procesandoId = null; this.cargar(); },
+      error: () => { this.procesandoId = null; this.error = 'No se pudo inactivar.'; }
+    });
+  }
 }

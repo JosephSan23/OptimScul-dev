@@ -1,0 +1,129 @@
+/* ── Tokens locales (si luego quieres, muévelos a un _variables.scss global) ── */
+$c-primary:   #2563eb;
+$c-primary-d: #1d4ed8;
+$c-ink:       #1f2937;
+$c-muted:     #6b7280;
+$c-line:      #e5e7eb;
+$c-line-soft: #f3f4f6;
+$radius:      12px;
+$shadow:      0 1px 2px rgba(16, 24, 40, .04), 0 1px 3px rgba(16, 24, 40, .06);
+
+:host { display: block; }
+
+.page-header {
+  margin-bottom: 1.5rem;
+  h1 { margin: 0 0 .25rem; font-size: 1.6rem; font-weight: 700; color: $c-ink; letter-spacing: -.01em; }
+  p  { margin: 0; color: $c-muted; font-size: .95rem; }
+}
+
+.estado-msg {
+  padding: .85rem 0;
+  color: $c-muted;
+  font-size: .95rem;
+  &.error { color: #dc2626; }
+}
+
+/* Botón "Nuevo" (es un <a>, hay que resetear el subrayado) */
+.btn-save {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .6rem 1.05rem;
+  background: $c-primary;
+  color: #fff;
+  border: none;
+  border-radius: 9px;
+  font-size: .9rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background .15s ease, transform .05s ease;
+  &:hover  { background: $c-primary-d; }
+  &:active { transform: translateY(1px); }
+  i { font-size: 1.05rem; }
+}
+
+/* Tabla */
+.tabla-admins {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  border: 1px solid $c-line;
+  border-radius: $radius;
+  overflow: hidden;
+  box-shadow: $shadow;
+
+  thead th {
+    text-align: left;
+    padding: .85rem 1rem;
+    background: #f9fafb;
+    color: $c-muted;
+    font-size: .74rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    border-bottom: 1px solid $c-line;
+    white-space: nowrap;
+  }
+
+  tbody td {
+    padding: .8rem 1rem;
+    font-size: .9rem;
+    color: #374151;
+    border-bottom: 1px solid $c-line-soft;
+    vertical-align: middle;
+  }
+
+  tbody tr {
+    transition: background .12s ease;
+    &:last-child td { border-bottom: none; }
+    &:hover td { background: #f9fafb; }
+  }
+}
+
+/* Badge de estado */
+.badge-estado {
+  display: inline-flex;
+  align-items: center;
+  padding: .25rem .6rem;
+  border-radius: 999px;
+  font-size: .74rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+
+  &.estado-activo               { background: #dcfce7; color: #166534; }
+  &.estado-inactivo             { background: #f3f4f6; color: #6b7280; }
+  &.estado-bloqueado            { background: #fee2e2; color: #991b1b; }
+  &.estado-pendiente_activacion { background: #fef9c3; color: #854d0e; }
+}
+
+/* Acciones */
+.acciones {
+  display: flex;
+  gap: 8px;
+  white-space: nowrap;
+
+  .btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid $c-line;
+    border-radius: 8px;
+    background: #fff;
+    color: #4b5563;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all .15s ease;
+    &:hover { color: $c-primary; border-color: #bfdbfe; background: #eff6ff; }
+    i { font-size: 1.05rem; }
+  }
+}
+
+/* Responsive: en móvil, scroll horizontal de la tabla */
+@media (max-width: 720px) {
+  .tabla-admins { display: block; overflow-x: auto; white-space: nowrap; }
+}

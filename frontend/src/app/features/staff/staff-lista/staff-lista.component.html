@@ -3,11 +3,6 @@
   <p>Gestiona las cuentas del personal de tu colegio</p>
 </div>
 
-<div *ngIf="creando" class="form-wrapper">
-  <h3 class="form-title">Nuevo usuario</h3>
-  <app-staff-form (guardado)="onGuardado()" (cancelado)="cerrar()"></app-staff-form>
-</div>
-
 <div *ngIf="cargando" class="estado-msg">Cargando personal...</div>
 <div *ngIf="error" class="estado-msg error">{{ error }}</div>
 
@@ -18,9 +13,9 @@
   mensajeVacio="Aún no hay personal creado.">
 
   <div acciones>
-    <button type="button" class="btn-save" (click)="abrirCrear()" *ngIf="!creando">
+    <a class="btn-save" routerLink="/dashboard/staff/nuevo">
       <i class="ti ti-plus"></i> Nuevo usuario
-    </button>
+    </a>
   </div>
 
   <ng-template filaTabla let-pagina>
@@ -28,7 +23,7 @@
       <thead>
         <tr>
           <th>Usuario</th><th>Correo institucional</th><th>Nombre</th>
-          <th>Documento</th><th>Rol</th><th>Estado</th><th>Último ingreso</th>
+          <th>Documento</th><th>Rol</th><th>Estado</th><th>Acciones</th>
         </tr>
       </thead>
       <tbody>
@@ -39,7 +34,19 @@
           <td>{{ s.numeroDocumento }}</td>
           <td>{{ s.rolNombre }}</td>
           <td><span class="badge-estado" [ngClass]="'estado-' + s.estado.toLowerCase()">{{ s.estado }}</span></td>
-          <td>{{ s.ultimoLogin ? (s.ultimoLogin | date:'short') : 'Nunca' }}</td>
+          <td class="acciones">
+            <a class="btn-icon" title="Editar" [routerLink]="['/dashboard/staff', s.usuarioId]">
+              <i class="ti ti-pencil"></i>
+            </a>
+            <button *ngIf="s.estado === 'ACTIVO'" class="btn-icon btn-icon--off" title="Inactivar"
+                    [disabled]="procesandoId === s.usuarioId" (click)="inactivar(s)">
+              <i class="ti ti-user-off"></i>
+            </button>
+            <button *ngIf="s.estado !== 'ACTIVO'" class="btn-icon btn-icon--on" title="Activar"
+                    [disabled]="procesandoId === s.usuarioId" (click)="activar(s)">
+              <i class="ti ti-user-check"></i>
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
