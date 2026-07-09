@@ -1,46 +1,137 @@
-<div class="form-grid">
-  <div>
-    <label>Rol *</label>
-    <select [(ngModel)]="form.rolCodigo" [ngModelOptions]="{standalone: true}">
-      <option value="">Selecciona un rol...</option>
-      <option *ngFor="let r of roles" [value]="r.valor">{{ r.etiqueta }}</option>
-    </select>
-  </div>
-  <div>
-    <label>Tipo de documento *</label>
-    <select [(ngModel)]="form.tipoDocumento" [ngModelOptions]="{standalone: true}">
-      <option value="">Selecciona...</option>
-      <option *ngFor="let t of tiposDocumento" [value]="t.valor">{{ t.etiqueta }}</option>
-    </select>
-  </div>
-  <div>
-    <label>Número de documento *</label>
-    <input [(ngModel)]="form.numeroDocumento" [ngModelOptions]="{standalone: true}">
-  </div>
-  <div>
-    <label>Primer nombre *</label>
-    <input [(ngModel)]="form.primerNombre" [ngModelOptions]="{standalone: true}">
-  </div>
-  <div>
-    <label>Primer apellido *</label>
-    <input [(ngModel)]="form.primerApellido" [ngModelOptions]="{standalone: true}">
-  </div>
-  <div>
-    <label>Correo personal *</label>
-    <input [(ngModel)]="form.correo" [ngModelOptions]="{standalone: true}" placeholder="persona@correo.com">
+<div class="perfil-page">
+
+  <!-- Header (edición) -->
+  <div class="perfil-header" *ngIf="modoEdicion && !cargando">
+    <img class="avatar" *ngIf="fotoUrl" [src]="fotoUrl" alt="foto">
+    <div class="avatar" *ngIf="!fotoUrl">{{ iniciales }}</div>
+    <div class="perfil-id">
+      <h2>{{ nombreCompleto }}</h2>
+      <p>{{ username }} · {{ emailLogin }}</p>
+    </div>
+    <span class="badge-estado" [ngClass]="'estado-' + estado.toLowerCase()">{{ estado | titlecase }}</span>
   </div>
 
-  <div class="form-full">
-    <small class="form-hint">Usuario y contraseña se generan solos (usuario: nombre-apellidoNN · contraseña = documento).</small>
+  <!-- Header (creación) -->
+  <div class="page-header" *ngIf="!modoEdicion">
+    <h1>Nuevo usuario</h1>
+    <p>Crea una cuenta para el personal del colegio</p>
   </div>
 
-  <div class="form-error" *ngIf="error">{{ error }}</div>
-  <div class="form-exito" *ngIf="exito">{{ exito }}</div>
+  <div *ngIf="cargando" class="estado-msg">Cargando...</div>
 
-  <div class="form-actions">
-    <button type="button" class="btn-cancel" (click)="cancelar()">Cerrar</button>
-    <button type="button" class="btn-save" [disabled]="guardando" (click)="guardar()">
-      {{ guardando ? 'Creando...' : 'Crear usuario' }}
+  <form *ngIf="!cargando" class="perfil-form">
+
+    <!-- Identificación -->
+    <section class="form-section">
+      <div class="section-info">
+        <h3>Identificación</h3>
+        <p>Rol y documento oficial</p>
+      </div>
+      <div class="section-fields">
+        <div class="campo">
+          <label>Rol *</label>
+          <select [(ngModel)]="form.rolCodigo" [ngModelOptions]="{standalone: true}">
+            <option value="">Selecciona...</option>
+            <option *ngFor="let r of roles" [value]="r.valor">{{ r.etiqueta }}</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label>Tipo de documento *</label>
+          <select [(ngModel)]="form.tipoDocumento" [ngModelOptions]="{standalone: true}">
+            <option value="">Selecciona...</option>
+            <option *ngFor="let t of tiposDocumento" [value]="t.valor">{{ t.etiqueta }}</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label>Número de documento *</label>
+          <input [(ngModel)]="form.numeroDocumento" [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+    </section>
+
+    <!-- Datos personales -->
+    <section class="form-section">
+      <div class="section-info">
+        <h3>Datos personales</h3>
+        <p>Nombre completo y datos básicos</p>
+      </div>
+      <div class="section-fields">
+        <div class="campo">
+          <label>Primer nombre *</label>
+          <input [(ngModel)]="form.primerNombre" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="campo" *ngIf="modoEdicion">
+          <label>Segundo nombre</label>
+          <input placeholder="Opcional" [(ngModel)]="form.segundoNombre" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="campo">
+          <label>Primer apellido *</label>
+          <input [(ngModel)]="form.primerApellido" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="campo" *ngIf="modoEdicion">
+          <label>Segundo apellido</label>
+          <input placeholder="Opcional" [(ngModel)]="form.segundoApellido" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="campo" *ngIf="modoEdicion">
+          <label>Fecha de nacimiento</label>
+          <input type="date" [(ngModel)]="form.fechaNacimiento" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="campo" *ngIf="modoEdicion">
+          <label>Sexo</label>
+          <select [(ngModel)]="form.sexo" [ngModelOptions]="{standalone: true}">
+            <option value="">Selecciona...</option>
+            <option *ngFor="let s of sexos" [value]="s">{{ s | titlecase }}</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contacto -->
+    <section class="form-section">
+      <div class="section-info">
+        <h3>Contacto</h3>
+        <p>Correo y ubicación</p>
+      </div>
+      <div class="section-fields">
+        <div class="campo">
+          <label>Correo personal *</label>
+          <input [(ngModel)]="form.correo" [ngModelOptions]="{standalone: true}" placeholder="persona@correo.com">
+        </div>
+        <ng-container *ngIf="modoEdicion">
+          <div class="campo"><label>Teléfono</label><input placeholder="Opcional" [(ngModel)]="form.telefono" [ngModelOptions]="{standalone: true}"></div>
+          <div class="campo"><label>Teléfono alternativo</label><input placeholder="Opcional" [(ngModel)]="form.telefonoAlternativo" [ngModelOptions]="{standalone: true}"></div>
+          <div class="campo"><label>Nacionalidad</label><input placeholder="Opcional" [(ngModel)]="form.nacionalidad" [ngModelOptions]="{standalone: true}"></div>
+          <div class="campo"><label>Dirección</label><input placeholder="Opcional" [(ngModel)]="form.direccion" [ngModelOptions]="{standalone: true}"></div>
+          <div class="campo"><label>Barrio</label><input placeholder="Opcional" [(ngModel)]="form.barrio" [ngModelOptions]="{standalone: true}"></div>
+          <div class="campo"><label>Ciudad</label><input placeholder="Opcional" [(ngModel)]="form.ciudad" [ngModelOptions]="{standalone: true}"></div>
+          <div class="campo"><label>Departamento</label><input placeholder="Opcional" [(ngModel)]="form.departamento" [ngModelOptions]="{standalone: true}"></div>
+          <div class="campo"><label>País</label><input [(ngModel)]="form.pais" [ngModelOptions]="{standalone: true}"></div>
+        </ng-container>
+      </div>
+    </section>
+
+    <!-- Observaciones -->
+    <section class="form-section" *ngIf="modoEdicion">
+      <div class="section-info">
+        <h3>Observaciones</h3>
+        <p>Notas internas</p>
+      </div>
+      <div class="section-fields">
+        <div class="campo campo-full">
+          <label>Observaciones</label>
+          <input placeholder="Opcional" [(ngModel)]="form.observaciones" [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+    </section>
+
+    <div class="form-error" *ngIf="error">{{ error }}</div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" (click)="cancelar()">Cancelar</button>
+      <button type="button" class="btn-save" [disabled]="guardando" (click)="guardar()">
+        <i class="ti" [ngClass]="modoEdicion ? 'ti-device-floppy' : 'ti-user-plus'"></i>
+        {{ guardando ? 'Guardando...' : (modoEdicion ? 'Guardar cambios' : 'Crear usuario') }}
     </button>
-  </div>
+    </div>
+  </form>
 </div>
