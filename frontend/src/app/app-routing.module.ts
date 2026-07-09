@@ -14,6 +14,7 @@ import { SeguimientoComponent } from './features/seguimiento/seguimiento/seguimi
 import { AdministradoresListaComponent } from './features/administradores/administradores-lista/administradores-lista.component';
 import { roleGuard } from './core/guards/role.guard';
 import { StaffListaComponent } from './features/staff/staff-lista/staff-lista.component';
+import { StaffFormComponent } from './features/staff/staff-form/staff-form.component';
 
 const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -29,7 +30,9 @@ const routes: Routes = [
   canActivate: [authGuard],
   children: [
     { path: 'admin',          component: DashboardComponent,          canActivate: [roleGuard], data: { soloSuperAdmin: true } },
-    { path: 'staff', component: StaffListaComponent, canActivate: [roleGuard], data: { roles: ['ADMIN_INSTITUCION'] } },
+    { path: 'staff',       component: StaffListaComponent, canActivate: [roleGuard], data: { roles: ['ADMIN_INSTITUCION'] } },
+    { path: 'staff/nuevo', component: StaffFormComponent,  canActivate: [roleGuard], data: { roles: ['ADMIN_INSTITUCION'] } },
+    { path: 'staff/:id',   component: StaffFormComponent,  canActivate: [roleGuard], data: { roles: ['ADMIN_INSTITUCION'] } },
     { path: 'instituciones',  component: InstitucionesListaComponent, canActivate: [roleGuard], data: { soloSuperAdmin: true } },
     { path: 'solicitudes',    component: SolicitudesListaComponent,   canActivate: [roleGuard], data: { soloSuperAdmin: true } },
     { path: 'administradores',component: AdministradoresListaComponent, canActivate: [roleGuard], data: { soloSuperAdmin: true } },
