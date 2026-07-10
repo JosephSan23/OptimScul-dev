@@ -1,23 +1,62 @@
 <app-navbar></app-navbar>
+
 <section class="hero" id="inicio">
+  <span class="hero-blob hero-blob-1"></span>
+  <span class="hero-blob hero-blob-2"></span>
+
   <div class="container">
     <div class="hero-content revelar-izq">
+      <span class="chip">✦ Plataforma de gestión escolar</span>
       <h1 class="hero-title">
         La gestión de tu colegio,
-        <br><span>más inteligente que nunca</span>
+        <br><span class="hl">más inteligente<svg class="squiggle" viewBox="0 0 200 14" preserveAspectRatio="none"><path d="M3 10 C40 3, 80 12, 120 6 S 180 4, 197 8" stroke="#F4762A" stroke-width="5" fill="none" stroke-linecap="round" opacity=".5"/></svg></span>
+        que nunca
       </h1>
       <p class="hero-description">
         Optimiza procesos, centraliza la información y mejora la comunicación
         entre docentes, alumnos y padres en una sola plataforma.
       </p>
       <div class="hero-btns">
-        <a routerLink="/primeros-pasos" class="btn-primary">Empezar ahora</a>
-        <a href="#" class="btn-secondary">Ver Demo</a>
+        <a routerLink="/primeros-pasos" class="btn-primary">Empezar ahora <i class="fas fa-arrow-right"></i></a>
+        <a href="#" class="btn-secondary"><i class="fas fa-play"></i> Ver Demo</a>
       </div>
     </div>
 
-    <div class="hero-image revelar">
-      <img src="assets/niño-header.png" alt="OptimScul">
+    <!-- Mock del producto: ilustración propia construida en CSS.
+         Reemplaza la imagen del hero — muestra el dashboard real como marca. -->
+    <div class="hero-mock revelar">
+      <div class="mock">
+        <div class="mock-side">
+          <span class="dot on"><i class="fas fa-house"></i></span>
+          <span class="dot"><i class="fas fa-users"></i></span>
+          <span class="dot"><i class="fas fa-book-open"></i></span>
+          <span class="dot"><i class="fas fa-chart-column"></i></span>
+        </div>
+        <div class="mock-main">
+          <div class="mock-top">
+            <h4>OptimScul</h4>
+            <span class="pill"><i class="fas fa-circle"></i> Periodo activo</span>
+          </div>
+          <div class="mock-stats">
+            <div class="mock-stat"><b>842</b><i>Alumnos</i></div>
+            <div class="mock-stat"><b>96%</b><i>Asistencia</i></div>
+            <div class="mock-stat"><b>38</b><i>Docentes</i></div>
+          </div>
+          <div class="mock-chart">
+            <b style="height:45%"></b><b style="height:70%"></b><b style="height:55%"></b>
+            <b class="hot" style="height:92%"></b><b style="height:62%"></b><b style="height:78%"></b><b style="height:50%"></b>
+          </div>
+        </div>
+      </div>
+
+      <div class="float-card float-1">
+        <span class="float-ico ok"><i class="fas fa-check"></i></span>
+        <div>Asistencia registrada<small>Curso 8-B · hace 2 min</small></div>
+      </div>
+      <div class="float-card float-2">
+        <span class="float-ico warm"><i class="fas fa-file-lines"></i></span>
+        <div>Boletines generados<small>Periodo II · listos para enviar</small></div>
+      </div>
     </div>
   </div>
 </section>
@@ -25,7 +64,7 @@
 <section class="problem-discovery" id="problem">
   <div class="container">
     <div class="problem-main-content revelar">
-      <span class="problem-label">El desafío actual</span>
+      <span class="chip">✦ El desafío actual</span>
       <h2>¿Tu institución sigue atrapada en procesos manuales?</h2>
       <p class="problem-subtitle">
         Gestionar un centro educativo con herramientas obsoletas
@@ -34,8 +73,6 @@
     </div>
 
     <div class="problem-list">
-      <!-- *ngFor — por cada objeto en el array "problemas" crea un div -->
-      <!-- "problema" es el nombre de la variable temporal en cada iteración -->
       <div class="problem-row revelar"
            *ngFor="let problema of problemas">
         <div class="problem-number">{{ problema.numero }}</div>
@@ -51,7 +88,7 @@
 <section class="why" id="features">
   <div class="why-container">
     <div class="why-header revelar">
-      <span class="subtitle">Beneficios</span>
+      <span class="chip">✦ Beneficios</span>
       <h2 class="section-title">¿Por qué elegir <span>OptimScul</span>?</h2>
       <p class="section-description">
         Diseñamos una herramienta pensada en simplificar el día a día
@@ -60,13 +97,10 @@
     </div>
 
     <div class="why-grid">
-      <!-- *ngFor recorre el array "beneficios" -->
       <div class="why-card revelar"
            *ngFor="let beneficio of beneficios">
         <div class="why-icon">
           <img [src]="beneficio.imagen" [alt]="beneficio.titulo">
-          <!-- [src] es property binding — Angular evalúa la expresión -->
-          <!-- Si fuera src="beneficio.imagen" lo tomaría como texto literal -->
         </div>
         <h3>{{ beneficio.titulo }}</h3>
         <p>{{ beneficio.descripcion }}</p>
@@ -81,7 +115,7 @@
     <div class="feature-item revelar">
       <div class="feature-text">
         <span class="badge">Eficacia Operativa</span>
-        <h2>Adiós a los Procesos Manuales e Ineficientes</h2>
+        <h2>Adiós a los procesos manuales e ineficientes</h2>
         <p>Optimizamos la gestión escolar automatizando la generación
           de certificados y la inscripción de asignaturas, eliminando
           los retrasos en los trámites institucionales.</p>
@@ -98,7 +132,7 @@
     <div class="feature-item reverse revelar">
       <div class="feature-text">
         <span class="badge">Conectividad</span>
-        <h2>Información Académica sin Barreras</h2>
+        <h2>Información académica sin barreras</h2>
         <p>Creamos un canal directo entre docentes, estudiantes y acudientes.
           Consulta calificaciones, tareas y control de asistencia al instante,
           sin desorganización.</p>
@@ -118,6 +152,7 @@
 <section class="solutions-roles" id="roles">
   <div class="container">
     <div class="solutions-header revelar">
+      <span class="chip">✦ Para toda la comunidad</span>
       <h2>Soluciones para toda la comunidad</h2>
       <p>OptimScul se adapta a las necesidades de cada rol dentro de la institución.</p>
     </div>
@@ -149,7 +184,6 @@
       <article class="cap-item revelar"
                *ngFor="let cap of capacidades">
         <div class="icon-box">
-          <!-- [class] dinámico — el icono de FontAwesome viene del array -->
           <i [class]="cap.icono"></i>
         </div>
         <h3>{{ cap.titulo }}</h3>
