@@ -1,256 +1,327 @@
-/* ══════════════════════════════════════════════════
-   HERO OSCURO
-   ══════════════════════════════════════════════════ */
-.steps-hero-dark {
-  background: linear-gradient(180deg, #0a2540 0%, #071a2d 100%);
-  padding: 160px 5% 80px;
-  text-align: center;
-  color: #fff;
-  position: relative;
-  overflow: hidden;
-  min-height: 40vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  h1 {
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    font-weight: 800;
-    line-height: 1.1;
-    margin-bottom: 25px;
-    color: #fff;
-  }
-
-  p {
-    font-size: 1.2rem;
-    color: #cbd5e0;
-    line-height: 1.8;
-    max-width: 750px;
-    margin: 0 auto;
-  }
-}
+/* ============================================================
+   PRIMEROS PASOS · OptimScul — sistema "Minimalismo cálido + clay"
+   Consume los tokens globales de styles.scss.
+   Ritmo: hero navy compacto → cuerpo crema → CTA banda navy → footer.
+   ============================================================ */
 
 .container-steps {
   max-width: 900px;
   margin: 0 auto;
   position: relative;
   z-index: 1;
+
+  &.wide { max-width: 1160px; }
 }
 
-.badge-consultive {
-  display: inline-block;
-  background-color: rgba(243,111,33,0.15);
-  color: #f36f21;
-  padding: 10px 24px;
-  border-radius: 50px;
-  font-size: 0.85rem;
+/* chip compartido */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(244,118,42,.15);
+  color: #FFB98A;
   font-weight: 700;
+  font-size: .84rem;
+  letter-spacing: .04em;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  border: 1px solid rgba(243,111,33,0.3);
-  margin-bottom: 30px;
+  padding: 9px 17px;
+  border-radius: 999px;
+  margin-bottom: 22px;
 }
 
 /* ══════════════════════════════════════════════════
-   SECCIONES OSCURAS DE PASOS
+   HERO COMPACTO — navy
    ══════════════════════════════════════════════════ */
-.section-dark-bg {
-  background-color: #0a2540;
-  padding: 80px 5%;
+.steps-hero {
+  background: var(--navy-900);
+  padding: 150px 5% 70px;
+  text-align: center;
   color: #fff;
+  position: relative;
+  overflow: hidden;
 
-  // alt-bg diferencia visualmente la sección de padres
-  // respecto a la de instituciones
-  &.alt-bg {
-    background-color: #071a2d;
-    border-top: 1px solid rgba(255,255,255,0.05);
+  .hero-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(70px);
+    pointer-events: none;
+  }
+  .hero-blob-1 { width: 380px; height: 380px; background: rgba(244,118,42,.13); top: -140px; right: -90px; }
+  .hero-blob-2 { width: 320px; height: 320px; background: rgba(227,237,247,.07); bottom: -160px; left: -100px; }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    color: #fff;
+    letter-spacing: -.01em;
+
+    span { color: var(--orange-500); }
+  }
+
+  p {
+    font-size: 1.15rem;
+    color: var(--ink-inverse);
+    line-height: 1.7;
+    max-width: 700px;
+    margin: 0 auto;
   }
 }
 
-.section-title {
+/* ══════════════════════════════════════════════════
+   CUERPO — crema, selector + camino
+   ══════════════════════════════════════════════════ */
+.steps-body {
+  background: var(--cream);
+  padding: 80px 5% 100px;
   text-align: center;
-  font-size: 2.2rem;
-  font-weight: 800;
-  color: #f36f21;
-  margin-bottom: 60px;
-  letter-spacing: -0.5px;
 }
 
-/* ══════════════════════════════════════════════════
-   GRILLA DE TARJETAS
-   ══════════════════════════════════════════════════ */
-.steps-path-grid {
+/* selector segmentado — misma familia que los toggles del sistema */
+.perfil-selector {
+  display: inline-flex;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px;
+  box-shadow: var(--shadow-1);
+  margin-bottom: 18px;
+
+  button {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    background: transparent;
+    border: none;
+    border-radius: 999px;
+    padding: 13px 28px;
+    font-family: var(--font-body);
+    font-size: .95rem;
+    font-weight: 700;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: all .25s ease;
+
+    i { font-size: .85rem; }
+
+    &:hover { color: var(--navy-900); }
+
+    /* activo: navy sólido — el naranja queda para el CTA final */
+    &.on {
+      background: var(--navy-900);
+      color: #fff;
+      box-shadow: var(--shadow-1);
+    }
+  }
+}
+
+.perfil-hint {
+  color: var(--ink-soft);
+  font-size: 1.02rem;
+  margin-bottom: 50px;
+}
+
+/* ── línea de pasos: 3 tarjetas conectadas ── */
+.steps-path {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 30px;
-  max-width: 1200px;
-  margin: 0 auto;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 26px;
+  text-align: left;
 }
 
 .path-card {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.1);
-  padding: 50px 40px;
-  border-radius: 24px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  box-shadow: var(--clay-card);
+  padding: 38px 30px;
   position: relative;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
   &:hover {
-    background: rgba(255,255,255,0.06);
-    border-color: #f36f21;
-    transform: translateY(-12px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-2);
+    border-color: rgba(244,118,42,.35);
 
-    // cuando la tarjeta tiene hover, el número de fondo
-    // se hace un poco más visible
-    .path-step {
-      color: rgba(243,111,33,0.15);
+    .path-icon {
+      transform: scale(1.06) rotate(3deg);
     }
   }
 
-  // card-center se agrega dinámicamente cuando paso.centrado = true
-  // centra la tercera tarjeta cuando está sola en su fila
-  &.card-center {
-    grid-column: 1 / -1;
-    justify-self: center;
-    max-width: 400px;
-    width: 100%;
-  }
-}
-
-// Número grande decorativo en el fondo de la tarjeta
-.path-step {
-  font-size: 6rem;
-  font-weight: 900;
-  color: rgba(243,111,33,0.08);
-  position: absolute;
-  top: -10px;
-  right: 10px;
-  user-select: none;
-  transition: color 0.4s ease;
-  line-height: 1;
-}
-
-.path-icon {
-  font-size: 2.5rem;
-  color: #f36f21;
-  margin-bottom: 25px;
-  display: inline-block;
-  position: relative;
-  z-index: 2;
-}
-
-.path-card {
   h3 {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 700;
-    margin-bottom: 15px;
-    color: #fff;
+    margin-bottom: 12px;
     position: relative;
     z-index: 2;
   }
 
   p {
-    font-size: 1rem;
-    line-height: 1.7;
-    color: #cbd5e0;
+    font-size: .95rem;
+    line-height: 1.65;
+    color: var(--ink-soft);
     position: relative;
     z-index: 2;
     margin: 0;
   }
 }
 
-/* ══════════════════════════════════════════════════
-   CTA FINAL
-   ══════════════════════════════════════════════════ */
-.final-cta-dark {
-  background-color: #0a2540;
-  padding: 120px 5%;
+/* número del paso: chip clay naranja arriba de la tarjeta,
+   comunica secuencia sin ser decoración de fondo */
+.path-num {
+  position: absolute;
+  top: -16px;
+  left: 28px;
+  background: var(--orange-500);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: .9rem;
+  padding: 6px 15px;
+  border-radius: 999px;
+  box-shadow: var(--clay-btn), var(--clay-btn-inset);
+  z-index: 3;
+}
+
+.path-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: var(--clay-radius);
+  background: var(--navy-100);
+  box-shadow: var(--clay-ico);
+  display: grid;
+  place-items: center;
+  margin-bottom: 20px;
+  transition: transform .3s ease;
   position: relative;
-  overflow: hidden;
-  text-align: center;
+  z-index: 2;
 
-  h2 {
-    font-size: clamp(2rem, 5vw, 3rem);
-    font-weight: 800;
-    color: #fff;
-    margin-bottom: 20px;
-  }
-
-  p {
-    color: #cbd5e0;
-    font-size: 1.1rem;
-    line-height: 1.7;
-    margin-bottom: 40px;
+  i {
+    font-size: 1.3rem;
+    color: var(--navy-900);
   }
 }
 
-// Círculo de luz naranja decorativo centrado detrás del contenido
-.cta-overlay-graphics {
+/* tintes alternados por posición — misma paleta */
+.path-card:nth-child(2) .path-icon {
+  background: var(--orange-100);
+  i { color: var(--orange-600); }
+}
+.path-card:nth-child(3) .path-icon {
+  background: var(--green-100);
+  i { color: var(--green-500); }
+}
+
+/* conector entre tarjetas (solo escritorio) */
+.path-connector {
   position: absolute;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(243,111,33,0.1) 0%, transparent 70%);
+  right: -22px;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-1);
+  display: grid;
+  place-items: center;
+  z-index: 4;
+
+  i {
+    font-size: .6rem;
+    color: var(--orange-500);
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   CTA FINAL — banda navy redondeada (como en la landing)
+   ══════════════════════════════════════════════════ */
+.steps-cta {
+  background: var(--cream);
+  padding: 0 5% 100px;
+}
+
+.cta-band {
+  background: var(--navy-900);
+  border-radius: var(--r-panel);
+  padding: 80px 40px;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  box-shadow: var(--shadow-2);
+}
+
+.cta-blob {
+  position: absolute;
+  top: -140px;
+  right: -100px;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: rgba(244,118,42,.16);
+  filter: blur(60px);
   pointer-events: none;
-  z-index: 1;
 }
 
 .cta-content {
   position: relative;
   z-index: 2;
-  max-width: 800px;
+  max-width: 720px;
   margin: 0 auto;
-}
 
-.cta-tag {
-  color: #f36f21;
-  text-transform: uppercase;
-  font-weight: 700;
-  letter-spacing: 2px;
-  font-size: 0.9rem;
-  display: block;
-  margin-bottom: 20px;
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 4.5vw, 2.7rem);
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 16px;
+    letter-spacing: -.01em;
+  }
+
+  p {
+    color: var(--ink-inverse);
+    font-size: 1.08rem;
+    line-height: 1.7;
+    margin-bottom: 36px;
+  }
 }
 
 .cta-actions {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 18px;
 }
 
-.btn-primary-orange {
-  background-color: #f36f21;
+.btn-cta {
+  background-color: var(--orange-500);
   color: #fff;
-  padding: 20px 45px;
-  border-radius: 50px;
+  padding: 18px 42px;
+  border-radius: 999px;
   text-decoration: none;
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  transition: all 0.3s ease;
-  box-shadow: 0 10px 25px rgba(243,111,33,0.3);
+  transition: all 0.25s ease;
+  box-shadow: var(--clay-btn), var(--clay-btn-inset);
 
-  i { transition: transform 0.3s ease; }
+  i { transition: transform 0.25s ease; }
 
   &:hover {
-    background-color: #ff8133;
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(243,111,33,0.5);
+    background-color: var(--orange-600);
+    transform: translateY(-3px);
 
-    i { transform: translateX(5px); }
+    i { transform: translateX(4px); }
   }
 }
 
 .cta-note {
-  color: #a0aec0;
+  color: var(--ink-inverse);
   font-size: 0.95rem;
   margin: 0;
 
@@ -258,45 +329,52 @@
     color: #fff;
     font-weight: 600;
     text-decoration: none;
-    border-bottom: 1px solid #f36f21;
-    transition: 0.3s;
+    border-bottom: 2px solid var(--orange-500);
+    transition: 0.25s;
 
-    &:hover { color: #f36f21; }
+    &:hover { color: var(--orange-500); }
   }
 }
 
 /* ══════════════════════════════════════════════════
    RESPONSIVE
    ══════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  .steps-hero-dark {
-    padding: 120px 5% 60px;
-  }
-
-  .steps-path-grid {
+@media (max-width: 900px) {
+  .steps-path {
     grid-template-columns: 1fr;
+    gap: 34px;
+    max-width: 520px;
+    margin: 0 auto;
   }
 
-  // En móvil la tarjeta centrada no necesita
-  // ocupar toda la fila porque ya hay una columna
-  .path-card.card-center {
-    grid-column: auto;
-    justify-self: stretch;
-    max-width: 100%;
+  /* en columna, el conector apunta hacia abajo entre tarjetas */
+  .path-connector {
+    top: auto;
+    bottom: -32px;
+    right: 50%;
+    transform: translateX(50%);
+
+    i { transform: rotate(90deg); }
+  }
+}
+
+@media (max-width: 768px) {
+  .steps-hero { padding: 130px 5% 55px; }
+  .steps-body { padding: 60px 5% 80px; }
+
+  .perfil-selector button {
+    padding: 11px 18px;
+    font-size: .87rem;
   }
 
-  .section-title { font-size: 1.8rem; }
-
-  .btn-primary-orange {
-    padding: 16px 32px;
-    font-size: 1rem;
-  }
-
-  .final-cta-dark { padding: 80px 5%; }
+  .cta-band { padding: 60px 24px; }
 }
 
 @media (max-width: 480px) {
-  .steps-hero-dark h1 { font-size: 1.8rem; }
-  .path-card { padding: 35px 25px; }
-  .path-step { font-size: 4rem; }
+  .path-card { padding: 32px 24px; }
+
+  .btn-cta {
+    padding: 15px 30px;
+    font-size: .95rem;
+  }
 }

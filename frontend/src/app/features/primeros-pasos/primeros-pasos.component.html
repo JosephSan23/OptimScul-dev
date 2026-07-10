@@ -1,11 +1,14 @@
-<!-- ══════════════════════════════════════════════
-     HERO OSCURO
-     ══════════════════════════════════════════════ -->
 <app-navbar [estatico]="true"></app-navbar>
-<section class="steps-hero-dark">
+
+<!-- ══════════════════════════════════════════════
+     HERO COMPACTO — navy, momento de marca
+     ══════════════════════════════════════════════ -->
+<section class="steps-hero">
+  <span class="hero-blob hero-blob-1"></span>
+  <span class="hero-blob hero-blob-2"></span>
   <div class="container-steps">
-    <span class="badge-consultive">Proceso Guiado</span>
-    <h1>¿Cómo unirse a la red de OptimScul?</h1>
+    <span class="chip">✦ Proceso guiado</span>
+    <h1>¿Cómo unirse a la red de <span>OptimScul</span>?</h1>
     <p>
       Ya seas una institución buscando modernizar sus procesos o un padre
       buscando el mejor futuro para su hijo, el camino es simple y seguro.
@@ -14,78 +17,80 @@
 </section>
 
 <!-- ══════════════════════════════════════════════
-     PASOS PARA INSTITUCIONES
+     EL CAMINO — selector de perfil + línea de pasos
+     El usuario elige su perfil (como en Contacto)
+     y ve solo el camino que le corresponde.
      ══════════════════════════════════════════════ -->
-<section class="section-dark-bg">
-  <div class="container-steps">
-    <h2 class="section-title">Para Instituciones Educativas</h2>
-    <div class="steps-path-grid">
+<section class="steps-body">
+  <div class="container-steps wide">
 
-      <!-- *ngFor recorre el array pasosInstituciones del .ts       -->
-      <!-- [class.card-center] agrega esa clase cuando centrado=true -->
-      <div class="path-card"
-           *ngFor="let paso of pasosInstituciones"
-           [class.card-center]="paso.centrado">
-        <div class="path-step">{{ paso.numero }}</div>
-        <div class="path-icon">
-          <i [class]="paso.icono"></i>
-        </div>
-        <h3>{{ paso.titulo }}</h3>
-        <p>{{ paso.descripcion }}</p>
-      </div>
-
+    <!-- Selector segmentado -->
+    <div class="perfil-selector">
+      <button [class.on]="perfilActivo === 'institucion'"
+              (click)="elegirPerfil('institucion')">
+        <i class="fas fa-school"></i> Instituciones
+      </button>
+      <button [class.on]="perfilActivo === 'padre'"
+              (click)="elegirPerfil('padre')">
+        <i class="fas fa-user"></i> Padres y Acudientes
+      </button>
     </div>
-  </div>
-</section>
 
-<!-- ══════════════════════════════════════════════
-     PASOS PARA PADRES Y ACUDIENTES
-     alt-bg cambia el color de fondo para diferenciar
-     visualmente las dos secciones
-     ══════════════════════════════════════════════ -->
-<section class="section-dark-bg alt-bg">
-  <div class="container-steps">
-    <h2 class="section-title">Para Padres y Acudientes</h2>
-    <div class="steps-path-grid">
-
-      <div class="path-card"
-           *ngFor="let paso of pasosPadres"
-           [class.card-center]="paso.centrado">
-        <div class="path-step">{{ paso.numero }}</div>
-        <div class="path-icon">
-          <i [class]="paso.icono"></i>
-        </div>
-        <h3>{{ paso.titulo }}</h3>
-        <p>{{ paso.descripcion }}</p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════
-     CTA FINAL — llamado a la acción
-     Lleva al login porque para hacer una solicitud
-     el usuario debe estar autenticado
-     ══════════════════════════════════════════════ -->
-<section class="final-cta-dark">
-  <div class="cta-overlay-graphics"></div>
-  <div class="cta-content">
-    <span class="cta-tag">Último paso</span>
-    <h2>¿Listo para transformar tu institución?</h2>
-    <p>
-      Para garantizar la seguridad de la información, todas las
-      solicitudes deben realizarse desde una cuenta.
+    <p class="perfil-hint" *ngIf="perfilActivo === 'institucion'">
+      Tres pasos para vincular tu colegio y modernizar su gestión.
     </p>
-    <div class="cta-actions">
-      <a routerLink="/login" class="btn-primary-orange">
-        Comenzar Solicitud <i class="fas fa-arrow-right"></i>
-      </a>
-      <p class="cta-note">
-        ¿Ya tienes cuenta?
-        <a routerLink="/login">Inicia sesión aquí</a>
-      </p>
+    <p class="perfil-hint" *ngIf="perfilActivo === 'padre'">
+      Tres pasos para postular a tu hijo a un colegio de la red.
+    </p>
+
+    <!-- Línea de pasos: 3 tarjetas conectadas -->
+    <div class="steps-path">
+      <div class="path-card"
+           *ngFor="let paso of pasosActivos; let i = index">
+        <div class="path-num">{{ paso.numero }}</div>
+        <div class="path-icon">
+          <i [class]="paso.icono"></i>
+        </div>
+        <h3>{{ paso.titulo }}</h3>
+        <p>{{ paso.descripcion }}</p>
+        <!-- conector hacia la siguiente tarjeta (solo escritorio) -->
+        <span class="path-connector" *ngIf="i < pasosActivos.length - 1">
+          <i class="fas fa-chevron-right"></i>
+        </span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     CTA FINAL — banda navy redondeada
+     Lleva al login: para hacer una solicitud
+     el usuario debe estar autenticado.
+     ══════════════════════════════════════════════ -->
+<section class="steps-cta">
+  <div class="container-steps wide">
+    <div class="cta-band">
+      <span class="cta-blob"></span>
+      <div class="cta-content">
+        <span class="chip">✦ Último paso</span>
+        <h2>¿Listo para transformar tu institución?</h2>
+        <p>
+          Para garantizar la seguridad de la información, todas las
+          solicitudes deben realizarse desde una cuenta.
+        </p>
+        <div class="cta-actions">
+          <a routerLink="/login" class="btn-cta">
+            Comenzar Solicitud <i class="fas fa-arrow-right"></i>
+          </a>
+          <p class="cta-note">
+            ¿Ya tienes cuenta?
+            <a routerLink="/login">Inicia sesión aquí</a>
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
+
 <app-footer></app-footer>
