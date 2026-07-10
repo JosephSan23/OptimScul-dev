@@ -1,24 +1,79 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 :root {
-  --azul-oscuro: #0a2540;
-  --naranja-optim: #f36f21;
-  --blanco: #ffffff;
-  --azul-head: #078ac3;
-  --primary-bg: #052850;
-  --hover-bg: #0e3a63;
-  --accent-color: #4f9cf9;
-  --text-color: #ffffff;
-  --text-muted: #8fa6c4;
-  --page-bg: #e9eef6;
-  --transition: all 0.3s ease;
+  /* ---------- COLOR · marca ---------- */
+  --navy-900: #0E2A47;   /* titulares, sidebar, footer, fondos de énfasis */
+  --navy-800: #14355A;   /* hover sobre navy */
+  --navy-700: #1B3A5C;   /* apoyo frío */
+  --navy-100: #E3EDF7;   /* tinte frío para iconos/fondos suaves */
+
+  --orange-600: #E05E12; /* hover del naranja */
+  --orange-500: #F4762A; /* SOLO acciones primarias y acentos — se gana */
+  --orange-100: #FFE8D8; /* tinte cálido para chips e iconos */
+  --orange-50:  #FFF4EB; /* tinte cálido muy suave */
+
+  /* ---------- COLOR · texto ---------- */
+  --ink: #22334A;        /* texto principal */
+  --ink-soft: #5A6B82;   /* texto secundario */
+  --ink-inverse: #B9C8DA;/* texto secundario sobre navy */
+
+  /* ---------- COLOR · superficies (cálidas, nunca blanco puro de fondo) ---------- */
+  --cream: #FAF6F0;      /* fondo base de páginas */
+  --paper: #FFFFFF;      /* tarjetas y superficies de datos */
+  --line: #E9E2D8;       /* bordes */
+  --line-soft: #F0EAE1;  /* separadores internos */
+
+  /* ---------- COLOR · semántico (solo estados, nunca decorativo) ---------- */
+  --green-500: #2E9E6B;  --green-100: #DDF2E7;
+  --red-500:   #CC4B3D;  --red-100:   #F9E3E0;
+
+  --data-blue: #2F6FB4;
+  --data-blue-soft: #D9E6F4;
+
+  /* ---------- TIPOGRAFÍA ---------- */
+  --font-display: 'Bricolage Grotesque', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+
+  /* ---------- FORMA ---------- */
+  --r-control: 12px;
+  --r-card: 20px;
+  --r-panel: 28px;
+
+  /* ---------- ELEVACIÓN (siempre estas, nunca otras) ---------- */
+  --shadow-1: 0 1px 2px rgba(14,42,71,.06), 0 8px 24px rgba(14,42,71,.08);
+  --shadow-2: 0 2px 4px rgba(14,42,71,.08), 0 16px 40px rgba(14,42,71,.14);
+
+  /* ---------- CLAY · nivel "Sutil" (solo elementos de acento:
+       iconos, chips, avatares, botón primario — nunca texto ni tablas) ---------- */
+  --clay-radius: 16px;
+  --clay-ico: inset 0 2px 3px rgba(255,255,255,.9), inset 0 -3px 5px rgba(14,42,71,.12);
+  --clay-card: 0 1px 2px rgba(14,42,71,.05), 0 10px 22px rgba(14,42,71,.09), inset 0 2px 2px rgba(255,255,255,.7);
+  --clay-btn: 0 8px 18px rgba(244,118,42,.36);
+  --clay-btn-inset: inset 0 2px 2px rgba(255,255,255,.45), inset 0 -3px 6px rgba(176,60,4,.35);
+
+  /* ---------- MOVIMIENTO ---------- */
+  --transition: all 0.25s ease;
+
+  /* ---------- LAYOUT · app interna (sidebar/panel del dashboard) ---------- */
   --sidebar-collapsed: 66px;
   --sidebar-expanded: 230px;
   --header-height: 68px;
-  --panel-radius: 16px;
+  --panel-radius: var(--r-card);
   --panel-margin: 5px;
   --panel-margin-left: 6px;
+
+  --primary-bg: var(--navy-900);   /* sidebar */
+  --hover-bg: var(--navy-800);     /* hover del sidebar */
+  --accent-color: var(--orange-500);
+  --text-color: #ffffff;
+  --text-muted: var(--ink-inverse);
+  --page-bg: var(--cream);
+
+
+  --azul-oscuro: var(--navy-900);
+  --naranja-optim: var(--orange-500);
+  --blanco: #ffffff;
+  --azul-head: var(--navy-700); /* el celeste #078ac3 sale del sistema */
 }
 
 * {
@@ -27,10 +82,20 @@
   box-sizing: border-box;
 }
 
-body {
-  font-family: 'Inter', sans-serif;
-}
-
 html {
   scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--page-bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--navy-900);
+  letter-spacing: -.01em;
+  line-height: 1.15;
 }
