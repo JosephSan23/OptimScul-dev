@@ -1,10 +1,11 @@
 <div class="login-container">
   <div class="brand-panel">
+    <span class="brand-blob brand-blob-1"></span>
+    <span class="brand-blob brand-blob-2"></span>
     <div class="brand-content">
-      <span class="welcome-tag">Bienvenido</span>
-      <h1>Transformando el futuro de la educación.</h1>
+      <span class="chip">✦ Bienvenido</span>
+      <h1>Transformando el futuro de la <span>educación.</span></h1>
       <p>Únete a las instituciones que ya están optimizando sus procesos con tecnología de vanguardia.</p>
-      <div class="brand-decoration"></div>
     </div>
   </div>
 
@@ -70,11 +71,11 @@
 
       <button type="submit" class="btn-log" [disabled]="cargando">
         <span *ngIf="!cargando">Iniciar Sesión</span>
-        <span *ngIf="cargando">Ingresando...</span>
+        <span *ngIf="cargando"><i class="fa-solid fa-circle-notch fa-spin"></i> Ingresando...</span>
       </button>
 
       <p class="visitor-text">¿No formas parte de una institución?
-        <a href="/registro">Contáctanos o postula a un estudiante aquí</a>
+        <a routerLink="/registro">Contáctanos o postula a un estudiante aquí</a>
       </p>
 
     </form>
