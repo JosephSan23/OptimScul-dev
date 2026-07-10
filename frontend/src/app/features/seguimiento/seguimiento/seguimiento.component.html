@@ -4,24 +4,34 @@
   <div class="seguimiento-container">
 
     <div class="page-head">
+      <span class="chip">✦ Tus solicitudes</span>
       <h1>Seguimiento de solicitudes</h1>
       <p>Aquí puedes ver el estado de las solicitudes que has enviado.</p>
     </div>
 
-    <div *ngIf="cargando" class="msg">Cargando tus solicitudes...</div>
-    <div *ngIf="error" class="msg error">{{ error }}</div>
+    <!-- Cargando -->
+    <div *ngIf="cargando" class="msg">
+      <i class="fas fa-circle-notch fa-spin"></i>
+      Cargando tus solicitudes...
+    </div>
+
+    <div *ngIf="error" class="msg error">
+      <i class="fas fa-exclamation-circle"></i>
+      {{ error }}
+    </div>
 
     <!-- Sin solicitudes -->
     <div *ngIf="!cargando && !error && solicitudes.length === 0" class="vacio">
-      <i class="ti ti-inbox"></i>
+      <div class="vacio-ico"><i class="ti ti-inbox"></i></div>
       <h3>Aún no tienes solicitudes</h3>
       <p>Cuando envíes una solicitud para vincular tu institución, aparecerá aquí.</p>
-      <a routerLink="/contacto" class="btn-nueva">Enviar una solicitud</a>
+      <a routerLink="/contacto" class="btn-nueva">Enviar una solicitud <i class="fas fa-arrow-right"></i></a>
     </div>
 
     <!-- Lista de solicitudes -->
     <div class="solicitudes-lista" *ngIf="!cargando && solicitudes.length > 0">
       <div class="sol-card" *ngFor="let s of solicitudes">
+
         <div class="sol-top">
           <div>
             <h3>{{ s.nombreColegio }}</h3>
@@ -32,7 +42,29 @@
           </span>
         </div>
 
+        <!-- Progreso visual: Enviada → En revisión → Resultado -->
+        <div class="sol-progreso" [ngClass]="claseEstado(s.estado)">
+          <span class="prog-dot done"><i class="fas fa-check"></i></span>
+          <span class="prog-line done"></span>
+          <span class="prog-dot" [class.done]="s.estado !== 'PENDIENTE'" [class.current]="s.estado === 'PENDIENTE'">
+            <i class="fas fa-check" *ngIf="s.estado !== 'PENDIENTE'"></i>
+            <i class="fas fa-hourglass-half" *ngIf="s.estado === 'PENDIENTE'"></i>
+          </span>
+          <span class="prog-line" [class.done]="s.estado !== 'PENDIENTE'"></span>
+          <span class="prog-dot final" [class.done]="s.estado !== 'PENDIENTE'">
+            <i class="fas fa-check" *ngIf="s.estado === 'APROBADA'"></i>
+            <i class="fas fa-xmark" *ngIf="s.estado === 'RECHAZADA'"></i>
+          </span>
+        </div>
+        <div class="sol-progreso-labels">
+          <span>Enviada</span>
+          <span>En revisión</span>
+          <span>Resultado</span>
+        </div>
+
         <p class="sol-estado-texto" [ngClass]="claseEstado(s.estado)">
+          <i class="fas"
+             [ngClass]="s.estado === 'APROBADA' ? 'fa-circle-check' : s.estado === 'RECHAZADA' ? 'fa-circle-xmark' : 'fa-clock'"></i>
           {{ textoEstado(s.estado) }}
         </p>
 
@@ -46,6 +78,7 @@
             <span *ngIf="s.correo"><i class="ti ti-mail"></i> {{ s.correo }}</span>
           </div>
         </div>
+
       </div>
     </div>
 

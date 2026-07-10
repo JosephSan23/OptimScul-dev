@@ -2,49 +2,132 @@
 
 .seguimiento-page {
   min-height: 70vh;
-  background: #f8fbff;
-  padding: 130px 5% 80px;
+  background: var(--cream);
+  padding: 130px 5% 90px;
 }
+
 .seguimiento-container { max-width: 760px; margin: 0 auto; }
 
-.page-head { margin-bottom: 32px; }
-.page-head h1 { font-size: 1.9rem; font-weight: 800; color: #0a2540; margin: 0 0 8px; }
-.page-head p { color: #5c7184; font-size: 1rem; margin: 0; }
+/* ---------- encabezado ---------- */
+.page-head {
+  margin-bottom: 36px;
 
-.msg { color: #5c7184; padding: 20px 0; }
-.msg.error { color: #b42318; }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--orange-100);
+    color: var(--orange-600);
+    font-weight: 700;
+    font-size: .8rem;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    padding: 8px 15px;
+    border-radius: 999px;
+    box-shadow: var(--clay-ico);
+    margin-bottom: 16px;
+  }
 
-/* Estado vacío */
+  h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 0 0 8px;
+  }
+
+  p {
+    color: var(--ink-soft);
+    font-size: 1rem;
+    margin: 0;
+  }
+}
+
+/* ---------- mensajes de estado de la página ---------- */
+.msg {
+  color: var(--ink-soft);
+  padding: 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+
+  i { color: var(--orange-500); }
+
+  &.error {
+    color: var(--red-500);
+    i { color: var(--red-500); }
+  }
+}
+
+/* ---------- estado vacío ---------- */
 .vacio {
-  background: #fff;
-  border: 1px solid #e8f0f7;
-  border-radius: 16px;
-  padding: 50px 30px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  box-shadow: var(--shadow-1);
+  padding: 56px 30px;
   text-align: center;
 }
-.vacio i { font-size: 44px; color: #b5c4d6; display: block; margin-bottom: 14px; }
-.vacio h3 { font-size: 1.2rem; color: #0a2540; margin: 0 0 8px; }
-.vacio p { color: #5c7184; margin: 0 0 22px; }
-.btn-nueva {
-  display: inline-block;
-  background: #f36f21;
-  color: #fff;
-  padding: 11px 24px;
-  border-radius: 10px;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.95rem;
+
+.vacio-ico {
+  width: 68px;
+  height: 68px;
+  border-radius: var(--clay-radius);
+  background: var(--navy-100);
+  box-shadow: var(--clay-ico);
+  display: grid;
+  place-items: center;
+  margin: 0 auto 18px;
+
+  i { font-size: 30px; color: var(--navy-700); }
 }
 
-/* Tarjetas */
-.solicitudes-lista { display: flex; flex-direction: column; gap: 16px; }
+.vacio h3 {
+  font-size: 1.25rem;
+  margin: 0 0 8px;
+}
+
+.vacio p {
+  color: var(--ink-soft);
+  margin: 0 0 24px;
+}
+
+.btn-nueva {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  background: var(--orange-500);
+  color: #fff;
+  padding: 13px 28px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+  box-shadow: var(--clay-btn), var(--clay-btn-inset);
+  transition: all .25s ease;
+
+  i { font-size: .8rem; }
+
+  &:hover {
+    background: var(--orange-600);
+    transform: translateY(-2px);
+  }
+}
+
+/* ---------- tarjetas de solicitud ---------- */
+.solicitudes-lista { display: flex; flex-direction: column; gap: 18px; }
 
 .sol-card {
-  background: #fff;
-  border: 1px solid #e8f0f7;
-  border-radius: 16px;
-  padding: 22px 24px;
-  box-shadow: 0 4px 16px rgba(10, 37, 64, 0.04);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  padding: 26px 28px;
+  box-shadow: var(--clay-card);
+  transition: transform .2s ease, box-shadow .2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-2);
+  }
 }
 
 .sol-top {
@@ -52,52 +135,166 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 14px;
-  margin-bottom: 14px;
+  margin-bottom: 18px;
 }
-.sol-top h3 { font-size: 1.15rem; color: #0a2540; margin: 0 0 3px; font-weight: 700; }
-.sol-fecha { font-size: 0.8rem; color: #8a94a6; }
 
+.sol-top h3 {
+  font-size: 1.15rem;
+  margin: 0 0 3px;
+  font-weight: 700;
+}
+
+.sol-fecha { font-size: 0.8rem; color: var(--ink-soft); }
+
+/* badge de estado — colores semánticos del sistema */
 .estado-badge {
-  font-size: 0.8rem;
-  font-weight: 600;
-  padding: 5px 14px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 6px 15px;
   border-radius: 999px;
   white-space: nowrap;
   flex-shrink: 0;
-}
-.estado-badge.estado-pendiente { background: #faeeda; color: #854f0b; }
-.estado-badge.estado-aprobada  { background: #eaf3de; color: #3b6d11; }
-.estado-badge.estado-rechazada { background: #fcebeb; color: #a32d2d; }
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 
+  &::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  &.estado-pendiente { background: var(--orange-100); color: var(--orange-600); }
+  &.estado-aprobada  { background: var(--green-100);  color: var(--green-500); }
+  &.estado-rechazada { background: var(--red-100);    color: var(--red-500); }
+}
+
+/* ---------- progreso visual: Enviada → En revisión → Resultado ---------- */
+.sol-progreso {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.prog-dot {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--navy-100);
+  color: var(--ink-soft);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  z-index: 2;
+
+  i { font-size: .6rem; }
+
+  /* completado */
+  &.done {
+    background: var(--green-500);
+    color: #fff;
+    box-shadow: var(--clay-ico);
+  }
+
+  /* paso actual (en revisión) */
+  &.current {
+    background: var(--orange-500);
+    color: #fff;
+    box-shadow: var(--clay-btn), var(--clay-btn-inset);
+  }
+}
+
+/* el punto final toma el color del desenlace */
+.sol-progreso.estado-rechazada .prog-dot.final.done {
+  background: var(--red-500);
+}
+
+.prog-line {
+  flex: 1;
+  height: 3px;
+  border-radius: 99px;
+  background: var(--navy-100);
+  margin: 0 -2px;
+
+  &.done { background: var(--green-500); }
+}
+
+.sol-progreso.estado-rechazada .prog-line.done:last-of-type {
+  background: var(--red-500);
+}
+
+.sol-progreso-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  margin-bottom: 18px;
+
+  span:nth-child(2) { text-align: center; }
+  span:last-child { text-align: right; }
+}
+
+/* ---------- texto de estado ---------- */
 .sol-estado-texto {
   font-size: 0.92rem;
-  padding: 12px 16px;
-  border-radius: 10px;
-  margin: 0 0 16px;
-}
-.sol-estado-texto.estado-pendiente { background: #fdf6e9; color: #854f0b; }
-.sol-estado-texto.estado-aprobada  { background: #f1f8e8; color: #3b6d11; }
-.sol-estado-texto.estado-rechazada { background: #fdf0f0; color: #a32d2d; }
+  font-weight: 600;
+  padding: 13px 17px;
+  border-radius: var(--r-control);
+  margin: 0 0 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 
-.sol-detalle { border-top: 1px solid #f0f4f8; padding-top: 16px; }
-.dato-label {
-  font-size: 0.75rem;
-  color: #8a94a6;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  i { font-size: 1rem; flex-shrink: 0; }
+
+  &.estado-pendiente { background: var(--orange-50);  color: var(--orange-600); }
+  &.estado-aprobada  { background: var(--green-100);  color: var(--green-500); }
+  &.estado-rechazada { background: var(--red-100);    color: var(--red-500); }
 }
+
+/* ---------- detalle ---------- */
+.sol-detalle {
+  border-top: 1px solid var(--line-soft);
+  padding-top: 16px;
+}
+
+.dato-label {
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+}
+
 .dato-mensaje {
   font-size: 0.95rem;
-  color: #334155;
+  color: var(--ink);
   font-style: italic;
   margin: 6px 0 14px;
   line-height: 1.5;
 }
+
 .sol-contacto {
   display: flex;
   gap: 18px;
   flex-wrap: wrap;
   font-size: 0.85rem;
-  color: #5c7184;
+  color: var(--ink-soft);
+  font-weight: 600;
+
+  i { color: var(--orange-500); }
 }
-.sol-contacto i { color: #8a94a6; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 560px) {
+  .seguimiento-page { padding: 115px 5% 70px; }
+  .sol-card { padding: 22px 20px; }
+
+  .sol-top {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
