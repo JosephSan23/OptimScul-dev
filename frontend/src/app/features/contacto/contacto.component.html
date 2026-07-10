@@ -1,18 +1,20 @@
 <app-navbar [estatico]="true"></app-navbar>
 
 <!-- ══════════════════════════════════════════════════
-     HERO PEQUEÑO
+     HERO COMPACTO — navy, momento de marca
      ══════════════════════════════════════════════════ -->
-<!-- <section class="contacto-hero">
+<section class="contacto-hero">
+  <span class="hero-blob hero-blob-1"></span>
+  <span class="hero-blob hero-blob-2"></span>
   <div class="contacto-hero-inner">
-    <span class="contacto-badge">Contáctanos</span>
+    <span class="chip">✦ Contáctanos</span>
     <h1>Conecta con <span>OptimScul</span></h1>
     <p>
       Ya seas una institución buscando modernizar sus procesos o un padre
       buscando el mejor futuro para tu hijo — el primer paso es simple.
     </p>
   </div>
-</section> -->
+</section>
 
 <!-- ══════════════════════════════════════════════════
      CUERPO PRINCIPAL
@@ -20,10 +22,7 @@
 <section class="contacto-body">
   <div class="contacto-container">
 
-    <!-- ── SELECTOR DE TIPO ──────────────────────────
-         Se muestra cuando tipoUsuario es null
-         *ngIf oculta este bloque cuando ya eligió
-         ─────────────────────────────────────────── -->
+    <!-- ── SELECTOR DE TIPO ────────────────────────── -->
     <div class="tipo-selector" *ngIf="tipoUsuario === null">
 
       <div class="tipo-intro">
@@ -33,7 +32,6 @@
       </div>
 
       <div class="tipo-cards">
-        <!-- (click) llama al método elegirTipo() del .ts -->
         <div class="tipo-card" (click)="elegirTipo('institucion')">
           <div class="tipo-card-icon">
             <i class="fas fa-school"></i>
@@ -86,21 +84,15 @@
       </div>
     </div>
 
-    <!-- ── STEPPER ────────────────────────────────────
-         Se muestra cuando tipoUsuario ya fue elegido
-         ─────────────────────────────────────────── -->
+    <!-- ── STEPPER ──────────────────────────────────── -->
     <div class="stepper-wrapper" *ngIf="tipoUsuario !== null">
 
-      <!-- Cabecera del stepper — botón volver + indicador de pasos -->
       <div class="stepper-header">
         <button class="btn-volver" (click)="volverAlSelector()">
           <i class="fas fa-arrow-left"></i> Cambiar perfil
         </button>
 
-        <!-- Indicador visual de pasos -->
         <div class="stepper-indicador">
-          <!-- ngFor genera un círculo por cada paso -->
-          <!-- El índice i+1 se compara con pasoActual para saber cuál está activo -->
           <ng-container *ngFor="let paso of [].constructor(totalPasos); let i = index">
             <div class="step-circulo"
                  [class.activo]="pasoActual === i + 1"
@@ -123,7 +115,6 @@
       <!-- ── FORMULARIO INSTITUCIÓN ──────────────── -->
       <div class="stepper-form" *ngIf="tipoUsuario === 'institucion'">
 
-        <!-- PASO 1 — Datos de la institución -->
         <div *ngIf="pasoActual === 1">
           <div class="paso-intro">
             <h2>Datos de la institución</h2>
@@ -137,9 +128,6 @@
               <input type="text"
                      placeholder="Ej: Colegio San José"
                      [(ngModel)]="formInstitucion.nombreColegio">
-              <!-- [(ngModel)] es two-way binding:
-                   lee el valor del input Y actualiza la variable del .ts
-                   simultáneamente -->
             </div>
 
             <div class="form-group">
@@ -172,7 +160,6 @@
           </div>
         </div>
 
-        <!-- PASO 2 — Contacto y mensaje -->
         <div *ngIf="pasoActual === 2">
           <div class="paso-intro">
             <h2>Datos de contacto</h2>
@@ -208,7 +195,6 @@
       <!-- ── FORMULARIO PADRE / ACUDIENTE ───────── -->
       <div class="stepper-form" *ngIf="tipoUsuario === 'padre'">
 
-        <!-- PASO 1 — Datos del acudiente -->
         <div *ngIf="pasoActual === 1">
           <div class="paso-intro">
             <h2>Tus datos como acudiente</h2>
@@ -285,7 +271,6 @@
           </div>
         </div>
 
-        <!-- PASO 2 — Datos del estudiante -->
         <div *ngIf="pasoActual === 2">
           <div class="paso-intro">
             <h2>Datos del estudiante</h2>
@@ -399,7 +384,6 @@
           </div>
         </div>
 
-        <!-- PASO 3 — Postulación y documentos -->
         <div *ngIf="pasoActual === 3">
           <div class="paso-intro">
             <h2>Postulación y documentos</h2>
@@ -433,7 +417,6 @@
                 <i class="fas fa-cloud-upload-alt"></i>
                 <p>Haz clic para seleccionar archivos</p>
                 <span>PDF, JPG, PNG — máx. 5MB por archivo</span>
-                <!-- input oculto — el área de arriba lo activa -->
                 <input #fileInput
                        type="file"
                        multiple
@@ -442,7 +425,6 @@
                        style="display: none">
               </div>
 
-              <!-- Lista de archivos cargados -->
               <div class="archivos-cargados"
                    *ngIf="formAcudiente.documentos.length > 0">
                 <div class="archivo-item"
@@ -456,13 +438,9 @@
         </div>
       </div>
 
-      <!-- ── NAVEGACIÓN DEL STEPPER ─────────────────
-           Botones anterior / siguiente / enviar
-           ─────────────────────────────────────── -->
+      <!-- ── NAVEGACIÓN DEL STEPPER ───────────────── -->
       <div class="stepper-nav">
 
-        <!-- Mensaje de error si el paso está incompleto -->
-        <!-- Se muestra solo cuando intentan avanzar con campos vacíos -->
         <p class="error-msg" *ngIf="mostrarError">
           <i class="fas fa-exclamation-circle"></i>
           Por favor completa todos los campos obligatorios antes de continuar.
