@@ -1,8 +1,7 @@
 .main-footer {
-  background-color: #0a2540;
+  background-color: var(--navy-900);
   color: #fff;
-  padding: 60px 5% 30px;
-  border-top: 1px solid rgba(255,255,255,0.1);
+  padding: 70px 5% 30px;
 }
 
 .footer-container {
@@ -18,23 +17,33 @@
   margin: 0 auto;
 }
 
+/* logo con la tipografía display y el "Scul" naranja,
+   igual que en el navbar — misma marca en todo el recorrido */
 .footer-logo {
-  font-size: 1.5rem;
-  margin-bottom: 15px;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 14px;
+  letter-spacing: -.01em;
+
+  span { color: var(--orange-500); }
 }
 
 .footer-col {
   p {
-    color: #cbd5e0;
+    color: var(--ink-inverse);
     line-height: 1.6;
     font-size: 0.95rem;
   }
 
   h4 {
-    color: #f36f21;
-    margin-bottom: 25px;
-    font-size: 1.1rem;
+    font-family: var(--font-body);
+    color: var(--orange-500);
+    margin-bottom: 22px;
+    font-size: 1.02rem;
     font-weight: 700;
+    letter-spacing: .02em;
   }
 
   ul {
@@ -45,13 +54,13 @@
       margin-bottom: 12px;
 
       a {
-        color: #cbd5e0;
+        color: var(--ink-inverse);
         text-decoration: none;
-        transition: 0.3s;
+        transition: 0.25s;
         font-size: 0.95rem;
 
         &:hover {
-          color: #f36f21;
+          color: var(--orange-500);
           padding-left: 5px;
         }
       }
@@ -59,24 +68,30 @@
   }
 }
 
+/* redes: cuadraditos redondeados del sistema (no círculos),
+   con el clay sutil y el hover naranja */
 .social-links {
   margin-top: 20px;
   display: flex;
-  gap: 15px;
+  gap: 12px;
 
   a {
-    color: white;
+    color: #fff;
     background: rgba(255,255,255,0.1);
-    width: 35px;
-    height: 35px;
+    width: 38px;
+    height: 38px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
-    transition: 0.3s;
+    border-radius: 12px;
+    box-shadow: var(--clay-ico);
+    transition: 0.25s;
     text-decoration: none;
 
-    &:hover { background: #f36f21; }
+    &:hover {
+      background: var(--orange-500);
+      transform: translateY(-3px);
+    }
   }
 }
 
@@ -84,10 +99,24 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  color: #cbd5e0;
+  color: var(--ink-inverse);
   font-size: 0.95rem;
 
-  i { color: #f36f21; }
+  /* icono dentro de un mini-blob del sistema */
+  .c-ico {
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+    background: rgba(244,118,42,.15);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+
+    i {
+      color: var(--orange-500);
+      font-size: .8rem;
+    }
+  }
 }
 
 .footer-bottom {

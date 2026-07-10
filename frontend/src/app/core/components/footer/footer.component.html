@@ -4,9 +4,7 @@
 
       <!-- Columna marca -->
       <div class="footer-col branding">
-        <h2 class="footer-logo">
-          <h2 class="footer-logo">OptimScul</h2>
-        </h2>
+        <h2 class="footer-logo">Optim<span>Scul</span></h2>
         <p>Transformando la gestión educativa con tecnología intuitiva y segura.</p>
         <div class="social-links">
           <a *ngFor="let red of redesSociales" [href]="red.enlace">
@@ -41,16 +39,15 @@
       <div class="footer-col">
         <h4>Contacto</h4>
         <ul class="contact-info">
-          <li><i class="fas fa-envelope"></i> soporte&#64;optimscul.com</li>
-          <li><i class="fas fa-phone"></i> +57 (300) 123-4567</li>
-          <li><i class="fas fa-map-marker-alt"></i> Bogotá, Colombia</li>
+          <li><span class="c-ico"><i class="fas fa-envelope"></i></span> soporte&#64;optimscul.com</li>
+          <li><span class="c-ico"><i class="fas fa-phone"></i></span> +57 (300) 123-4567</li>
+          <li><span class="c-ico"><i class="fas fa-map-marker-alt"></i></span> Bogotá, Colombia</li>
         </ul>
       </div>
 
     </div>
 
     <div class="footer-bottom">
-      <!-- {{ anioActual }} muestra el año calculado en el .ts -->
       <p>&copy; {{ anioActual }} OptimScul. Todos los derechos reservados.</p>
     </div>
   </div>

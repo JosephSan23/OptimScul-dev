@@ -12,14 +12,14 @@
 
     <nav class="sidebar-nav">
       <ul>
-        <li class="nav-item active">
-          <a href="#" (click)="$event.preventDefault()">
+        <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a routerLink="/dashboard">
             <i class="ti ti-home"></i>
             <span class="link-name">Inicio</span>
           </a>
         </li>
 
-        <li class="nav-item" *ngIf="esSuperAdmin">
+        <li class="nav-item" routerLinkActive="active" *ngIf="esSuperAdmin">
           <a routerLink="/dashboard/administradores">
             <i class="ti ti-user-shield"></i>
             <span class="link-name">Administradores</span>
@@ -27,14 +27,14 @@
         </li>
 
 
-        <li class="nav-item" *ngIf="esSuperAdmin">
+        <li class="nav-item" routerLinkActive="active" *ngIf="esSuperAdmin">
           <a routerLink="/dashboard/instituciones">
             <i class="ti ti-building-community"></i>
             <span class="link-name">Instituciones</span>
           </a>
         </li>
 
-        <li class="nav-item" *ngIf="esSuperAdmin">
+        <li class="nav-item" routerLinkActive="active" *ngIf="esSuperAdmin">
           <a routerLink="/dashboard/solicitudes">
             <i class="ti ti-inbox"></i>
             <span class="link-name">Solicitudes</span>

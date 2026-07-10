@@ -13,7 +13,6 @@ export class NavbarComponent implements OnInit {
   @Input() estatico = false;
 
   isScrolled = false;
-  heroHeight = 0;
 
   // Estado de sesión
   logueado = false;
@@ -24,20 +23,14 @@ export class NavbarComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    // Preguntar al AuthService si hay sesión
     this.logueado = this.authService.isLoggedIn();
     if (this.logueado) {
       this.usuario = this.authService.getUsuarioActual();
       this.roles = this.authService.getRoles();
     }
-
-    if (typeof document === 'undefined') return;
-    if (this.estatico) return;
-    const hero = document.querySelector('.hero') as HTMLElement;
-    if (hero) this.heroHeight = hero.offsetHeight;
   }
 
-  // Iniciales para el avatar (ej: "JS" de Joseph Sánchez)
+  // Iniciales para el avatar (ej: "JO" de joseph-olarte10)
   get iniciales(): string {
     if (!this.usuario?.username) return '?';
     return this.usuario.username.substring(0, 2).toUpperCase();
@@ -68,12 +61,14 @@ export class NavbarComponent implements OnInit {
   irALogin(): void { this.router.navigate(['/login']); }
   irARegistro(): void { this.router.navigate(['/registro']); }
 
+  /* La cápsula ya no se invierte a navy al pasar el hero (no lo necesita:
+     la misma cápsula clara funciona sobre oscuro y sobre claro), así que
+     desaparece el cálculo de la altura del hero. Solo detectamos un poco
+     de scroll para "asentar" la cápsula (más opacidad y sombra). */
   @HostListener('window:scroll', [])
   onScroll(): void {
     if (this.estatico) return;
-    if (typeof document === 'undefined') return;
-    const hero = document.querySelector('.hero') as HTMLElement;
-    if (hero) this.heroHeight = hero.offsetHeight;
-    this.isScrolled = window.scrollY > (this.heroHeight - 80);
+    if (typeof window === 'undefined') return;
+    this.isScrolled = window.scrollY > 16;
   }
 }

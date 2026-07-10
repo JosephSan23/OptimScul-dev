@@ -8,12 +8,12 @@
 /* ================= MARCO PADRE ================= */
 .app-frame {
   flex: 1;
-  background-color: var(--primary-bg);
+  background-color: var(--navy-900);
   display: flex;
   overflow: hidden;
 }
 
-/* ================= SIDEBAR (hijo izquierdo) ================= */
+/* ================= SIDEBAR ================= */
 .sidebar {
   width: var(--sidebar-collapsed);
   flex-shrink: 0;
@@ -49,25 +49,26 @@
   display: flex;
   align-items: center;
   gap: 11px;
+  color: #fff;
 }
 
 .logo-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    filter: brightness(0) invert(1);
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  filter: brightness(0) invert(1);
 }
 
 .logo-text {
-  font-family: 'Baloo 2', cursive;
-  font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: 0.4px;
-  color: var(--text-color);
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: -.01em;
+  color: #fff;
   white-space: nowrap;
   display: none;
 }
@@ -99,8 +100,8 @@
   justify-content: center;
   padding: 11px;
   text-decoration: none;
-  color: var(--text-muted);
-  border-radius: 11px;
+  color: var(--ink-inverse);
+  border-radius: var(--r-control);
   transition: var(--transition);
   cursor: pointer;
   width: 100%;
@@ -124,19 +125,33 @@
 
 .nav-item:hover > a,
 .submenu-header:hover {
-  background-color: var(--hover-bg);
-  color: var(--text-color);
+  background-color: var(--navy-800);
+  color: #fff;
 }
 
+/* item activo: naranja de marca con barrita indicadora */
 .nav-item.active > a {
-  color: var(--accent-color);
-  background-color: rgba(79, 156, 249, 0.18);
+  color: var(--orange-500);
+  background-color: rgba(244, 118, 42, 0.14);
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: -13px;
+    top: 8px;
+    bottom: 8px;
+    width: 4px;
+    border-radius: 0 4px 4px 0;
+    background: var(--orange-500);
+  }
 }
 
 .link-name {
   white-space: nowrap;
   display: none;
   font-size: 0.9rem;
+  font-weight: 600;
 }
 
 .sidebar:hover .link-name {
@@ -149,7 +164,7 @@
   align-items: center;
   background: none;
   border: none;
-  color: var(--text-muted);
+  color: var(--ink-inverse);
   cursor: pointer;
 }
 
@@ -175,14 +190,14 @@
   overflow: hidden;
   opacity: 0;
   margin-left: 20px;
-  border-left: 1px solid rgba(143, 166, 196, 0.2);
+  border-left: 1px solid rgba(185, 200, 218, 0.2);
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .submenu-list li a {
   padding: 9px 24px;
   font-size: 0.875rem;
-  color: var(--text-muted);
+  color: var(--ink-inverse);
   border-radius: 8px;
   display: block;
   transition: var(--transition);
@@ -190,7 +205,7 @@
 }
 
 .submenu-list li a:hover {
-  color: var(--accent-color);
+  color: var(--orange-500);
   padding-left: 30px;
 }
 
@@ -205,11 +220,11 @@
   transform: rotate(180deg);
 }
 
-/* --- Logout (footer del sidebar) --- */
+/* --- Logout --- */
 .sidebar-footer {
   width: 100%;
   padding: 12px 13px 0;
-  border-top: 1px solid rgba(143, 166, 196, 0.15);
+  border-top: 1px solid rgba(185, 200, 218, 0.15);
   margin-top: 8px;
 }
 
@@ -218,8 +233,8 @@
   align-items: center;
   justify-content: center;
   padding: 11px;
-  color: var(--text-muted);
-  border-radius: 11px;
+  color: var(--ink-inverse);
+  border-radius: var(--r-control);
   text-decoration: none;
   cursor: pointer;
   transition: var(--transition);
@@ -236,14 +251,16 @@
 }
 
 .logout-link:hover {
-  background-color: rgba(229, 62, 62, 0.15);
-  color: #fb7185;
+  background-color: rgba(204, 75, 61, 0.18);
+  color: #F0958A;
 }
 
-/* ================= PANEL BLANCO (hijo derecho) ================= */
+/* ================= PANEL PRINCIPAL ================= */
+/* el panel flotante ahora es crema (superficie cálida del sistema);
+   las tarjetas del contenido serán blancas encima */
 .main-content {
   flex: 1;
-  background: #ffffff;
+  background: var(--cream);
   border-radius: var(--panel-radius);
   margin: var(--panel-margin) var(--panel-margin) var(--panel-margin) var(--panel-margin-left);
   display: flex;
@@ -255,13 +272,13 @@
 /* ================= HEADER ================= */
 .main-header {
   height: var(--header-height);
-  background: transparent;
+  background: var(--paper);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 24px;
   flex-shrink: 0;
-  border-bottom: 1px solid #edf2f7;
+  border-bottom: 1px solid var(--line);
 }
 
 .header-logo {
@@ -273,8 +290,9 @@
 .school-logo {
   width: 36px;
   height: 36px;
-  border-radius: 9px;
-  background-color: var(--primary-bg);
+  border-radius: var(--r-control);
+  background-color: var(--navy-900);
+  box-shadow: var(--clay-ico);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -283,22 +301,24 @@
 }
 
 .school-name {
+  font-family: var(--font-display);
   font-weight: 700;
   font-size: 1rem;
-  color: #1a2b45;
+  color: var(--navy-900);
   white-space: nowrap;
 }
 
 .school-name .accent {
-  color: var(--accent-color);
+  color: var(--orange-500);
 }
 
 /* Buscador */
 .search-bar {
   display: flex;
   align-items: center;
-  background-color: #eef2f8;
-  border-radius: 30px;
+  background-color: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 999px;
   padding: 5px 5px 5px 18px;
   width: 320px;
   gap: 8px;
@@ -308,13 +328,14 @@
   border: none;
   background: transparent;
   outline: none;
-  color: #4a5568;
+  color: var(--ink);
   width: 100%;
   font-size: 0.875rem;
+  font-family: var(--font-body);
 }
 
 .search-bar input::placeholder {
-  color: #9aa8bd;
+  color: #A8B3C2;
 }
 
 .search-btn {
@@ -322,19 +343,20 @@
   height: 36px;
   border: none;
   border-radius: 50%;
-  background-color: var(--accent-color);
+  background-color: var(--orange-500);
   color: #fff;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: var(--clay-btn-inset);
   transition: background 0.2s;
   font-size: 16px;
 }
 
 .search-btn:hover {
-  background-color: #3b83e0;
+  background-color: var(--orange-600);
 }
 
 /* Derecha del header */
@@ -347,31 +369,34 @@
 .notifications {
   position: relative;
   cursor: pointer;
-  color: #64748b;
+  color: var(--ink);
   display: flex;
   width: 40px;
   height: 40px;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  background: #f1f4f9;
+  border-radius: var(--r-control);
+  background: var(--cream);
+  border: 1px solid var(--line);
+  box-shadow: var(--clay-ico);
   transition: var(--transition);
   font-size: 19px;
 }
 
 .notifications:hover {
-  color: var(--accent-color);
+  color: var(--orange-600);
+  border-color: var(--orange-500);
 }
 
 .notifications .dot {
   position: absolute;
-  top: 9px;
-  right: 10px;
+  top: 8px;
+  right: 9px;
   width: 8px;
   height: 8px;
-  background-color: #f43f5e;
+  background-color: var(--orange-500);
   border-radius: 50%;
-  border: 2px solid #f1f4f9;
+  border: 2px solid var(--paper);
 }
 
 .user-info {
@@ -391,13 +416,13 @@
 .user-name {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #1a2b45;
+  color: var(--navy-900);
   line-height: 1.2;
 }
 
 .user-role {
   font-size: 0.78rem;
-  color: #94a3b8;
+  color: var(--ink-soft);
 }
 
 .avatar-wrapper {
@@ -410,10 +435,12 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: var(--accent-color);
-  color: #fff;
-  font-weight: 600;
-  font-size: 0.9rem;
+  background-color: var(--orange-100);
+  color: var(--orange-600);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.85rem;
+  box-shadow: var(--clay-ico);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -425,8 +452,8 @@
   right: 1px;
   width: 10px;
   height: 10px;
-  background-color: #48bb78;
-  border: 2px solid #fff;
+  background-color: var(--green-500);
+  border: 2px solid var(--paper);
   border-radius: 50%;
 }
 
@@ -435,14 +462,14 @@
   position: absolute;
   top: 54px;
   right: 0;
-  width: 220px;
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 10px 28px rgba(15, 40, 80, 0.13);
-  padding: 8px 0;
+  width: 230px;
+  background: var(--paper);
+  border-radius: 18px;
+  box-shadow: var(--shadow-2);
+  padding: 8px;
   display: none;
   z-index: 1000;
-  border: 1px solid #eef2f8;
+  border: 1px solid var(--line);
 }
 
 .user-dropdown.active {
@@ -451,20 +478,27 @@
 }
 
 .dropdown-header {
-  padding: 13px 18px;
-  border-bottom: 1px solid #eef2f8;
+  padding: 12px;
+  border-bottom: 1px solid var(--line-soft);
+  margin-bottom: 4px;
 }
 
 .dropdown-header p {
   font-size: 0.92rem;
   font-weight: 700;
-  color: #1a2b45;
-  margin-bottom: 2px;
+  color: var(--navy-900);
+  margin-bottom: 5px;
 }
 
 .dropdown-header span {
-  font-size: 0.78rem;
-  color: #94a3b8;
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  color: var(--navy-700);
+  background: var(--navy-100);
+  padding: 3px 10px;
+  border-radius: 999px;
 }
 
 .dropdown-list {
@@ -473,26 +507,29 @@
 }
 
 .dropdown-list li {
-  padding: 11px 18px;
+  padding: 10px 12px;
   display: flex;
   align-items: center;
   gap: 11px;
   font-size: 0.875rem;
-  color: #475569;
+  font-weight: 600;
+  color: var(--ink);
+  border-radius: var(--r-control);
   cursor: pointer;
   transition: 0.2s;
 }
 
 .dropdown-list li i {
   font-size: 17px;
+  color: var(--ink-soft);
 }
 
 .dropdown-list li:hover {
-  background-color: #f6f9fd;
-  color: var(--accent-color);
+  background-color: var(--cream);
+  color: var(--navy-900);
 }
 
-/* ================= CONTENEDOR DEL CONTENIDO ================= */
+/* ================= CONTENIDO ================= */
 .dashboard-body {
   padding: 28px 30px;
   overflow-y: auto;

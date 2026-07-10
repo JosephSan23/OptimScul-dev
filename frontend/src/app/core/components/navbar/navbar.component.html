@@ -1,68 +1,64 @@
 <header class="navbar" [class.header-active]="isScrolled">
-  <div class="inline">
-    <h2 class="logo-title">
-      <img src="assets/img/logo.png" class="logo-icon" alt="OptimScul logo">
+  <div class="capsule">
+
+    <!-- Logo: hace de "Inicio", con su propio aire -->
+    <a class="logo-title" routerLink="/">
+      <img src="assets/img/logo1.png" class="logo-icon" alt="OptimScul logo">
       <span class="text-left">Optim<span class="text-right">Scul</span></span>
-    </h2>
-  </div>
+    </a>
 
-  <div class="nav-actions">
-    <nav>
-      <ul>
-        <!-- Solo SIN sesión: Inicio y Plataforma (marketing) -->
-        <ng-container *ngIf="!logueado">
-          <li><a routerLink="/" fragment="inicio" class="nav-link">Inicio</a></li>
-          <li class="dropdown">
-            <a href="#" class="dropbtn nav-link">
-              Plataforma <i class="fas fa-chevron-down"></i>
-            </a>
-            <ul class="dropdown-content">
-              <li><a routerLink="/" fragment="problem">El Desafío</a></li>
-              <li><a routerLink="/" fragment="solutions">Soluciones</a></li>
-              <li><a routerLink="/" fragment="features">Características</a></li>
-              <li><a routerLink="/" fragment="capabilities">Infraestructura</a></li>
-            </ul>
-          </li>
-        </ng-container>
+    <!-- Grupo de navegación: enlaces + acción, compactos entre sí -->
+    <div class="cap-group">
+      <nav class="cap-nav">
+        <ul>
+          <!-- SIN sesión -->
+          <ng-container *ngIf="!logueado">
+            <li class="dropdown">
+              <a href="#" class="dropbtn nav-link" (click)="$event.preventDefault()">
+                Plataforma <i class="fas fa-chevron-down"></i>
+              </a>
+              <ul class="dropdown-content">
+                <li><a routerLink="/" fragment="problem">El Desafío</a></li>
+                <li><a routerLink="/" fragment="solutions">Soluciones</a></li>
+                <li><a routerLink="/" fragment="features">Características</a></li>
+                <li><a routerLink="/" fragment="capabilities">Infraestructura</a></li>
+              </ul>
+            </li>
+            <li><a routerLink="/primeros-pasos" class="nav-link">Primeros Pasos</a></li>
+            <li><a routerLink="/login" class="nav-link">Acceso</a></li>
+          </ng-container>
 
-        <!-- Siempre visible: Primeros Pasos -->
-        <li><a routerLink="/primeros-pasos" class="nav-link">Primeros Pasos</a></li>
+          <!-- CON sesión -->
+          <ng-container *ngIf="logueado">
+            <li><a routerLink="/primeros-pasos" class="nav-link">Primeros Pasos</a></li>
+            <li><a routerLink="/contacto" class="nav-link">Contacto</a></li>
+            <li><a routerLink="/seguimiento" class="nav-link">Seguimiento</a></li>
+          </ng-container>
+        </ul>
+      </nav>
 
-        <!-- Solo CON sesión: Contacto y Seguimiento -->
-        <ng-container *ngIf="logueado">
-          <li><a routerLink="/contacto" class="nav-link">Contacto</a></li>
-          <li><a routerLink="/seguimiento" class="nav-link">Seguimiento</a></li>
-        </ng-container>
-      </ul>
-    </nav>
-  </div>
+      <!-- SIN sesión: único botón (CTA) -->
+      <a *ngIf="!logueado" routerLink="/primeros-pasos" class="btn-register">Registrarse</a>
 
-  <!-- SIN sesión: botones de login/registro -->
-  <div class="auth-buttons" *ngIf="!logueado">
-    <a routerLink="/login" class="btn-login">Iniciar sesión</a>
-    <a routerLink="/primeros-pasos" class="btn-register">Registrarse</a>
-  </div>
+      <!-- CON sesión: solo el circulito de perfil; el menú se abre al clic -->
+      <div class="user-menu" *ngIf="logueado">
+        <div class="avatar-wrapper" (click)="toggleDropdown($event)">
+          <div class="avatar">{{ iniciales }}</div>
+          <div class="status-indicator"></div>
+        </div>
 
-  <!-- CON sesión: menú de usuario -->
-  <div class="user-menu" *ngIf="logueado" (click)="toggleDropdown($event)">
-    <div class="user-details">
-      <span class="user-name">{{ usuario?.username }}</span>
-      <span class="user-role">{{ rolPrincipal }}</span>
-    </div>
-    <div class="avatar-wrapper">
-      <div class="avatar">{{ iniciales }}</div>
-      <div class="status-indicator"></div>
-    </div>
-
-    <div class="user-dropdown" [class.active]="dropdownAbierto">
-      <div class="dropdown-header">
-        <p>{{ usuario?.username }}</p>
-        <span>{{ rolPrincipal }}</span>
+        <div class="user-dropdown" [class.active]="dropdownAbierto">
+          <div class="dropdown-header">
+            <p>{{ usuario?.username }}</p>
+            <span>{{ rolPrincipal }}</span>
+          </div>
+          <ul class="dropdown-list">
+            <li><i class="ti ti-user"></i>Mi Perfil</li>
+            <li class="logout-item" (click)="cerrarSesion()"><i class="ti ti-logout"></i>Cerrar sesión</li>
+          </ul>
+        </div>
       </div>
-      <ul class="dropdown-list">
-        <li><i class="ti ti-user"></i>Mi Perfil</li>
-        <li class="logout-item" (click)="cerrarSesion()"><i class="ti ti-logout"></i>Cerrar sesión</li>
-      </ul>
     </div>
+
   </div>
 </header>
