@@ -4,9 +4,34 @@
     <input type="text" [(ngModel)]="termino" (ngModelChange)="buscar()"
            [ngModelOptions]="{standalone: true}" [placeholder]="placeholderBusqueda">
   </div>
+
   <div class="toolbar-acciones">
+    <!-- botón de filtros: solo aparece si el padre configuró filtros -->
+    <button type="button" class="btn-filtros" *ngIf="filtros.length"
+            (click)="filtrosAbiertos = !filtrosAbiertos"
+            [class.con-activos]="numFiltrosActivos > 0">
+      <i class="ti ti-filter"></i> Filtros
+      <span class="filtros-count" *ngIf="numFiltrosActivos > 0">{{ numFiltrosActivos }}</span>
+      <i class="ti ti-chevron-down flecha" [class.girada]="filtrosAbiertos"></i>
+    </button>
+
     <ng-content select="[acciones]"></ng-content>
   </div>
+</div>
+
+<!-- fila de filtros desplegable -->
+<div class="filtros-panel" *ngIf="filtros.length" [class.abierto]="filtrosAbiertos">
+  <div class="filtro-item" *ngFor="let f of filtros">
+    <label>{{ f.etiqueta }}</label>
+    <select [(ngModel)]="valoresFiltro[f.campo]" (ngModelChange)="alCambiarFiltro()"
+            [ngModelOptions]="{standalone: true}">
+      <option value="">Todos</option>
+      <option *ngFor="let op of opcionesDe(f)" [value]="op">{{ op }}</option>
+    </select>
+  </div>
+  <button type="button" class="btn-limpiar" *ngIf="numFiltrosActivos > 0" (click)="limpiarFiltros()">
+    <i class="ti ti-x"></i> Limpiar filtros
+  </button>
 </div>
 
 <!-- Tabla del padre con la página actual -->
@@ -31,5 +56,5 @@
 <!-- Vacíos -->
 <p *ngIf="items.length === 0" class="estado-msg">{{ mensajeVacio }}</p>
 <p *ngIf="items.length > 0 && !filtrados.length" class="estado-msg">
-  No hay resultados para "{{ termino }}".
+  No hay resultados<span *ngIf="termino"> para "{{ termino }}"</span><span *ngIf="numFiltrosActivos"> con los filtros aplicados</span>.
 </p>
