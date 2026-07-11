@@ -3,7 +3,7 @@
   <p>Gestiona las cuentas del personal de tu colegio</p>
 </div>
 
-<div *ngIf="cargando" class="estado-msg">Cargando personal...</div>
+<div *ngIf="cargando" class="estado-msg"><i class="ti ti-loader-2 girando"></i> Cargando personal...</div>
 <div *ngIf="error" class="estado-msg error">{{ error }}</div>
 
 <app-tabla-paginada *ngIf="!cargando"
@@ -19,36 +19,51 @@
   </div>
 
   <ng-template filaTabla let-pagina>
-    <table class="tabla-admins">
-      <thead>
-        <tr>
-          <th>Usuario</th><th>Correo institucional</th><th>Nombre</th>
-          <th>Documento</th><th>Rol</th><th>Estado</th><th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let s of pagina">
-          <td>{{ s.username }}</td>
-          <td>{{ s.emailLogin }}</td>
-          <td>{{ s.primerNombre }} {{ s.primerApellido }}</td>
-          <td>{{ s.numeroDocumento }}</td>
-          <td>{{ s.rolNombre }}</td>
-          <td><span class="badge-estado" [ngClass]="'estado-' + s.estado.toLowerCase()">{{ s.estado }}</span></td>
-          <td class="acciones">
-            <a class="btn-icon" title="Editar" [routerLink]="['/dashboard/staff', s.usuarioId]">
-              <i class="ti ti-pencil"></i>
-            </a>
-            <button *ngIf="s.estado === 'ACTIVO'" class="btn-icon btn-icon--off" title="Inactivar"
-                    [disabled]="procesandoId === s.usuarioId" (click)="inactivar(s)">
-              <i class="ti ti-user-off"></i>
-            </button>
-            <button *ngIf="s.estado !== 'ACTIVO'" class="btn-icon btn-icon--on" title="Activar"
-                    [disabled]="procesandoId === s.usuarioId" (click)="activar(s)">
-              <i class="ti ti-user-check"></i>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="tabla-card">
+      <table class="tabla-crud">
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <th>Documento</th>
+            <th>Rol</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of pagina">
+            <td>
+              <div class="celda-usuario">
+                <span class="mini-avatar">{{ (s.primerNombre?.charAt(0) || '') + (s.primerApellido?.charAt(0) || '') || '?' }}</span>
+                <div>
+                  <b>{{ s.primerNombre }} {{ s.primerApellido }}</b>
+                  <small>{{ s.username }} · {{ s.emailLogin }}</small>
+                </div>
+              </div>
+            </td>
+            <td class="celda-mono">{{ s.numeroDocumento }}</td>
+            <td><span class="tag info">{{ s.rolNombre }}</span></td>
+            <td>
+              <span class="badge-estado" [ngClass]="'estado-' + s.estado.toLowerCase()">
+                {{ s.estado.replaceAll('_', ' ') | titlecase }}
+              </span>
+            </td>
+            <td class="acciones">
+              <a class="btn-accion" title="Editar" [routerLink]="['/dashboard/staff', s.usuarioId]">
+                <i class="ti ti-pencil"></i>
+              </a>
+              <button *ngIf="s.estado === 'ACTIVO'" class="btn-accion peligro" title="Inactivar"
+                      [disabled]="procesandoId === s.usuarioId" (click)="inactivar(s)">
+                <i class="ti ti-user-off"></i>
+              </button>
+              <button *ngIf="s.estado !== 'ACTIVO'" class="btn-accion exito" title="Activar"
+                      [disabled]="procesandoId === s.usuarioId" (click)="activar(s)">
+                <i class="ti ti-user-check"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </ng-template>
 </app-tabla-paginada>
