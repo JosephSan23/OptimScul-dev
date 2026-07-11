@@ -1,7 +1,7 @@
 <div class="registro-wrapper">
   <div class="registro-card">
 
-    <!-- IZQUIERDA: formulario en tarjeta sobre fondo gris -->
+    <!-- IZQUIERDA: formulario en tarjeta sobre fondo crema -->
     <div class="form-side">
       <div class="form-card">
         <button class="btn-volver" (click)="volver()">
@@ -74,9 +74,12 @@
           </div>
         </div>
 
-        <p class="form-error" *ngIf="error">{{ error }}</p>
+        <p class="form-error" *ngIf="error">
+          <i class="ti ti-alert-circle"></i> {{ error }}
+        </p>
 
         <button class="btn-crear" [disabled]="cargando" (click)="registrar()">
+          <i class="ti ti-loader-2 spin" *ngIf="cargando"></i>
           {{ cargando ? 'Creando...' : 'Crear cuenta' }}
         </button>
 
@@ -84,15 +87,19 @@
       </div>
     </div>
 
-    <!-- DERECHA: panel azul -->
+    <!-- DERECHA: panel de marca navy -->
     <div class="info-side">
-      <span class="info-badge">CREA TU CUENTA</span>
-      <h2 class="info-titulo">Empieza tu camino con OptimScul.</h2>
-      <p class="info-texto">Una sola cuenta para postular a un estudiante o vincular tu institución.</p>
-      <div class="info-checks">
-        <div class="check"><i class="ti ti-circle-check"></i>Sigue el estado de tus solicitudes</div>
-        <div class="check"><i class="ti ti-circle-check"></i>Comunicación directa con la plataforma</div>
-        <div class="check"><i class="ti ti-circle-check"></i>Un proceso simple y guiado</div>
+      <span class="info-blob info-blob-1"></span>
+      <span class="info-blob info-blob-2"></span>
+      <div class="info-content">
+        <span class="info-badge">✦ Crea tu cuenta</span>
+        <h2 class="info-titulo">Empieza tu camino con <span>OptimScul.</span></h2>
+        <p class="info-texto">Una sola cuenta para postular a un estudiante o vincular tu institución.</p>
+        <div class="info-checks">
+          <div class="check"><i class="ti ti-circle-check"></i>Sigue el estado de tus solicitudes</div>
+          <div class="check"><i class="ti ti-circle-check"></i>Comunicación directa con la plataforma</div>
+          <div class="check"><i class="ti ti-circle-check"></i>Un proceso simple y guiado</div>
+        </div>
       </div>
     </div>
 

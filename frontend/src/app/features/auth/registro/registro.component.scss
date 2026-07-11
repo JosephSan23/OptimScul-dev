@@ -1,3 +1,9 @@
+/* ============================================================
+   REGISTRO · OptimScul — espejo del login, mismos tokens
+   Consume los tokens globales de styles.scss.
+   Layout: formulario (izq, crema) + panel de marca navy (der).
+   ============================================================ */
+
 :host {
   display: block;
   width: 100%;
@@ -15,9 +21,9 @@
   grid-template-columns: 1fr 1fr;
 }
 
-/* ---------- Lado formulario ---------- */
+/* ---------- Lado formulario — crema ---------- */
 .form-side {
-  background: #eef2f8;
+  background: var(--cream);
   padding: 40px;
   display: flex;
   align-items: center;
@@ -25,72 +31,83 @@
 }
 
 .form-card {
-  background: #fff;
+  background: var(--paper);
+  border: 1px solid var(--line);
   width: 100%;
   max-width: 460px;
-  padding: 34px 36px;
-  border-radius: 18px;
-  box-shadow: 0 10px 40px rgba(10, 37, 64, 0.1);
+  padding: 36px 38px;
+  border-radius: var(--r-panel);
+  box-shadow: var(--clay-card);
 }
 
 .btn-volver {
   background: none;
   border: none;
-  color: #5c7184;
+  color: var(--ink-soft);
+  font-family: var(--font-body);
   font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 6px;
   padding: 0;
   margin-bottom: 18px;
-}
-.btn-volver:hover {
-  color: #0a2540;
+  transition: color .2s;
+
+  &:hover { color: var(--navy-900); }
 }
 
 .form-titulo {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #0a2540;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--navy-900);
   margin: 0 0 4px;
+  letter-spacing: -.01em;
 }
+
 .form-sub {
   font-size: 0.9rem;
-  color: #5c7184;
+  color: var(--ink-soft);
   margin: 0 0 20px;
 }
 
+/* ---------- Botones sociales ---------- */
 .social-btns {
   display: flex;
   gap: 10px;
   margin-bottom: 12px;
 }
+
 .btn-social {
   flex: 1;
-  border: 1px solid #e8f0f7;
-  background: #fff;
-  padding: 10px 0;
-  border-radius: 9px;
+  border: 1.5px solid var(--line);
+  background: var(--paper);
+  padding: 11px 0;
+  border-radius: 999px;
+  font-family: var(--font-body);
   font-size: 13px;
-  color: #5c7184;
+  font-weight: 600;
+  color: var(--ink);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 7px;
-  transition: border-color 0.2s;
-}
-.btn-social:hover {
-  border-color: #cdd9e5;
-}
-.btn-social i {
-  font-size: 16px;
+  transition: border-color 0.2s, background 0.2s;
+
+  &:hover {
+    border-color: var(--navy-900);
+    background: var(--cream);
+  }
+
+  i { font-size: 16px; }
 }
 
 .social-nota {
   font-size: 11px;
-  color: #9aa8bd;
+  color: var(--ink-soft);
   text-align: center;
   margin: 0 0 16px;
 }
@@ -100,151 +117,235 @@
   align-items: center;
   gap: 12px;
   margin-bottom: 16px;
-}
-.divisor::before,
-.divisor::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: #e8f0f7;
-}
-.divisor span {
-  font-size: 12px;
-  color: #9aa8bd;
+
+  &::before,
+  &::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  span {
+    font-size: 12px;
+    color: var(--ink-soft);
+    font-weight: 600;
+  }
 }
 
-/* Filas de campos */
+/* ---------- Campos ---------- */
 .campo-row {
   display: flex;
   gap: 12px;
 }
+
 .campo {
   flex: 1;
   margin-bottom: 14px;
 }
+
 .campo-tipo {
-  flex: 0 0 90px;
-} /* el tipo de documento más angosto */
+  flex: 0 0 90px; /* tipo de documento más angosto */
+}
 
 .form-card label {
   font-size: 12px;
   font-weight: 600;
-  color: #0a2540;
+  color: var(--navy-900);
   display: block;
   margin-bottom: 5px;
 }
+
 .form-card input,
 .form-card select {
   width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #e8f0f7;
-  border-radius: 9px;
+  padding: 11px 13px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-control);
   font-size: 14px;
-  font-family: inherit;
-  color: #0a2540;
+  font-family: var(--font-body);
+  color: var(--ink);
   outline: none;
-  transition:
-    border-color 0.2s,
-    box-shadow 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
   box-sizing: border-box;
-  background: #fff;
-}
-.form-card input:focus,
-.form-card select:focus {
-  border-color: #f36f21;
-  box-shadow: 0 0 0 3px rgba(243, 111, 33, 0.1);
+  background: var(--paper);
+
+  &:focus {
+    border-color: var(--orange-500);
+    box-shadow: 0 0 0 3px rgba(244, 118, 42, 0.12);
+  }
+
+  &::placeholder { color: #A8B3C2; }
 }
 
 .form-error {
-  color: #e63946;
+  color: var(--red-500);
+  background: var(--red-100);
   font-size: 13px;
+  font-weight: 600;
+  padding: 10px 14px;
+  border-radius: var(--r-control);
   margin: 0 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  i { font-size: 15px; flex-shrink: 0; }
 }
 
+/* ---------- Botón principal — pill naranja con clay ---------- */
 .btn-crear {
   width: 100%;
   border: none;
-  background: #f36f21;
+  background: var(--orange-500);
   color: #fff;
-  padding: 12px 0;
-  border-radius: 10px;
+  padding: 13px 0;
+  border-radius: 999px;
+  font-family: var(--font-body);
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
-  transition: background 0.2s;
+  box-shadow: var(--clay-btn), var(--clay-btn-inset);
+  transition: all 0.25s ease;
   margin-top: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  &:hover:not(:disabled) {
+    background: var(--orange-600);
+    transform: translateY(-2px);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: wait;
+    transform: none;
+  }
+
+  .spin { animation: girar 1s linear infinite; }
 }
-.btn-crear:hover {
-  background: #d95d16;
-}
-.btn-crear:disabled {
-  opacity: 0.7;
-  cursor: default;
+
+@keyframes girar {
+  to { transform: rotate(360deg); }
 }
 
 .ir-login {
   font-size: 13px;
-  color: #5c7184;
+  color: var(--ink-soft);
   text-align: center;
   margin: 16px 0 0;
-}
-.ir-login span {
-  color: #185fa5;
-  cursor: pointer;
-  font-weight: 600;
+
+  span {
+    color: var(--orange-600);
+    cursor: pointer;
+    font-weight: 700;
+
+    &:hover { text-decoration: underline; }
+  }
 }
 
-/* ---------- Lado panel azul ---------- */
+/* ---------- Lado panel de marca — navy ---------- */
 .info-side {
-  background-image: linear-gradient(rgba(10, 37, 64, 0.85), rgba(10, 37, 64, 0.85)), url('/assets/img/formularios/fondo-log1.png');
+  background-image:
+    linear-gradient(rgba(14, 42, 71, 0.92), rgba(14, 42, 71, 0.92)),
+    url('/assets/img/formularios/fondo-log2.png');
   background-size: cover;
+  background-position: center;
   padding: 60px 56px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
 }
+
+.info-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  pointer-events: none;
+}
+.info-blob-1 { width: 400px; height: 400px; background: rgba(244,118,42,.14); top: -120px; right: -100px; }
+.info-blob-2 { width: 340px; height: 340px; background: rgba(227,237,247,.08); bottom: -140px; left: -110px; }
+
+.info-content {
+  position: relative;
+  z-index: 1;
+}
+
 .info-badge {
-  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(244,118,42,.15);
+  color: #FFB98A;
   font-weight: 700;
-  letter-spacing: 2px;
-  color: #f36f21;
-  margin-bottom: 18px;
+  font-size: .8rem;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: 9px 17px;
+  border-radius: 999px;
+  margin-bottom: 22px;
+  width: fit-content;
 }
+
 .info-titulo {
+  font-family: var(--font-display);
   font-size: 2.6rem;
   font-weight: 800;
   color: #fff;
   line-height: 1.1;
   margin: 0 0 20px;
+  letter-spacing: -.01em;
+
+  span { color: var(--orange-500); }
 }
+
 .info-texto {
   font-size: 1.1rem;
-  color: #cbd5e0;
+  color: var(--ink-inverse);
   line-height: 1.6;
   margin: 0 0 30px;
 }
+
 .info-checks {
   display: flex;
   flex-direction: column;
   gap: 13px;
 }
+
 .check {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 11px;
   font-size: 14px;
-  color: #cbd5e0;
-}
-.check i {
-  font-size: 18px;
-  color: #f36f21;
+  font-weight: 500;
+  color: var(--ink-inverse);
+
+  i {
+    font-size: 18px;
+    color: var(--orange-500);
+    flex-shrink: 0;
+  }
 }
 
+/* ---------- Responsive ---------- */
 @media (max-width: 768px) {
   .registro-card {
     grid-template-columns: 1fr;
   }
+
   .info-side {
     display: none;
+  }
+
+  .form-side {
+    padding: 30px 18px;
+  }
+
+  .form-card {
+    padding: 30px 24px;
   }
 }
