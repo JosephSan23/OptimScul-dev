@@ -49,7 +49,8 @@ public class SedeEntity {
     private Boolean principal;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "estado")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "estado", columnDefinition = "estado_registro_sede")
     private EstadoRegistro estado;
 
     @Column(name = "created_at")

@@ -11,4 +11,5 @@ public interface SedeRepository {
     Optional<Sede> findById(UUID id);
     List<Sede> findAll();
     void deleteById(UUID id);
+    List<Sede> findByInstitucionId(UUID institucionId);
 }
