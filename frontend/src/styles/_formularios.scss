@@ -1,0 +1,197 @@
+/* ============================================================
+   _formularios.scss · OptimScul — ESTÁNDAR DE FORMULARIOS CRUD
+   Importado una vez en styles.scss. Ningún componente de form
+   define estilos de campos propios.
+
+   (Las clases compartidas con listas — .page-header, .estado-msg,
+   .btn-save, .btn-cancel, .badge-estado, .girando — viven en
+   _tablas.scss y aplican aquí también.)
+
+   Convención de clases:
+   .perfil-page      contenedor de la vista de form (centrado)
+   .perfil-header    header de edición: avatar + identidad + estado
+   .avatar           avatar del header
+   .perfil-id        nombre + credenciales del header
+   .form-section     sección: descripción izquierda + campos derecha
+   .section-info     la descripción de la sección
+   .section-fields   la grilla de campos
+   .campo            un campo (label + input/select/textarea)
+   .campo-full       campo que ocupa toda la fila
+   .form-error       error del formulario
+   .form-actions     botonera final (cancel + save)
+   ============================================================ */
+
+.perfil-page {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;   /* centrado: el espacio sobrante se reparte simétrico */
+}
+
+/* ---------- header de edición ---------- */
+.perfil-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  box-shadow: var(--shadow-1);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+
+  .avatar {
+    width: 58px;
+    height: 58px;
+    border-radius: var(--clay-radius);
+    background: var(--orange-100);
+    color: var(--orange-600);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.15rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--clay-ico);
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .perfil-id {
+    flex: 1;
+    min-width: 0;
+
+    h2 {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--navy-900);
+      margin: 0 0 3px;
+    }
+
+    p {
+      color: var(--ink-soft);
+      font-size: .85rem;
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+/* ---------- secciones: descripción izq + campos der ---------- */
+.form-section {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 28px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  box-shadow: var(--shadow-1);
+  padding: 26px 28px;
+  margin-bottom: 16px;
+}
+
+.section-info {
+  h3 {
+    font-family: var(--font-display);
+    font-size: 1.02rem;
+    font-weight: 800;
+    color: var(--navy-900);
+    margin: 0 0 5px;
+  }
+
+  p {
+    margin: 0;
+    font-size: .82rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+}
+
+.section-fields {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px 16px;
+  align-content: start;
+}
+
+/* ---------- campos ---------- */
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  &.campo-full { grid-column: 1 / -1; }
+
+  label {
+    font-size: .78rem;
+    font-weight: 600;
+    color: var(--navy-900);
+  }
+
+  input, select, textarea {
+    width: 100%;
+    padding: 11px 13px;
+    border: 1.5px solid var(--line);
+    border-radius: var(--r-control);
+    font-family: var(--font-body);
+    font-size: .9rem;
+    color: var(--ink);
+    background: var(--paper);
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+
+    &::placeholder { color: #A8B3C2; }
+
+    &:focus {
+      border-color: var(--orange-500);
+      box-shadow: 0 0 0 3px rgba(244, 118, 42, .12);
+    }
+  }
+
+  select {
+    cursor: pointer;
+    appearance: none;
+    padding-right: 36px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235A6B82' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+  }
+
+  textarea { resize: vertical; min-height: 110px; }
+}
+
+/* ---------- error y botonera ---------- */
+.form-error {
+  margin-top: 4px;
+  padding: 12px 16px;
+  font-size: .88rem;
+  font-weight: 600;
+  color: var(--red-500);
+  background: var(--red-100);
+  border-radius: var(--r-control);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line-soft);
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 860px) {
+  .form-section { grid-template-columns: 1fr; gap: 16px; }
+}
+
+@media (max-width: 560px) {
+  .section-fields { grid-template-columns: 1fr; }
+  .campo.campo-full { grid-column: auto; }
+  .perfil-header { flex-wrap: wrap; }
+}
