@@ -26,6 +26,8 @@ import { TablaPaginadaComponent } from './core/components/tabla-paginada/tabla-p
 import { FilaTablaDirective } from './core/directives/fila-tabla.directive';
 import { StaffListaComponent } from './features/staff/staff-lista/staff-lista.component';
 import { StaffFormComponent } from './features/staff/staff-form/staff-form.component';
+import { SedesListaComponent } from './features/config/sedes-lista/sedes-lista.component';
+import { SedeFormComponent } from './features/config/sede-form/sede-form.component'
 
 @NgModule({
   declarations: [
@@ -49,6 +51,8 @@ import { StaffFormComponent } from './features/staff/staff-form/staff-form.compo
     FilaTablaDirective,
     StaffListaComponent,
     StaffFormComponent,
+    SedesListaComponent,
+    SedeFormComponent,
   ],
   imports: [
     BrowserModule,

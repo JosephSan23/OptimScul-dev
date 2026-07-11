@@ -99,3 +99,35 @@ h1, h2, h3, h4 {
   letter-spacing: -.01em;
   line-height: 1.15;
 }
+
+/* ---------- Scrollbar del sistema ---------- */
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;          /* scroll horizontal */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #bdc7d5;               /* tono del --line, un paso más oscuro */
+  border-radius: 999px;
+  border: 2px solid transparent;     /* "padding" alrededor del pulgar */
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ink-soft);
+  background-clip: padding-box;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #D5CBBD transparent;
+}
+
+@import 'styles/_tablas';
+@import 'styles/_formularios';
