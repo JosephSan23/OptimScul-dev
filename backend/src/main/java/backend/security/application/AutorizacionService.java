@@ -1,7 +1,9 @@
 package backend.security.application;
 
 import backend.security.application.port.UsuarioRepository;
+import backend.security.application.port.UsuarioInstitucionRepository;
 import backend.security.domain.model.TipoContextoUsuario;
+import backend.security.domain.model.UsuarioInstitucion;
 import backend.security.domain.model.Usuario;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +15,11 @@ import java.util.UUID;
 public class AutorizacionService {
 
     private final UsuarioRepository usuarioRepository;
+    private final UsuarioInstitucionRepository usuarioInstitucionRepository;
 
-    public AutorizacionService(UsuarioRepository usuarioRepository) {
+    public AutorizacionService(UsuarioRepository usuarioRepository, UsuarioInstitucionRepository usuarioInstitucionRepository) {
         this.usuarioRepository = usuarioRepository;
+        this.usuarioInstitucionRepository = usuarioInstitucionRepository;
     }
 
     // ---- Super admin: PLATAFORMA y sin rol VISITANTE ----
@@ -54,5 +58,14 @@ public class AutorizacionService {
         if (!tieneRolEnInstitucion(usuarioId, institucionId, roles)) {
             throw new SecurityException("No tienes permisos sobre esta institución.");
         }
+    }
+
+    public UUID institucionDelAdmin(UUID adminId) {
+        UUID institucionId = usuarioInstitucionRepository.findByUsuarioId(adminId).stream()
+                .filter(v -> Boolean.TRUE.equals(v.getEsPrincipal()))
+                .findFirst().map(UsuarioInstitucion::getInstitucionId)
+                .orElseThrow(() -> new SecurityException("No perteneces a ninguna institución."));
+        exigirRolEnInstitucion(adminId, institucionId, "ADMIN_INSTITUCION");
+        return institucionId;
     }
 }
