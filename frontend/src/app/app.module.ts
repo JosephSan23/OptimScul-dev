@@ -29,7 +29,8 @@ import { StaffFormComponent } from './features/staff/staff-form/staff-form.compo
 import { SedesListaComponent } from './features/config/sedes-lista/sedes-lista.component';
 import { SedeFormComponent } from './features/config/sede-form/sede-form.component';
 import { JornadasListaComponent } from './features/config/jornadas-lista/jornadas-lista.component';
-import { JornadaFormComponent } from './features/config/jornada-form/jornada-form.component'
+import { JornadaFormComponent } from './features/config/jornada-form/jornada-form.component';
+import { DatosColegioComponent } from './features/config/datos-colegio/datos-colegio.component'
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { JornadaFormComponent } from './features/config/jornada-form/jornada-for
     SedeFormComponent,
     JornadasListaComponent,
     JornadaFormComponent,
+    DatosColegioComponent,
   ],
   imports: [
     BrowserModule,
