@@ -55,6 +55,13 @@
           </a>
         </li>
 
+        <li class="nav-item" routerLinkActive="active" *ngIf="tieneRol('ADMIN_INSTITUCION')">
+          <a routerLink="/dashboard/jornadas">
+            <i class="ti ti-clock-hour-4"></i>
+            <span class="link-name">Jornadas</span>
+          </a>
+        </li>
+
         <li class="nav-item has-submenu" [class.open]="submenuAbierto === 'usuarios'">
           <div class="submenu-header" (click)="toggleSubmenu('usuarios')">
             <i class="ti ti-users"></i>
