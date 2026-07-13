@@ -42,7 +42,8 @@ public class PeriodoAcademicoEntity {
     private BigDecimal peso;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "estado")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "estado", columnDefinition = "estado_periodo_enum")
     private EstadoPeriodo estado;
 
     @Column(name = "created_at")

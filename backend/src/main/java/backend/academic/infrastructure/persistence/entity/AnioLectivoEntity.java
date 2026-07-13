@@ -35,7 +35,8 @@ public class AnioLectivoEntity {
     private LocalDate fechaFin;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "estado")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "estado", columnDefinition = "estado_anio_lectivo_enum")
     private EstadoAnioLectivo estado;
 
     @Column(name = "es_actual")
