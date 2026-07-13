@@ -1,0 +1,82 @@
+<div class="page-header">
+  <h1>{{ modoEdicion ? "Editar año lectivo" : "Nuevo año lectivo" }}</h1>
+  <p>Datos del año escolar</p>
+</div>
+
+<div *ngIf="cargando" class="estado-msg">Cargando...</div>
+
+<div class="form-grid" *ngIf="!cargando" style="max-width: 760px">
+  <div class="campo">
+    <label>Año *</label
+    ><input
+      type="number"
+      [(ngModel)]="form.anio"
+      [ngModelOptions]="{ standalone: true }"
+      placeholder="2026"
+    />
+  </div>
+  <div class="campo">
+    <label>Nombre *</label
+    ><input
+      [(ngModel)]="form.nombre"
+      [ngModelOptions]="{ standalone: true }"
+      placeholder="Año escolar 2026"
+    />
+  </div>
+  <div class="campo">
+    <label>Fecha inicio *</label
+    ><input
+      type="date"
+      [(ngModel)]="form.fechaInicio"
+      [ngModelOptions]="{ standalone: true }"
+    />
+  </div>
+  <div class="campo">
+    <label>Fecha fin *</label
+    ><input
+      type="date"
+      [(ngModel)]="form.fechaFin"
+      [ngModelOptions]="{ standalone: true }"
+    />
+  </div>
+  <div class="campo">
+    <label>Estado</label>
+    <select [(ngModel)]="form.estado" [ngModelOptions]="{ standalone: true }">
+      <option *ngFor="let e of estados" [value]="e">{{ e | titlecase }}</option>
+    </select>
+  </div>
+  <div class="campo campo-full">
+    <label>Descripción</label
+    ><input
+      placeholder="Opcional"
+      [(ngModel)]="form.descripcion"
+      [ngModelOptions]="{ standalone: true }"
+    />
+  </div>
+
+  <div class="form-error" *ngIf="error">{{ error }}</div>
+
+  <div class="form-actions">
+    <button type="button" class="btn-cancel" (click)="cancelar()">
+      Cancelar
+    </button>
+    <button
+      type="button"
+      class="btn-save"
+      [disabled]="guardando"
+      (click)="guardar()"
+    >
+      <i
+        class="ti"
+        [ngClass]="modoEdicion ? 'ti-device-floppy' : 'ti-plus'"
+      ></i>
+      {{
+        guardando
+          ? "Guardando..."
+          : modoEdicion
+            ? "Guardar cambios"
+            : "Crear año"
+      }}
+    </button>
+  </div>
+</div>

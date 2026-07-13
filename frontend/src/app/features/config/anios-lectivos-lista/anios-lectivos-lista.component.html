@@ -1,0 +1,75 @@
+<div class="page-header">
+  <h1>Año lectivo</h1>
+  <p>Gestiona los años escolares de tu institución</p>
+</div>
+
+<div *ngIf="cargando" class="estado-msg">Cargando...</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+
+<app-tabla-paginada
+  *ngIf="!cargando"
+  [items]="anios"
+  [camposBusqueda]="['nombre', 'anio', 'estado']"
+  placeholderBusqueda="Buscar por nombre, año..."
+  mensajeVacio="Aún no hay años lectivos."
+>
+  <div acciones>
+    <a class="btn-save" routerLink="/dashboard/anios-lectivos/nuevo"
+      ><i class="ti ti-plus"></i> Nuevo año</a
+    >
+  </div>
+
+  <ng-template filaTabla let-pagina>
+    <table class="tabla-admins">
+      <thead>
+        <tr>
+          <th>Año</th>
+          <th>Nombre</th>
+          <th>Inicio</th>
+          <th>Fin</th>
+          <th>Estado</th>
+          <th>Vigente</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let a of pagina">
+          <td>{{ a.anio }}</td>
+          <td>{{ a.nombre }}</td>
+          <td>{{ a.fechaInicio || "—" }}</td>
+          <td>{{ a.fechaFin || "—" }}</td>
+          <td>
+            <span
+              class="badge-estado"
+              [ngClass]="'estado-' + a.estado.toLowerCase()"
+              >{{ a.estado | titlecase }}</span
+            >
+          </td>
+          <td>
+            <span *ngIf="a.esActual" class="badge-estado estado-activo"
+              >Actual</span
+            >
+            <span *ngIf="!a.esActual">—</span>
+          </td>
+          <td class="acciones">
+            <a
+              class="btn-icon"
+              title="Editar"
+              [routerLink]="['/dashboard/anios-lectivos', a.id]"
+              ><i class="ti ti-pencil"></i
+            ></a>
+            <button
+              *ngIf="!a.esActual"
+              class="btn-icon btn-icon--on"
+              title="Marcar como actual"
+              [disabled]="procesandoId === a.id"
+              (click)="marcarActual(a)"
+            >
+              <i class="ti ti-star"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-template>
+</app-tabla-paginada>
