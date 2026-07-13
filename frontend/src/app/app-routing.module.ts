@@ -19,7 +19,9 @@ import { SedesListaComponent } from './features/config/sedes-lista/sedes-lista.c
 import { SedeFormComponent } from './features/config/sede-form/sede-form.component';
 import { JornadasListaComponent } from './features/config/jornadas-lista/jornadas-lista.component';
 import { JornadaFormComponent } from './features/config/jornada-form/jornada-form.component';
-import { DatosColegioComponent } from './features/config/datos-colegio/datos-colegio.component'
+import { DatosColegioComponent } from './features/config/datos-colegio/datos-colegio.component';
+import { AniosLectivosListaComponent } from './features/config/anios-lectivos-lista/anios-lectivos-lista.component';
+import { AnioLectivoFormComponent } from './features/config/anio-lectivo-form/anio-lectivo-form.component';
 
 const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -45,6 +47,10 @@ const routes: Routes = [
     { path: 'jornadas/nuevo', component: JornadaFormComponent,   canActivate: [roleGuard], data: { roles: ['ADMIN_INSTITUCION'] } },
     { path: 'jornadas/:id',   component: JornadaFormComponent,   canActivate: [roleGuard], data: { roles: ['ADMIN_INSTITUCION'] } },
     { path: 'institucion', component: DatosColegioComponent, canActivate: [roleGuard], data: { roles: ['ADMIN_INSTITUCION'] } },
+    { path: 'anios-lectivos',       component: AniosLectivosListaComponent, canActivate: [roleGuard], data: { roles: ['ADMIN_INSTITUCION'] } },
+    { path: 'anios-lectivos/nuevo', component: AnioLectivoFormComponent,    canActivate: [roleGuard], data: { roles: ['ADMIN_INSTITUCION'] } },
+    { path: 'anios-lectivos/:id',   component: AnioLectivoFormComponent,    canActivate: [roleGuard], data: { roles: ['ADMIN_INSTITUCION'] } },
+
     { path: 'instituciones',  component: InstitucionesListaComponent, canActivate: [roleGuard], data: { soloSuperAdmin: true } },
     { path: 'solicitudes',    component: SolicitudesListaComponent,   canActivate: [roleGuard], data: { soloSuperAdmin: true } },
     { path: 'administradores',component: AdministradoresListaComponent, canActivate: [roleGuard], data: { soloSuperAdmin: true } },

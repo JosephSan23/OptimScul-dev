@@ -30,7 +30,9 @@ import { SedesListaComponent } from './features/config/sedes-lista/sedes-lista.c
 import { SedeFormComponent } from './features/config/sede-form/sede-form.component';
 import { JornadasListaComponent } from './features/config/jornadas-lista/jornadas-lista.component';
 import { JornadaFormComponent } from './features/config/jornada-form/jornada-form.component';
-import { DatosColegioComponent } from './features/config/datos-colegio/datos-colegio.component'
+import { DatosColegioComponent } from './features/config/datos-colegio/datos-colegio.component';
+import { AniosLectivosListaComponent } from './features/config/anios-lectivos-lista/anios-lectivos-lista.component';
+import { AnioLectivoFormComponent } from './features/config/anio-lectivo-form/anio-lectivo-form.component'
 
 @NgModule({
   declarations: [
@@ -59,6 +61,8 @@ import { DatosColegioComponent } from './features/config/datos-colegio/datos-col
     JornadasListaComponent,
     JornadaFormComponent,
     DatosColegioComponent,
+    AniosLectivosListaComponent,
+    AnioLectivoFormComponent,
   ],
   imports: [
     BrowserModule,
