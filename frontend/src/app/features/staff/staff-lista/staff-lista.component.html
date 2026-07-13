@@ -9,6 +9,7 @@
 <app-tabla-paginada *ngIf="!cargando"
   [items]="staff"
   [camposBusqueda]="['username','emailLogin','primerNombre','primerApellido','numeroDocumento','correo','rolNombre']"
+  [filtros]="filtrosTabla"
   placeholderBusqueda="Buscar por nombre, documento, rol..."
   mensajeVacio="Aún no hay personal creado.">
 
