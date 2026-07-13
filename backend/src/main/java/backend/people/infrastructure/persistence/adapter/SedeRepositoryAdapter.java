@@ -21,11 +21,28 @@ public class SedeRepositoryAdapter implements SedeRepository {
         this.mapper = mapper;
     }
 
-    @Override public Sede save(Sede entity) { return mapper.toDomain(jpaRepository.save(mapper.toEntity(entity))); }
-    @Override public Optional<Sede> findById(UUID id) { return jpaRepository.findById(id).map(mapper::toDomain); }
-    @Override public List<Sede> findAll() { return jpaRepository.findAll().stream().map(mapper::toDomain).toList(); }
-    @Override public void deleteById(UUID id) { jpaRepository.deleteById(id); }
-    @Override public List<Sede> findByInstitucionId(UUID institucionId) {
+    @Override
+    public Sede save(Sede entity) {
+        return mapper.toDomain(jpaRepository.save(mapper.toEntity(entity)));
+    }
+
+    @Override
+    public Optional<Sede> findById(UUID id) {
+        return jpaRepository.findById(id).map(mapper::toDomain);
+    }
+
+    @Override
+    public List<Sede> findAll() {
+        return jpaRepository.findAll().stream().map(mapper::toDomain).toList();
+    }
+
+    @Override
+    public void deleteById(UUID id) {
+        jpaRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Sede> findByInstitucionId(UUID institucionId) {
         return jpaRepository.findByInstitucionId(institucionId).stream().map(mapper::toDomain).toList();
     }
 }
