@@ -11,4 +11,5 @@ public interface AnioLectivoRepository {
     Optional<AnioLectivo> findById(UUID id);
     List<AnioLectivo> findAll();
     void deleteById(UUID id);
+    List<AnioLectivo> findByInstitucionId(UUID institucionId);
 }
