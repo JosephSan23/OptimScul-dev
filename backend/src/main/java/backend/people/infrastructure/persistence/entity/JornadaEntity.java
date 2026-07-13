@@ -35,7 +35,8 @@ public class JornadaEntity {
     private LocalTime horaFin;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "estado")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "estado", columnDefinition = "estado_jornada_enum")
     private EstadoRegistro estado;
 
     @Column(name = "created_at")

@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.UUID;
 
 public interface JornadaJpaRepository extends JpaRepository<JornadaEntity, UUID> {
+    java.util.List<JornadaEntity> findByInstitucionId(UUID institucionId);
 }

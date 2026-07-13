@@ -11,4 +11,5 @@ public interface JornadaRepository {
     Optional<Jornada> findById(UUID id);
     List<Jornada> findAll();
     void deleteById(UUID id);
+    List<Jornada> findByInstitucionId(UUID institucionId);
 }
