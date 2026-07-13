@@ -27,7 +27,9 @@ import { FilaTablaDirective } from './core/directives/fila-tabla.directive';
 import { StaffListaComponent } from './features/staff/staff-lista/staff-lista.component';
 import { StaffFormComponent } from './features/staff/staff-form/staff-form.component';
 import { SedesListaComponent } from './features/config/sedes-lista/sedes-lista.component';
-import { SedeFormComponent } from './features/config/sede-form/sede-form.component'
+import { SedeFormComponent } from './features/config/sede-form/sede-form.component';
+import { JornadasListaComponent } from './features/config/jornadas-lista/jornadas-lista.component';
+import { JornadaFormComponent } from './features/config/jornada-form/jornada-form.component'
 
 @NgModule({
   declarations: [
@@ -53,6 +55,8 @@ import { SedeFormComponent } from './features/config/sede-form/sede-form.compone
     StaffFormComponent,
     SedesListaComponent,
     SedeFormComponent,
+    JornadasListaComponent,
+    JornadaFormComponent,
   ],
   imports: [
     BrowserModule,
