@@ -41,6 +41,7 @@ export class AnioLectivoFormComponent implements OnInit {
     this.modoEdicion = !!this.anioId;
     if (this.modoEdicion) this.cargar();
   }
+
   cargar(): void {
     this.cargando = true;
     this.anioService.obtener(this.anioId!).subscribe({
@@ -61,6 +62,7 @@ export class AnioLectivoFormComponent implements OnInit {
       },
     });
   }
+
   guardar(): void {
     this.error = '';
     if (
@@ -70,6 +72,10 @@ export class AnioLectivoFormComponent implements OnInit {
       !this.form.fechaFin
     ) {
       this.error = 'Año, nombre y fechas son obligatorios.';
+      return;
+    }
+    if (this.fechasInvertidas) {
+      this.error = 'La fecha de fin debe ser posterior a la de inicio.';
       return;
     }
     this.guardando = true;
@@ -84,7 +90,34 @@ export class AnioLectivoFormComponent implements OnInit {
       },
     });
   }
+
   cancelar(): void {
     this.router.navigate(['/dashboard/anios-lectivos']);
+  }
+
+  /* ══════════ preview del rango en vivo ══════════ */
+
+  private aFecha(s?: string): Date | null {
+    if (!s) return null;
+    const d = new Date(s + 'T00:00:00');
+    return isNaN(d.getTime()) ? null : d;
+  }
+
+  get tieneRango(): boolean {
+    return this.aFecha(this.form.fechaInicio) != null && this.aFecha(this.form.fechaFin) != null;
+  }
+
+  get fechasInvertidas(): boolean {
+    const i = this.aFecha(this.form.fechaInicio), f = this.aFecha(this.form.fechaFin);
+    return !!i && !!f && f <= i;
+  }
+
+  /** duración del año en días / meses aproximados */
+  get duracionTexto(): string {
+    const i = this.aFecha(this.form.fechaInicio), f = this.aFecha(this.form.fechaFin);
+    if (!i || !f || f <= i) return '';
+    const dias = Math.round((f.getTime() - i.getTime()) / 86400000);
+    const meses = Math.round(dias / 30.4);
+    return `${dias} días · ~${meses} meses`;
   }
 }
