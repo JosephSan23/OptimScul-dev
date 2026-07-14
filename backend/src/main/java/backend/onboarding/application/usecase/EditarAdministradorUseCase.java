@@ -6,6 +6,7 @@ import backend.people.domain.model.Institucion;
 import backend.people.domain.model.Persona;
 import backend.people.domain.model.TipoDocumentoPersona;
 import backend.security.application.AutorizacionService;
+import backend.security.application.UsernameGenerator;
 import backend.security.application.port.RolRepository;
 import backend.security.application.port.UsuarioInstitucionRepository;
 import backend.security.application.port.UsuarioRepository;
@@ -13,6 +14,7 @@ import backend.security.application.port.UsuarioRolRepository;
 import backend.security.domain.model.Rol;
 import backend.security.domain.model.Usuario;
 import backend.security.domain.model.UsuarioInstitucion;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +31,8 @@ public class EditarAdministradorUseCase {
     private final RolRepository rolRepository;
     private final InstitucionRepository institucionRepository;
     private final AutorizacionService autorizacionService;
+    private final UsernameGenerator usernameGenerator;
+    private final PasswordEncoder passwordEncoder;
 
     public EditarAdministradorUseCase(UsuarioRepository usuarioRepository,
                                       PersonaRepository personaRepository,
@@ -36,7 +40,9 @@ public class EditarAdministradorUseCase {
                                       UsuarioInstitucionRepository usuarioInstitucionRepository,
                                       RolRepository rolRepository,
                                       InstitucionRepository institucionRepository,
-                                      AutorizacionService autorizacionService) {
+                                      AutorizacionService autorizacionService,
+                                      UsernameGenerator usernameGenerator,
+                                      PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.personaRepository = personaRepository;
         this.usuarioRolRepository = usuarioRolRepository;
@@ -44,6 +50,8 @@ public class EditarAdministradorUseCase {
         this.rolRepository = rolRepository;
         this.institucionRepository = institucionRepository;
         this.autorizacionService = autorizacionService;
+        this.usernameGenerator = usernameGenerator;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
@@ -63,6 +71,7 @@ public class EditarAdministradorUseCase {
             throw new RuntimeException("Ya existe otra persona con ese documento.");
         }
 
+        boolean documentoCambio = !persona.getNumeroDocumento().equals(numeroDocumento);
         LocalDateTime ahora = LocalDateTime.now();
 
         // 1. Datos personales
@@ -70,7 +79,7 @@ public class EditarAdministradorUseCase {
         persona.setNumeroDocumento(numeroDocumento);
         persona.setPrimerNombre(primerNombre);
         persona.setPrimerApellido(primerApellido);
-        persona.setCorreo(correo);            // personal
+        persona.setCorreo(correo); // personal
         persona.setUpdatedAt(ahora);
         personaRepository.save(persona);
 
@@ -81,19 +90,36 @@ public class EditarAdministradorUseCase {
             throw new RuntimeException("La institución no tiene configurado el dominio de correo.");
         }
 
-        // 3. Regenerar username (nombre/apellido/doc) y correo institucional (dominio)
-        String nuevoUsername = generarUsername(primerNombre, primerApellido, numeroDocumento, usuario.getId());
-        usuario.setUsername(nuevoUsername);
-        usuario.setEmailLogin(nuevoUsername + "@" + institucion.getDominioCorreo());
-        usuario.setUpdatedAt(ahora);
-        usuarioRepository.save(usuario);
-        // OJO: aquí NO se toca passwordHash ni requiereCambioPassword
-
-        // 4. Si cambió de institución, mover vínculo principal + rol
         UsuarioInstitucion principal = usuarioInstitucionRepository.findByUsuarioId(usuarioId).stream()
                 .filter(v -> Boolean.TRUE.equals(v.getEsPrincipal()))
                 .findFirst().orElse(null);
-        if (principal != null && !institucionId.equals(principal.getInstitucionId())) {
+        boolean cambioInstitucion = principal != null && !institucionId.equals(principal.getInstitucionId());
+
+        // 3. Username y password: solo se regeneran/resetean si el admin NUNCA ha iniciado sesión.
+        //    Congelados después del primer login para no romper el acceso ya usado.
+        if (usuario.getUltimoLogin() == null) {
+            String nuevoUsername = usernameGenerator.generar(primerNombre, primerApellido,
+                    numeroDocumento, usuario.getId());
+            usuario.setUsername(nuevoUsername);
+
+            if (documentoCambio) {
+                usuario.setPasswordHash(passwordEncoder.encode(numeroDocumento));
+                usuario.setRequiereCambioPassword(true);
+            }
+        }
+
+        // 4. El dominio del emailLogin SIEMPRE debe reflejar la institución actual,
+        //    incluso si ya inició sesión: si lo movieron de institución, su correo
+        //    institucional tiene que corresponder a la institución a la que pertenece ahora.
+        if (cambioInstitucion || usuario.getUltimoLogin() == null) {
+            usuario.setEmailLogin(usuario.getUsername() + "@" + institucion.getDominioCorreo());
+        }
+
+        usuario.setUpdatedAt(ahora);
+        usuarioRepository.save(usuario);
+
+        // 5. Si cambió de institución, mover vínculo principal + rol
+        if (cambioInstitucion) {
             principal.setInstitucionId(institucionId);
             principal.setUpdatedAt(ahora);
             usuarioInstitucionRepository.save(principal);
@@ -108,30 +134,5 @@ public class EditarAdministradorUseCase {
                         usuarioRolRepository.save(ur);
                     });
         }
-    }
-
-    private String generarUsername(String primerNombre, String primerApellido,
-                                   String numeroDocumento, UUID usuarioId) {
-        String nombre = normalizar(primerNombre);
-        String apellido = normalizar(primerApellido);
-        String soloDigitos = numeroDocumento.replaceAll("\\D", "");
-        String dosDigitos = soloDigitos.length() >= 2 ? soloDigitos.substring(0, 2) : soloDigitos;
-
-        String base = nombre + "-" + apellido + dosDigitos;
-        String candidato = base;
-        int intento = 1;
-        while (true) {
-            var existente = usuarioRepository.findByUsernameOrEmail(candidato);
-            if (existente.isEmpty() || existente.get().getId().equals(usuarioId)) break; // libre o es él mismo
-            candidato = base + "-" + intento;
-            intento++;
-        }
-        return candidato;
-    }
-
-    private String normalizar(String texto) {
-        String sinTildes = java.text.Normalizer.normalize(texto, java.text.Normalizer.Form.NFD)
-                .replaceAll("\\p{M}", "");
-        return sinTildes.toLowerCase().replaceAll("[^a-z0-9]", "");
     }
 }
