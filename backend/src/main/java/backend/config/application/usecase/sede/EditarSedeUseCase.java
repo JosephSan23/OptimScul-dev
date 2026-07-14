@@ -1,8 +1,7 @@
-package backend.config.application.usecase;
+package backend.config.application.usecase.sede;
 
 import backend.config.infrastructure.rest.dto.SedeRequestDto;
 import backend.people.application.port.SedeRepository;
-import backend.people.domain.model.EstadoRegistro;
 import backend.people.domain.model.Sede;
 import backend.security.application.AutorizacionService;
 import org.springframework.stereotype.Service;
@@ -12,23 +11,23 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
-public class CrearSedeUseCase {
+public class EditarSedeUseCase {
     private final SedeRepository sedeRepository;
     private final AutorizacionService autorizacionService;
 
-    public CrearSedeUseCase(SedeRepository sedeRepository, AutorizacionService autorizacionService) {
+    public EditarSedeUseCase(SedeRepository sedeRepository, AutorizacionService autorizacionService) {
         this.sedeRepository = sedeRepository;
         this.autorizacionService = autorizacionService;
     }
 
     @Transactional
-    public Sede ejecutar(UUID adminId, SedeRequestDto dto) {
+    public Sede ejecutar(UUID adminId, UUID sedeId, SedeRequestDto dto) {
         UUID institucionId = autorizacionService.institucionDelAdmin(adminId);
-        LocalDateTime ahora = LocalDateTime.now();
-
-        Sede s = new Sede();
-        s.setId(UUID.randomUUID());
-        s.setInstitucionId(institucionId);
+        Sede s = sedeRepository.findById(sedeId)
+                .orElseThrow(() -> new RuntimeException("La sede no existe."));
+        if (!institucionId.equals(s.getInstitucionId())) {
+            throw new SecurityException("No puedes editar sedes de otra institución.");
+        }
         s.setCodigo(dto.getCodigo());
         s.setNombre(dto.getNombre());
         s.setDescripcion(dto.getDescripcion());
@@ -39,9 +38,7 @@ public class CrearSedeUseCase {
         s.setDepartamento(dto.getDepartamento());
         s.setPais(dto.getPais());
         s.setPrincipal(dto.getPrincipal() != null && dto.getPrincipal());
-        s.setEstado(EstadoRegistro.ACTIVO);
-        s.setCreatedAt(ahora);
-        s.setUpdatedAt(ahora);
+        s.setUpdatedAt(LocalDateTime.now());
         return sedeRepository.save(s);
     }
 }

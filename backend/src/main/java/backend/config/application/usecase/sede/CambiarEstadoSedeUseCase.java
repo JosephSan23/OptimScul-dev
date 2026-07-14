@@ -1,4 +1,4 @@
-package backend.config.application.usecase;
+package backend.config.application.usecase.sede;
 
 import backend.people.application.port.SedeRepository;
 import backend.people.domain.model.EstadoRegistro;

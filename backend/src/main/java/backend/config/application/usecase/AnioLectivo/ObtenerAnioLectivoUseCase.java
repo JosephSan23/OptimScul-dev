@@ -1,4 +1,4 @@
-package backend.config.application.usecase.AnioLectivo;
+package backend.config.application.usecase.anioLectivo;
 
 import backend.academic.application.port.AnioLectivoRepository;
 import backend.academic.domain.model.AnioLectivo;

@@ -1,6 +1,6 @@
 package backend.config.infrastructure.rest.controller;
 
-import backend.config.application.usecase.AnioLectivo.*;
+import backend.config.application.usecase.anioLectivo.*;
 import backend.config.infrastructure.rest.dto.AnioLectivoConfigRequestDto;
 import backend.config.infrastructure.rest.dto.AnioLectivoConfigResponseDto;
 import jakarta.validation.Valid;

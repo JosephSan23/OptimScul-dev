@@ -19,7 +19,7 @@
 
     <div class="hero-top">
       <div class="hero-ident">
-        <span class="hero-badge"><i class="ti ti-star-filled"></i> 🎔Año actual</span>
+        <span class="hero-badge"><i class="ti ti-star-filled"></i>Año actual</span>
         <div class="hero-anio">{{ a.anio }}</div>
         <div class="hero-nombre">{{ a.nombre }}</div>
       </div>
@@ -29,6 +29,9 @@
         <a class="btn-accion hero-editar" title="Editar" [routerLink]="['/dashboard/anios-lectivos', a.id]">
           <i class="ti ti-pencil"></i>
         </a>
+        <a class="btn-accion hero-editar" title="Periodos" [routerLink]="['/dashboard/anios-lectivos', a.id, 'periodos']">
+              <i class="ti ti-list-details"></i>
+            </a>
       </div>
     </div>
 
@@ -82,6 +85,7 @@
             <a class="btn-accion" title="Editar" [routerLink]="['/dashboard/anios-lectivos', a.id]">
               <i class="ti ti-pencil"></i>
             </a>
+
             <button class="btn-accion exito" title="Marcar como actual"
                     [disabled]="procesandoId === a.id" (click)="marcarActual(a)">
               <i class="ti ti-star"></i>

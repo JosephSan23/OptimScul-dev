@@ -1,6 +1,6 @@
 package backend.config.infrastructure.rest.controller;
 
-import backend.config.application.usecase.*;
+import backend.config.application.usecase.jornada.*;
 import backend.config.infrastructure.rest.dto.JornadaRequestDto;
 import backend.config.infrastructure.rest.dto.JornadaResponseDto;
 import jakarta.validation.Valid;

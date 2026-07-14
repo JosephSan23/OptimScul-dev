@@ -1,6 +1,6 @@
 package backend.config.infrastructure.rest.controller;
 
-import backend.config.application.usecase.*;
+import backend.config.application.usecase.sede.*;
 import backend.config.infrastructure.rest.dto.SedeRequestDto;
 import backend.config.infrastructure.rest.dto.SedeResponseDto;
 import jakarta.validation.Valid;

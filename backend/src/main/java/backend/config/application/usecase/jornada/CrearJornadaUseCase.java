@@ -1,7 +1,8 @@
-package backend.config.application.usecase;
+package backend.config.application.usecase.jornada;
 
 import backend.config.infrastructure.rest.dto.JornadaRequestDto;
 import backend.people.application.port.JornadaRepository;
+import backend.people.domain.model.EstadoRegistro;
 import backend.people.domain.model.Jornada;
 import backend.security.application.AutorizacionService;
 import org.springframework.stereotype.Service;
@@ -10,24 +11,27 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
-public class EditarJornadaUseCase {
+public class CrearJornadaUseCase {
     private final JornadaRepository jornadaRepository;
     private final AutorizacionService autorizacionService;
-    public EditarJornadaUseCase(JornadaRepository jornadaRepository, AutorizacionService autorizacionService) {
+    public CrearJornadaUseCase(JornadaRepository jornadaRepository, AutorizacionService autorizacionService) {
         this.jornadaRepository = jornadaRepository; this.autorizacionService = autorizacionService;
     }
     @Transactional
-    public Jornada ejecutar(UUID adminId, UUID jornadaId, JornadaRequestDto dto) {
+    public Jornada ejecutar(UUID adminId, JornadaRequestDto dto) {
         UUID inst = autorizacionService.institucionDelAdmin(adminId);
-        Jornada j = jornadaRepository.findById(jornadaId)
-                .orElseThrow(() -> new RuntimeException("La jornada no existe."));
-        if (!inst.equals(j.getInstitucionId())) throw new SecurityException("No puedes editar jornadas de otra institución.");
+        LocalDateTime ahora = LocalDateTime.now();
+        Jornada j = new Jornada();
+        j.setId(UUID.randomUUID());
+        j.setInstitucionId(inst);
         j.setCodigo(dto.getCodigo());
         j.setNombre(dto.getNombre());
         j.setDescripcion(dto.getDescripcion());
         j.setHoraInicio(dto.getHoraInicio());
         j.setHoraFin(dto.getHoraFin());
-        j.setUpdatedAt(LocalDateTime.now());
+        j.setEstado(EstadoRegistro.ACTIVO);
+        j.setCreatedAt(ahora);
+        j.setUpdatedAt(ahora);
         return jornadaRepository.save(j);
     }
 }

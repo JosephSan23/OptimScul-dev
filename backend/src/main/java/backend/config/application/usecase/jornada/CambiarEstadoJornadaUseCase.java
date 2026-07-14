@@ -1,4 +1,4 @@
-package backend.config.application.usecase;
+package backend.config.application.usecase.jornada;
 
 import backend.people.application.port.JornadaRepository;
 import backend.people.domain.model.EstadoRegistro;
