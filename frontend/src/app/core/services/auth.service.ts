@@ -56,6 +56,7 @@ export class AuthService {
       return;
     }
     if (roles.includes('ADMIN_INSTITUCION'))   this.router.navigate(['/dashboard/colegio']);
+    else if (roles.includes('COORDINADOR_ACADEMICO')) this.router.navigate(['/dashboard/cooracademico'])
     else if (roles.includes('DOCENTE'))   this.router.navigate(['/dashboard/profesor']);
     else if (roles.includes('ESTUDIANTE')) this.router.navigate(['/dashboard/estudiante']);
     else if (roles.includes('ACUDIENTE'))  this.router.navigate(['/dashboard/acudiente']);
