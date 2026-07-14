@@ -15,15 +15,15 @@ import { AdministradoresListaComponent } from './features/administradores/admini
 import { roleGuard } from './core/guards/role.guard';
 import { StaffListaComponent } from './features/adminInstitucion/staff/staff-lista/staff-lista.component';
 import { StaffFormComponent } from './features/adminInstitucion/staff/staff-form/staff-form.component';
-import { SedesListaComponent } from './features/config/sedes-lista/sedes-lista.component';
-import { SedeFormComponent } from './features/config/sede-form/sede-form.component';
-import { JornadasListaComponent } from './features/config/jornadas-lista/jornadas-lista.component';
-import { JornadaFormComponent } from './features/config/jornada-form/jornada-form.component';
-import { DatosColegioComponent } from './features/config/datos-colegio/datos-colegio.component';
-import { AniosLectivosListaComponent } from './features/config/anios-lectivos-lista/anios-lectivos-lista.component';
-import { AnioLectivoFormComponent } from './features/config/anio-lectivo-form/anio-lectivo-form.component';
-import { PeriodosListaComponent } from './features/config/periodos-lista/periodos-lista.component';
-import { PeriodoFormComponent } from './features/config/periodo-form/periodo-form.component';
+import { SedesListaComponent } from './features/adminInstitucion/config/sedes-lista/sedes-lista.component';
+import { SedeFormComponent } from './features/adminInstitucion/config/sede-form/sede-form.component';
+import { JornadasListaComponent } from './features/adminInstitucion/config/jornadas-lista/jornadas-lista.component';
+import { JornadaFormComponent } from './features/adminInstitucion/config/jornada-form/jornada-form.component';
+import { DatosColegioComponent } from './features/adminInstitucion/config/datos-colegio/datos-colegio.component';
+import { AniosLectivosListaComponent } from './features/adminInstitucion/config/anios-lectivos-lista/anios-lectivos-lista.component';
+import { AnioLectivoFormComponent } from './features/adminInstitucion/config/anio-lectivo-form/anio-lectivo-form.component';
+import { PeriodosListaComponent } from './features/adminInstitucion/config/periodos-lista/periodos-lista.component';
+import { PeriodoFormComponent } from './features/adminInstitucion/config/periodo-form/periodo-form.component';
 
 const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -59,7 +59,9 @@ const routes: Routes = [
     { path: 'instituciones',  component: InstitucionesListaComponent, canActivate: [roleGuard], data: { soloSuperAdmin: true } },
     { path: 'solicitudes',    component: SolicitudesListaComponent,   canActivate: [roleGuard], data: { soloSuperAdmin: true } },
     { path: 'administradores',component: AdministradoresListaComponent, canActivate: [roleGuard], data: { soloSuperAdmin: true } },
+
     { path: 'colegio',        component: DashboardComponent,          canActivate: [roleGuard], data: { roles: ['ADMIN_INSTITUCION'] } },
+    { path: 'cooracademico',      component: DashboardComponent,          canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO'] } },
     { path: 'profesor',       component: DashboardComponent,          canActivate: [roleGuard], data: { roles: ['DOCENTE'] } },
     { path: 'estudiante',     component: DashboardComponent,          canActivate: [roleGuard], data: { roles: ['ESTUDIANTE'] } },
     { path: 'acudiente',      component: DashboardComponent,          canActivate: [roleGuard], data: { roles: ['ACUDIENTE'] } },
