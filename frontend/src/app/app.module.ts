@@ -24,15 +24,17 @@ import { AdministradorFormComponent } from './features/administradores/administr
 import { AdministradoresListaComponent } from './features/administradores/administradores-lista/administradores-lista.component';
 import { TablaPaginadaComponent } from './core/components/tabla-paginada/tabla-paginada.component';
 import { FilaTablaDirective } from './core/directives/fila-tabla.directive';
-import { StaffListaComponent } from './features/staff/staff-lista/staff-lista.component';
-import { StaffFormComponent } from './features/staff/staff-form/staff-form.component';
+import { StaffListaComponent } from './features/adminInstitucion/staff/staff-lista/staff-lista.component';
+import { StaffFormComponent } from './features/adminInstitucion/staff/staff-form/staff-form.component';
 import { SedesListaComponent } from './features/config/sedes-lista/sedes-lista.component';
 import { SedeFormComponent } from './features/config/sede-form/sede-form.component';
 import { JornadasListaComponent } from './features/config/jornadas-lista/jornadas-lista.component';
 import { JornadaFormComponent } from './features/config/jornada-form/jornada-form.component';
 import { DatosColegioComponent } from './features/config/datos-colegio/datos-colegio.component';
 import { AniosLectivosListaComponent } from './features/config/anios-lectivos-lista/anios-lectivos-lista.component';
-import { AnioLectivoFormComponent } from './features/config/anio-lectivo-form/anio-lectivo-form.component'
+import { AnioLectivoFormComponent } from './features/config/anio-lectivo-form/anio-lectivo-form.component';
+import { PeriodosListaComponent } from './features/config/periodos-lista/periodos-lista.component';
+import { PeriodoFormComponent } from './features/config/periodo-form/periodo-form.component'
 
 @NgModule({
   declarations: [
@@ -63,6 +65,8 @@ import { AnioLectivoFormComponent } from './features/config/anio-lectivo-form/an
     DatosColegioComponent,
     AniosLectivosListaComponent,
     AnioLectivoFormComponent,
+    PeriodosListaComponent,
+    PeriodoFormComponent,
   ],
   imports: [
     BrowserModule,
