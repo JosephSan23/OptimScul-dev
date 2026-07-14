@@ -11,4 +11,5 @@ public interface PeriodoAcademicoRepository {
     Optional<PeriodoAcademico> findById(UUID id);
     List<PeriodoAcademico> findAll();
     void deleteById(UUID id);
+    List<PeriodoAcademico> findByAnioLectivoId(UUID anioLectivoId);
 }
