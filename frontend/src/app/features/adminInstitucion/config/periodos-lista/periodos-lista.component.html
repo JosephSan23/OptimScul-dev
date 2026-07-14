@@ -1,0 +1,102 @@
+<div class="page-header con-back">
+  <a class="volver-link" routerLink="/dashboard/anios-lectivos">
+    <i class="ti ti-arrow-left"></i> Años lectivos
+  </a>
+  <div class="head-row">
+    <div>
+      <h1>Periodos</h1>
+      <p>Cortes académicos del año lectivo</p>
+    </div>
+    <a class="btn-save"
+       [routerLink]="['/dashboard/anios-lectivos', anioId, 'periodos', 'nuevo']">
+      <i class="ti ti-plus"></i> Nuevo periodo
+    </a>
+  </div>
+</div>
+
+<div *ngIf="cargando" class="estado-msg"><i class="ti ti-loader-2 girando"></i> Cargando...</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+
+<ng-container *ngIf="!cargando && periodos.length > 0">
+
+  <!-- ══════════ PRESUPUESTO DE CALIFICACIÓN ══════════ -->
+  <!-- <div class="peso-panel" *ngIf="hayPesos">
+    <div class="peso-panel-head">
+      <div class="peso-titulo">
+        <i class="ti ti-scale"></i>
+        <div>
+          <b>Distribución de la calificación</b>
+          <small>Cómo se reparte la nota final entre los periodos</small>
+        </div>
+      </div>
+      <div class="peso-total"
+           [class.completo]="pesoCompleto"
+           [class.excedido]="pesoExcedido > 0">
+        <span class="peso-total-num">{{ pesoTotal }}%</span>
+        <span class="peso-total-estado" *ngIf="pesoCompleto"><i class="ti ti-circle-check"></i> Completo</span>
+        <span class="peso-total-estado" *ngIf="!pesoCompleto && pesoExcedido === 0">faltan {{ pesoRestante }}%</span>
+        <span class="peso-total-estado" *ngIf="pesoExcedido > 0"><i class="ti ti-alert-triangle"></i> +{{ pesoExcedido }}% de más</span>
+      </div>
+    </div>
+
+    <!-- barra de distribución: cada segmento = peso del periodo -->
+    <!-- <div class="dist-bar">
+      <div class="dist-seg"
+           *ngFor="let p of ordenados; let i = index"
+           [style.flexBasis.%]="p.peso || 0"
+           [style.background]="colorSegmento(i)"
+           [title]="p.nombre + ' · ' + (p.peso || 0) + '%'">
+        <span *ngIf="(p.peso || 0) >= 9">{{ p.peso }}%</span>
+      </div>
+      <div class="dist-seg faltante" *ngIf="pesoRestante > 0" [style.flexBasis.%]="pesoRestante">
+        <span *ngIf="pesoRestante >= 12">{{ pesoRestante }}% libre</span>
+      </div>
+    </div>
+  </div> -->
+  <!-- ══════════ TARJETAS-CAPÍTULO ══════════ -->
+  <div class="periodos-grid">
+    <div class="periodo-card"
+         *ngFor="let p of ordenados"
+         [class.inactivo]="p.estado === 'ANULADO' || p.estado === 'CERRADO'">
+
+      <!-- número grande, tipo capítulo -->
+      <div class="periodo-num">{{ dosDigitos(p.numero) }}</div>
+
+      <div class="periodo-body">
+        <div class="periodo-top">
+          <h3>{{ p.nombre }}</h3>
+          <span class="badge-estado" [ngClass]="'estado-' + p.estado.toLowerCase()">{{ p.estado | titlecase }}</span>
+        </div>
+
+        <div class="periodo-fechas" *ngIf="p.fechaInicio && p.fechaFin">
+          <i class="ti ti-calendar"></i>
+          {{ p.fechaInicio | date:'d MMM' }} — {{ p.fechaFin | date:'d MMM y' }}
+        </div>
+        <div class="periodo-fechas sin" *ngIf="!p.fechaInicio || !p.fechaFin">
+          Sin fechas definidas
+        </div>
+
+        <!-- peso del periodo -->
+        <div class="periodo-peso" *ngIf="p.peso != null">
+          <div class="peso-mini-track"><span [style.width.%]="p.peso"></span></div>
+          <b>{{ p.peso }}%</b>
+        </div>
+
+        <a class="periodo-editar" [routerLink]="['/dashboard/periodos', p.id]">
+          <i class="ti ti-pencil"></i> Editar
+        </a>
+      </div>
+    </div>
+  </div>
+
+</ng-container>
+
+<!-- vacío -->
+<div class="periodos-vacio" *ngIf="!cargando && periodos.length === 0">
+  <div class="vacio-ico"><i class="ti ti-layout-grid-add"></i></div>
+  <h3>Aún no hay periodos en este año</h3>
+  <p>Divide el año lectivo en cortes académicos (bimestres, trimestres...).</p>
+  <a class="btn-save" [routerLink]="['/dashboard/anios-lectivos', anioId, 'periodos', 'nuevo']">
+    <i class="ti ti-plus"></i> Crear el primer periodo
+  </a>
+</div>

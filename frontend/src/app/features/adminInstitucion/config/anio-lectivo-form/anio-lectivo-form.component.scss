@@ -1,0 +1,128 @@
+:host { display: block; }
+
+.anio-form {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.anio-form-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  box-shadow: var(--shadow-1);
+  padding: 28px;
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 16px;
+  }
+
+  .req { color: var(--orange-500); }
+}
+
+/* ---------- preview del rango ---------- */
+.rango-preview {
+  margin-top: 22px;
+  background: var(--cream);
+  border: 1px solid var(--line-soft);
+  border-radius: 14px;
+  padding: 18px;
+  transition: border-color .2s, background .2s;
+
+  &.error {
+    background: var(--red-100);
+    border-color: var(--red-100);
+  }
+}
+
+.rango-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.rango-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+
+  i { color: var(--orange-500); font-size: .9rem; }
+}
+
+.rango-duracion {
+  background: var(--navy-100);
+  color: var(--navy-700);
+  font-size: .72rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 999px;
+}
+
+.rango-hint {
+  font-size: .76rem;
+  color: var(--ink-soft);
+  font-style: italic;
+
+  &.alerta {
+    color: var(--red-500);
+    font-style: normal;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+}
+
+/* línea inicio → fin con banderitas */
+.rango-linea {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.rango-punto {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  box-shadow: var(--clay-ico);
+  z-index: 1;
+
+  i { font-size: .85rem; }
+
+  &.ini { background: var(--green-100); i { color: var(--green-500); } }
+  &.fin { background: var(--orange-100); i { color: var(--orange-600); } }
+}
+
+.rango-barra {
+  flex: 1;
+  height: 6px;
+  background: linear-gradient(90deg, var(--green-500), var(--orange-500));
+  margin: 0 -4px;
+  border-radius: 99px;
+}
+
+.rango-fechas {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-family: var(--font-display);
+  font-size: .82rem;
+  font-weight: 700;
+  color: var(--navy-900);
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 560px) {
+  .anio-form-card .form-grid { grid-template-columns: 1fr; }
+}

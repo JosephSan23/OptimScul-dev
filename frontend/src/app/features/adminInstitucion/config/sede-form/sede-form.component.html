@@ -1,0 +1,74 @@
+<div class="panel-form">
+
+  <!-- cabecera del panel -->
+  <header class="panel-head">
+    <div>
+      <h2>{{ modoEdicion ? 'Editar sede' : 'Nueva sede' }}</h2>
+      <p>{{ modoEdicion ? 'Actualiza los datos de la sede' : 'Registra una sede de tu institución' }}</p>
+    </div>
+    <button type="button" class="btn-cerrar" (click)="cancelar()" title="Cerrar">
+      <i class="ti ti-x"></i>
+    </button>
+  </header>
+
+  <div *ngIf="cargando" class="panel-cargando">
+    <i class="ti ti-loader-2 girando"></i> Cargando...
+  </div>
+
+  <!-- cuerpo scrolleable -->
+  <div class="panel-body" *ngIf="!cargando">
+
+    <p class="seccion-label">Identificación</p>
+    <div class="form-grid">
+      <div class="campo"><label>Código <span class="req">*</span></label>
+        <input placeholder="Ej: SJ-002" [(ngModel)]="form.codigo" [ngModelOptions]="{standalone:true}"></div>
+      <div class="campo"><label>Nombre <span class="req">*</span></label>
+        <input placeholder="Ej: Sede Norte" [(ngModel)]="form.nombre" [ngModelOptions]="{standalone:true}"></div>
+      <div class="campo campo-full"><label>Descripción</label>
+        <input placeholder="Opcional" [(ngModel)]="form.descripcion" [ngModelOptions]="{standalone:true}"></div>
+    </div>
+
+    <p class="seccion-label">Ubicación</p>
+    <div class="form-grid">
+      <div class="campo campo-full"><label>Dirección</label>
+        <input placeholder="Opcional" [(ngModel)]="form.direccion" [ngModelOptions]="{standalone:true}"></div>
+      <div class="campo"><label>Ciudad</label>
+        <input placeholder="Opcional" [(ngModel)]="form.ciudad" [ngModelOptions]="{standalone:true}"></div>
+      <div class="campo"><label>Departamento</label>
+        <input placeholder="Opcional" [(ngModel)]="form.departamento" [ngModelOptions]="{standalone:true}"></div>
+      <div class="campo campo-full"><label>País</label>
+        <input [(ngModel)]="form.pais" [ngModelOptions]="{standalone:true}"></div>
+    </div>
+
+    <p class="seccion-label">Contacto</p>
+    <div class="form-grid">
+      <div class="campo"><label>Teléfono</label>
+        <input placeholder="Opcional" [(ngModel)]="form.telefono" [ngModelOptions]="{standalone:true}"></div>
+      <div class="campo"><label>Correo</label>
+        <input placeholder="Opcional" [(ngModel)]="form.correo" [ngModelOptions]="{standalone:true}"></div>
+    </div>
+
+    <!-- sede principal como interruptor -->
+    <label class="switch-principal">
+      <input type="checkbox" [(ngModel)]="form.principal" [ngModelOptions]="{standalone:true}">
+      <span class="switch-pill"><span class="switch-dot"></span></span>
+      <span class="switch-texto">
+        <b><i class="ti ti-star-filled"></i> Sede principal</b>
+        <small>La sede principal representa a la institución.</small>
+      </span>
+    </label>
+
+    <p class="form-error" *ngIf="error"><i class="ti ti-alert-circle"></i> {{ error }}</p>
+  </div>
+
+  <!-- pie fijo con acciones -->
+  <footer class="panel-pie" *ngIf="!cargando">
+    <button type="button" class="btn-cancel" (click)="cancelar()">Cancelar</button>
+    <button type="button" class="btn-save" [disabled]="guardando" (click)="guardar()">
+      <i class="ti girando" *ngIf="guardando" [ngClass]="'ti-loader-2'"></i>
+      <i class="ti" *ngIf="!guardando" [ngClass]="modoEdicion ? 'ti-device-floppy' : 'ti-plus'"></i>
+      {{ guardando ? 'Guardando...' : (modoEdicion ? 'Guardar cambios' : 'Crear sede') }}
+    </button>
+  </footer>
+
+</div>

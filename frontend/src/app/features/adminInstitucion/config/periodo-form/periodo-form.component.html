@@ -1,0 +1,70 @@
+<div class="page-header">
+  <h1>{{ modoEdicion ? "Editar periodo" : "Nuevo periodo" }}</h1>
+  <p>Datos del periodo académico</p>
+</div>
+
+<div *ngIf="cargando" class="estado-msg"><i class="ti ti-loader-2 girando"></i> Cargando...</div>
+
+<div class="periodo-form" *ngIf="!cargando">
+  <div class="periodo-form-card">
+
+    <div class="form-grid">
+      <div class="campo">
+        <label>Número <span class="req">*</span></label>
+        <input type="number" placeholder="1" [(ngModel)]="form.numero" [ngModelOptions]="{ standalone: true }" />
+      </div>
+      <div class="campo">
+        <label>Nombre <span class="req">*</span></label>
+        <input placeholder="Primer bimestre" [(ngModel)]="form.nombre" [ngModelOptions]="{ standalone: true }" />
+      </div>
+      <div class="campo">
+        <label>Fecha inicio <span class="req">*</span></label>
+        <input type="date" [(ngModel)]="form.fechaInicio" [ngModelOptions]="{ standalone: true }" />
+      </div>
+      <div class="campo">
+        <label>Fecha fin <span class="req">*</span></label>
+        <input type="date" [(ngModel)]="form.fechaFin" [ngModelOptions]="{ standalone: true }" />
+      </div>
+      <div class="campo">
+        <label>Estado</label>
+        <select [(ngModel)]="form.estado" [ngModelOptions]="{ standalone: true }">
+          <option *ngFor="let e of estados" [value]="e">{{ e | titlecase }}</option>
+        </select>
+      </div>
+      <div class="campo campo-full">
+        <label>Descripción</label>
+        <input placeholder="Opcional" [(ngModel)]="form.descripcion" [ngModelOptions]="{ standalone: true }" />
+      </div>
+    </div>
+
+    <!-- peso con anillo en vivo -->
+    <div class="peso-bloque">
+      <div class="peso-ring" [style.background]="pesoAnillo">
+        <div class="peso-ring-centro">
+          <b>{{ pesoValido }}<i>%</i></b>
+        </div>
+      </div>
+      <div class="peso-bloque-datos">
+        <label>Peso en la calificación</label>
+        <div class="peso-input">
+          <input type="number" min="0" max="100" placeholder="0"
+                 [(ngModel)]="form.peso" [ngModelOptions]="{ standalone: true }" />
+          <span>%</span>
+        </div>
+        <small>Cuánto vale este periodo en la nota final del año.</small>
+      </div>
+    </div>
+
+    <div class="form-error" *ngIf="error"><i class="ti ti-alert-circle"></i> {{ error }}</div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" (click)="cancelar()">Cancelar</button>
+      <button type="button" class="btn-save" [disabled]="guardando" (click)="guardar()">
+        <i class="ti girando" *ngIf="guardando" [ngClass]="'ti-loader-2'"></i>
+        <i class="ti" *ngIf="!guardando" [ngClass]="modoEdicion ? 'ti-device-floppy' : 'ti-plus'"></i>
+        {{ guardando ? "Guardando..." : modoEdicion ? "Guardar cambios" : "Crear periodo" }}
+      </button>
+    </div>
+
+  </div>
+</div>

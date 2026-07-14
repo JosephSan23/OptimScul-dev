@@ -1,0 +1,172 @@
+:host { display: block; }
+
+.jornadas-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ---------- tarjeta-franja ---------- */
+.jornada-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  box-shadow: var(--clay-card);
+  padding: 20px 24px;
+  transition: transform .2s ease, box-shadow .2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-2);
+  }
+
+  &.inactiva {
+    opacity: .68;
+
+    .jornada-ico { filter: grayscale(.6); }
+    .timeline-fill { background: var(--ink-soft); }
+  }
+}
+
+/* ---------- fila superior ---------- */
+.jornada-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.jornada-ident {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 220px;
+}
+
+.jornada-ico {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--clay-radius);
+  background: var(--orange-100);
+  box-shadow: var(--clay-ico);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+
+  i { font-size: 1.4rem; color: var(--orange-600); }
+}
+
+.jornada-nombre {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+
+  h3 {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--navy-900);
+    margin: 0;
+  }
+}
+
+.jornada-codigo {
+  font-family: var(--font-display);
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  background: var(--cream);
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  padding: 4px 11px;
+  border-radius: 999px;
+}
+
+/* ---------- horario ---------- */
+.jornada-horario {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  b {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--navy-900);
+  }
+
+  > i { color: var(--orange-500); font-size: 1.1rem; }
+
+  .jornada-duracion {
+    background: var(--navy-100);
+    color: var(--navy-700);
+    font-size: .72rem;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 999px;
+    margin-left: 4px;
+  }
+
+  &.sin-horario span {
+    color: var(--ink-soft);
+    font-size: .88rem;
+    font-style: italic;
+  }
+}
+
+/* ---------- línea de tiempo del día ---------- */
+.jornada-timeline {
+  margin-top: 16px;
+}
+
+.timeline-track {
+  position: relative;
+  height: 12px;
+  border-radius: 999px;
+  background: var(--navy-100);
+  overflow: hidden;
+
+  /* marcas de 6h / 12h / 18h */
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, transparent calc(25% - 1px), rgba(14,42,71,.14) 25%, transparent calc(25% + 1px)),
+      linear-gradient(90deg, transparent calc(50% - 1px), rgba(14,42,71,.14) 50%, transparent calc(50% + 1px)),
+      linear-gradient(90deg, transparent calc(75% - 1px), rgba(14,42,71,.14) 75%, transparent calc(75% + 1px));
+    pointer-events: none;
+  }
+}
+
+.timeline-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 999px;
+  background: var(--orange-500);
+  box-shadow: var(--clay-ico);
+  min-width: 6px;
+}
+
+.timeline-horas {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: .68rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 720px) {
+  .jornada-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .jornada-horario b { font-size: 1.1rem; }
+}

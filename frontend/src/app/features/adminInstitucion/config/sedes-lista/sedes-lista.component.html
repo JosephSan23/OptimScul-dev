@@ -1,0 +1,96 @@
+<div class="page-header">
+  <h1>Sedes</h1>
+  <p>Gestiona las sedes de tu institución</p>
+</div>
+
+<div *ngIf="cargando" class="estado-msg">
+  <i class="ti ti-loader-2 girando"></i> Cargando sedes...
+</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+
+<ng-container *ngIf="!cargando">
+
+  <!-- toolbar: búsqueda local + acción primaria -->
+  <div class="sedes-toolbar">
+    <div class="sedes-buscar">
+      <i class="ti ti-search"></i>
+      <input type="text" placeholder="Buscar por nombre, código, ciudad..."
+             [(ngModel)]="filtro" [ngModelOptions]="{standalone:true}">
+    </div>
+    <button class="btn-primario" (click)="abrirCrear()">
+      <i class="ti ti-plus"></i> Nueva sede
+    </button>
+  </div>
+
+  <!-- estado vacío -->
+  <div class="sedes-vacio" *ngIf="sedesFiltradas.length === 0">
+    <div class="vacio-ico"><i class="ti ti-building-community"></i></div>
+    <h3>{{ filtro ? 'Sin resultados' : 'Aún no hay sedes creadas' }}</h3>
+    <p>{{ filtro ? 'Prueba con otro término de búsqueda.' : 'Crea la primera sede de tu institución.' }}</p>
+  </div>
+
+  <!-- grilla de tarjetas -->
+  <div class="sedes-grid" *ngIf="sedesFiltradas.length > 0">
+
+    <div class="sede-card"
+         *ngFor="let s of sedesFiltradas"
+         [class.principal]="s.principal"
+         [class.inactiva]="s.estado !== 'ACTIVO'">
+
+      <span class="badge-principal" *ngIf="s.principal">
+        <i class="ti ti-star-filled"></i> Sede principal
+      </span>
+
+      <div class="sede-top">
+        <div class="sede-ico">
+          <i class="ti" [ngClass]="s.principal ? 'ti-building-bank' : 'ti-school'"></i>
+        </div>
+        <span class="sede-codigo">{{ s.codigo }}</span>
+      </div>
+
+      <h3>{{ s.nombre }}</h3>
+      <div class="sede-ciudad">
+        <i class="ti ti-map-pin"></i>
+        {{ s.ciudad || 'Sin ciudad' }}<ng-container *ngIf="s.direccion"> · {{ s.direccion }}</ng-container>
+      </div>
+
+      <div class="sede-pie">
+        <span class="tag" [ngClass]="s.estado === 'ACTIVO' ? 'ok' : 'off'">
+          {{ s.estado | titlecase }}
+        </span>
+        <div class="acciones">
+          <button class="btn-accion" title="Editar" (click)="abrirEditar(s)">
+            <i class="ti ti-pencil"></i>
+          </button>
+          <button *ngIf="s.estado === 'ACTIVO'" class="btn-accion peligro" title="Inactivar"
+                  [disabled]="procesandoId === s.id" (click)="inactivar(s)">
+            <i class="ti ti-toggle-left"></i>
+          </button>
+          <button *ngIf="s.estado !== 'ACTIVO'" class="btn-accion exito" title="Activar"
+                  [disabled]="procesandoId === s.id" (click)="activar(s)">
+            <i class="ti ti-toggle-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- tarjeta fantasma: crear -->
+    <button class="sede-nueva" (click)="abrirCrear()">
+      <span class="mas"><i class="ti ti-plus"></i></span>
+      <b>Agregar nueva sede</b>
+    </button>
+  </div>
+
+</ng-container>
+
+<!-- ══════════ PANEL LATERAL (crear / editar) ══════════ -->
+<div class="panel-overlay" [class.abierto]="panelAbierto" (click)="cerrarPanel()"></div>
+
+<aside class="panel-lateral" [class.abierto]="panelAbierto">
+  <!-- *ngIf reinicia el form en cada apertura -->
+  <app-sede-form *ngIf="panelAbierto"
+                 [sedeId]="sedeEditandoId"
+                 (guardado)="onGuardado()"
+                 (cancelado)="cerrarPanel()">
+  </app-sede-form>
+</aside>
