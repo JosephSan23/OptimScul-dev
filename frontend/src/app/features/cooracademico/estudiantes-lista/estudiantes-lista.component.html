@@ -1,0 +1,100 @@
+<div class="page-header">
+  <h1>Estudiantes</h1>
+  <p>Gestiona los estudiantes de tu institución</p>
+</div>
+
+<div *ngIf="cargando" class="estado-msg">
+  <i class="ti ti-loader-2 girando"></i> Cargando...
+</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+
+<app-tabla-paginada
+  *ngIf="!cargando"
+  [items]="estudiantes"
+  [camposBusqueda]="[
+    'codigoEstudiante',
+    'primerNombre',
+    'primerApellido',
+    'numeroDocumento',
+    'username',
+  ]"
+  placeholderBusqueda="Buscar por nombre, código, documento..."
+  mensajeVacio="Aún no hay estudiantes creados."
+>
+  <div acciones>
+    <a class="btn-save" routerLink="/dashboard/estudiantes/nuevo">
+      <i class="ti ti-plus"></i> Nuevo estudiante
+    </a>
+  </div>
+
+  <ng-template filaTabla let-pagina>
+    <div class="tabla-card">
+      <table class="tabla-crud">
+        <thead>
+          <tr>
+            <th>Estudiante</th>
+            <th>Documento</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let e of pagina">
+            <td>
+              <div class="celda-usuario">
+                <span class="mini-avatar">{{
+                  (e.primerNombre?.charAt(0) || "") +
+                    (e.primerApellido?.charAt(0) || "") || "?"
+                }}</span>
+                <div>
+                  <b>{{ e.primerNombre }} {{ e.primerApellido }}</b>
+                  <small
+                    >{{ e.codigoEstudiante
+                    }}<ng-container *ngIf="e.username">
+                      · {{ e.username }}</ng-container
+                    ></small
+                  >
+                </div>
+              </div>
+            </td>
+            <td class="celda-mono">{{ e.numeroDocumento }}</td>
+            <td>
+              <span
+                class="badge-estado"
+                [ngClass]="'estado-' + e.estado.toLowerCase()"
+                >{{ e.estado | titlecase }}</span
+              >
+            </td>
+            <td class="acciones">
+              <a
+                class="btn-accion"
+                title="Editar"
+                [routerLink]="['/dashboard/estudiantes', e.estudianteId]"
+              >
+                <i class="ti ti-pencil"></i>
+              </a>
+              <button
+                *ngIf="e.estado === 'ACTIVO'"
+                class="btn-accion peligro"
+                title="Inactivar"
+                [disabled]="procesandoId === e.estudianteId"
+                (click)="inactivar(e)"
+              >
+                <i class="ti ti-user-off"></i>
+              </button>
+              <button
+                *ngIf="e.estado !== 'ACTIVO'"
+                class="btn-accion exito"
+                title="Activar"
+                [disabled]="procesandoId === e.estudianteId"
+                (click)="activar(e)"
+              >
+                <i class="ti ti-user-check"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </ng-template>
+</app-tabla-paginada>

@@ -1,0 +1,271 @@
+<div class="page-header">
+  <h1>{{ modoEdicion ? "Editar estudiante" : "Nuevo estudiante" }}</h1>
+  <p>
+    {{
+      modoEdicion
+        ? "Actualiza los datos del estudiante"
+        : "Crea el estudiante y su cuenta de acceso"
+    }}
+  </p>
+</div>
+
+<div *ngIf="cargando" class="estado-msg">
+  <i class="ti ti-loader-2 girando"></i> Cargando...
+</div>
+
+<div class="perfil-page" *ngIf="!cargando">
+  <!-- ══════════ MODO CREAR: solo lo esencial ══════════ -->
+  <ng-container *ngIf="!modoEdicion">
+    <section class="form-section">
+      <div class="section-info">
+        <h3>Datos del estudiante</h3>
+        <p>
+          Con estos datos creamos al estudiante. El resto se completa luego, al
+          editar.
+        </p>
+      </div>
+      <div class="section-fields">
+        <div class="campo">
+          <label>Tipo de documento <span class="req">*</span></label>
+          <select
+            [(ngModel)]="form.tipoDocumento"
+            [ngModelOptions]="{ standalone: true }"
+          >
+            <option value="">Selecciona...</option>
+            <option *ngFor="let t of tiposDocumento" [value]="t.valor">
+              {{ t.etiqueta }}
+            </option>
+          </select>
+        </div>
+        <div class="campo">
+          <label>Número de documento <span class="req">*</span></label>
+          <input
+            [(ngModel)]="form.numeroDocumento"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </div>
+        <div class="campo">
+          <label>Primer nombre <span class="req">*</span></label>
+          <input
+            [(ngModel)]="form.primerNombre"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </div>
+        <div class="campo">
+          <label>Primer apellido <span class="req">*</span></label>
+          <input
+            [(ngModel)]="form.primerApellido"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </div>
+        <div class="campo campo-full">
+          <label>Correo</label>
+          <input
+            placeholder="Opcional"
+            [(ngModel)]="form.correo"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </div>
+        <p class="form-hint campo-full">
+          <i class="ti ti-wand"></i>
+          El <b>usuario</b>, la <b>contraseña</b> (= documento) y el
+          <b>código</b> se generan automáticamente.
+        </p>
+      </div>
+    </section>
+  </ng-container>
+
+  <!-- ══════════ MODO EDITAR: ficha completa ══════════ -->
+  <ng-container *ngIf="modoEdicion">
+    <section class="form-section">
+      <div class="section-info">
+        <h3>Identificación</h3>
+        <p>Código del estudiante y documento oficial.</p>
+      </div>
+      <div class="section-fields">
+        <div class="campo">
+          <label>Código</label>
+          <input [value]="codigo" disabled />
+        </div>
+        <div class="campo">
+          <label>Tipo de documento <span class="req">*</span></label>
+          <select
+            [(ngModel)]="form.tipoDocumento"
+            [ngModelOptions]="{ standalone: true }"
+          >
+            <option value="">Selecciona...</option>
+            <option *ngFor="let t of tiposDocumento" [value]="t.valor">
+              {{ t.etiqueta }}
+            </option>
+          </select>
+        </div>
+        <div class="campo">
+          <label>Número de documento <span class="req">*</span></label>
+          <input
+            [(ngModel)]="form.numeroDocumento"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </div>
+      </div>
+    </section>
+
+    <section class="form-section">
+      <div class="section-info">
+        <h3>Datos personales</h3>
+        <p>Nombre completo y fecha de nacimiento.</p>
+      </div>
+      <div class="section-fields">
+        <div class="campo">
+          <label>Primer nombre <span class="req">*</span></label>
+          <input
+            [(ngModel)]="form.primerNombre"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </div>
+        <div class="campo">
+          <label>Segundo nombre</label>
+          <input
+            placeholder="Opcional"
+            [(ngModel)]="form.segundoNombre"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </div>
+        <div class="campo">
+          <label>Primer apellido <span class="req">*</span></label>
+          <input
+            [(ngModel)]="form.primerApellido"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </div>
+        <div class="campo">
+          <label>Segundo apellido</label>
+          <input
+            placeholder="Opcional"
+            [(ngModel)]="form.segundoApellido"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </div>
+        <div class="campo">
+          <label>Fecha de nacimiento</label>
+          <input
+            type="date"
+            [(ngModel)]="form.fechaNacimiento"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </div>
+      </div>
+    </section>
+
+    <section class="form-section">
+      <div class="section-info">
+        <h3>Contacto</h3>
+        <p>Correo, teléfono y ubicación del estudiante.</p>
+      </div>
+      <div class="section-fields">
+        <div class="campo">
+          <label>Correo</label>
+          <input
+            placeholder="Opcional"
+            [(ngModel)]="form.correo"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </div>
+        <div class="campo">
+          <label>Teléfono</label>
+          <input
+            placeholder="Opcional"
+            [(ngModel)]="form.telefono"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </div>
+        <div class="campo">
+          <label>Dirección</label>
+          <input
+            placeholder="Opcional"
+            [(ngModel)]="form.direccion"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </div>
+        <div class="campo">
+          <label>Ciudad</label>
+          <input
+            placeholder="Opcional"
+            [(ngModel)]="form.ciudad"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </div>
+      </div>
+    </section>
+
+    <section class="form-section">
+      <div class="section-info">
+        <h3>Estado académico</h3>
+        <p>Ingreso y situación actual del estudiante.</p>
+      </div>
+      <div class="section-fields">
+        <div class="campo">
+          <label>Fecha de ingreso</label>
+          <input
+            type="date"
+            [(ngModel)]="form.fechaIngreso"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </div>
+        <div class="campo">
+          <label>Estado</label>
+          <select
+            [(ngModel)]="form.estado"
+            [ngModelOptions]="{ standalone: true }"
+          >
+            <option *ngFor="let e of estados" [value]="e">
+              {{ e | titlecase }}
+            </option>
+          </select>
+        </div>
+        <div class="campo campo-full">
+          <label>Observaciones</label>
+          <input
+            placeholder="Opcional"
+            [(ngModel)]="form.observaciones"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </div>
+      </div>
+    </section>
+  </ng-container>
+
+  <!-- mensajes -->
+  <div class="form-error" *ngIf="error">
+    <i class="ti ti-alert-circle"></i> {{ error }}
+  </div>
+  <div class="form-exito" *ngIf="exito">
+    <i class="ti ti-circle-check"></i> {{ exito }}
+  </div>
+
+  <!-- acciones -->
+  <div class="form-actions">
+    <button type="button" class="btn-cancel" (click)="volver()">
+      {{ modoEdicion ? "Cancelar" : "Volver a la lista" }}
+    </button>
+    <button
+      type="button"
+      class="btn-save"
+      [disabled]="guardando"
+      (click)="guardar()"
+    >
+      <i class="ti girando" *ngIf="guardando" [ngClass]="'ti-loader-2'"></i>
+      <i
+        class="ti"
+        *ngIf="!guardando"
+        [ngClass]="modoEdicion ? 'ti-device-floppy' : 'ti-plus'"
+      ></i>
+      {{
+        guardando
+          ? "Guardando..."
+          : modoEdicion
+            ? "Guardar cambios"
+            : "Crear estudiante"
+      }}
+    </button>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+:host {
+  display: block;
+}
+
+/* estados específicos del estudiante
+   (activo/inactivo ya existen en el global) */
+.badge-estado {
+  &.estado-retirado {
+    background: var(--red-100);
+    color: var(--red-500);
+  }
+  &.estado-graduado {
+    background: var(--navy-100);
+    color: var(--navy-700);
+  }
+}
