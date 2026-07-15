@@ -1,0 +1,70 @@
+:host { display: block; }
+
+/* header con back + acción (como periodos) */
+.page-header.con-back { margin-bottom: 22px; }
+
+.volver-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-soft);
+  font-size: .85rem;
+  font-weight: 600;
+  text-decoration: none;
+  margin-bottom: 12px;
+  transition: color .2s;
+
+  &:hover { color: var(--orange-600); }
+  i { font-size: .9rem; }
+}
+
+.head-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* estrella de acudiente principal, junto al nombre */
+.principal-star {
+  color: var(--orange-500);
+  font-size: .8rem;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+/* el parentesco como tag chico dentro del subtexto */
+.celda-usuario small {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  .tag.parentesco {
+    font-size: .66rem;
+    padding: 3px 9px;
+  }
+}
+
+/* chips de permisos */
+.permisos {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.permiso-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: .7rem;
+  font-weight: 700;
+  padding: 4px 11px;
+  border-radius: 999px;
+  white-space: nowrap;
+
+  i { font-size: .82rem; }
+
+  &.ok   { background: var(--green-100); color: var(--green-500); }
+  &.info { background: var(--navy-100);  color: var(--navy-700); }
+}

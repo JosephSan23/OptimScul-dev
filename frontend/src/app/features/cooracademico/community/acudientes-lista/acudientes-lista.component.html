@@ -1,0 +1,87 @@
+<div class="page-header con-back">
+  <a class="volver-link" routerLink="/dashboard/estudiantes">
+    <i class="ti ti-arrow-left"></i> Estudiantes
+  </a>
+  <div class="head-row">
+    <div>
+      <h1>Acudientes</h1>
+      <p>Acudientes vinculados a este estudiante</p>
+    </div>
+    <a class="btn-save"
+       [routerLink]="['/dashboard/estudiantes', estudianteId, 'acudientes', 'nuevo']">
+      <i class="ti ti-plus"></i> Nuevo acudiente
+    </a>
+  </div>
+</div>
+
+<div *ngIf="cargando" class="estado-msg"><i class="ti ti-loader-2 girando"></i> Cargando...</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+
+<app-tabla-paginada
+  *ngIf="!cargando"
+  [items]="acudientes"
+  [camposBusqueda]="[
+    'primerNombre',
+    'primerApellido',
+    'numeroDocumento',
+    'parentesco',
+  ]"
+  placeholderBusqueda="Buscar acudiente..."
+  mensajeVacio="Este estudiante aún no tiene acudientes."
+>
+  <ng-template filaTabla let-pagina>
+    <div class="tabla-card">
+      <table class="tabla-crud">
+        <thead>
+          <tr>
+            <th>Acudiente</th>
+            <th>Documento</th>
+            <th>Permisos</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let a of pagina">
+            <td>
+              <div class="celda-usuario">
+                <span class="mini-avatar">{{ (a.primerNombre?.charAt(0) || '') + (a.primerApellido?.charAt(0) || '') || '?' }}</span>
+                <div>
+                  <b>
+                    {{ a.primerNombre }} {{ a.primerApellido }}
+                    <i class="ti ti-star-filled principal-star" *ngIf="a.esPrincipal" title="Acudiente principal"></i>
+                  </b>
+                  <small>
+                    <span class="tag info parentesco">{{ a.parentesco | titlecase }}</span>
+                    <ng-container *ngIf="a.username"> · {{ a.username }}</ng-container>
+                  </small>
+                </div>
+              </div>
+            </td>
+            <td class="celda-mono">{{ a.numeroDocumento }}</td>
+            <td>
+              <div class="permisos">
+                <span class="permiso-chip ok" *ngIf="a.autorizadoRecogida" title="Autorizado a recoger">
+                  <i class="ti ti-car"></i> Recoge
+                </span>
+                <span class="permiso-chip info" *ngIf="a.autorizadoInfoAcademica" title="Ve información académica">
+                  <i class="ti ti-file-text"></i> Académico
+                </span>
+                <span class="celda-secundaria" *ngIf="!a.autorizadoRecogida && !a.autorizadoInfoAcademica">Sin permisos</span>
+              </div>
+            </td>
+            <td class="acciones">
+              <a class="btn-accion" title="Editar"
+                 [routerLink]="['/dashboard/estudiantes', estudianteId, 'acudientes', a.vinculoId, 'editar']">
+                <i class="ti ti-pencil"></i>
+              </a>
+              <button class="btn-accion peligro" title="Desvincular"
+                      [disabled]="procesandoId === a.vinculoId" (click)="desvincular(a)">
+                <i class="ti ti-unlink"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </ng-template>
+</app-tabla-paginada>

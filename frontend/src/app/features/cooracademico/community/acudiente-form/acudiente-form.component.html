@@ -1,0 +1,145 @@
+<div class="page-header">
+  <h1>{{ modoEdicion ? "Editar acudiente" : "Nuevo acudiente" }}</h1>
+  <p>Datos del acudiente y su relación con el estudiante</p>
+</div>
+
+<div *ngIf="cargando" class="estado-msg"><i class="ti ti-loader-2 girando"></i> Cargando...</div>
+
+<div class="perfil-page" *ngIf="!cargando">
+
+  <!-- ══════════ Datos del acudiente ══════════ -->
+  <section class="form-section">
+    <div class="section-info">
+      <h3>Datos del acudiente</h3>
+      <p>Identidad y contacto de la persona responsable.</p>
+    </div>
+    <div class="section-fields">
+      <div class="campo">
+        <label>Tipo de documento <span class="req">*</span></label>
+        <select [(ngModel)]="form.tipoDocumento" [ngModelOptions]="{ standalone: true }">
+          <option value="">Selecciona...</option>
+          <option *ngFor="let t of tiposDocumento" [value]="t.valor">{{ t.etiqueta }}</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label>Número de documento <span class="req">*</span></label>
+        <input [(ngModel)]="form.numeroDocumento" [ngModelOptions]="{ standalone: true }" />
+      </div>
+      <div class="campo">
+        <label>Primer nombre <span class="req">*</span></label>
+        <input [(ngModel)]="form.primerNombre" [ngModelOptions]="{ standalone: true }" />
+      </div>
+      <div class="campo">
+        <label>Primer apellido <span class="req">*</span></label>
+        <input [(ngModel)]="form.primerApellido" [ngModelOptions]="{ standalone: true }" />
+      </div>
+
+      <ng-container *ngIf="modoEdicion">
+        <div class="campo">
+          <label>Segundo nombre</label>
+          <input placeholder="Opcional" [(ngModel)]="form.segundoNombre" [ngModelOptions]="{ standalone: true }" />
+        </div>
+        <div class="campo">
+          <label>Segundo apellido</label>
+          <input placeholder="Opcional" [(ngModel)]="form.segundoApellido" [ngModelOptions]="{ standalone: true }" />
+        </div>
+        <div class="campo">
+          <label>Teléfono</label>
+          <input placeholder="Opcional" [(ngModel)]="form.telefono" [ngModelOptions]="{ standalone: true }" />
+        </div>
+        <div class="campo">
+          <label>Estado de la cuenta</label>
+          <select [(ngModel)]="form.estado" [ngModelOptions]="{ standalone: true }">
+            <option *ngFor="let e of estados" [value]="e">{{ e | titlecase }}</option>
+          </select>
+        </div>
+      </ng-container>
+
+      <div class="campo">
+        <label>Correo</label>
+        <input placeholder="Opcional" [(ngModel)]="form.correo" [ngModelOptions]="{ standalone: true }" />
+      </div>
+      <div class="campo">
+        <label>Ocupación</label>
+        <input placeholder="Opcional" [(ngModel)]="form.ocupacion" [ngModelOptions]="{ standalone: true }" />
+      </div>
+      <div class="campo">
+        <label>Empresa</label>
+        <input placeholder="Opcional" [(ngModel)]="form.empresa" [ngModelOptions]="{ standalone: true }" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ Relación y permisos ══════════ -->
+  <section class="form-section">
+    <div class="section-info">
+      <h3>Relación y permisos</h3>
+      <p>Parentesco con el estudiante y qué está autorizado a hacer.</p>
+    </div>
+    <div class="section-fields">
+      <div class="campo campo-full">
+        <label>Parentesco <span class="req">*</span></label>
+        <select [(ngModel)]="form.parentesco" [ngModelOptions]="{ standalone: true }">
+          <option value="">Selecciona...</option>
+          <option *ngFor="let p of parentescos" [value]="p">{{ p | titlecase }}</option>
+        </select>
+      </div>
+
+      <!-- permisos como tarjetas de interruptor -->
+      <div class="permisos-lista campo-full">
+        <label class="permiso-row">
+          <input type="checkbox" [(ngModel)]="form.esPrincipal" [ngModelOptions]="{ standalone: true }" />
+          <span class="permiso-check"><i class="ti ti-check"></i></span>
+          <span class="permiso-ico"><i class="ti ti-star"></i></span>
+          <span class="permiso-text">
+            <b>Acudiente principal</b>
+            <small>Es el contacto principal del estudiante.</small>
+          </span>
+        </label>
+
+        <label class="permiso-row">
+          <input type="checkbox" [(ngModel)]="form.autorizadoRecogida" [ngModelOptions]="{ standalone: true }" />
+          <span class="permiso-check"><i class="ti ti-check"></i></span>
+          <span class="permiso-ico"><i class="ti ti-car"></i></span>
+          <span class="permiso-text">
+            <b>Autorizado a recoger</b>
+            <small>Puede retirar al estudiante de la institución.</small>
+          </span>
+        </label>
+
+        <label class="permiso-row">
+          <input type="checkbox" [(ngModel)]="form.autorizadoInfoAcademica" [ngModelOptions]="{ standalone: true }" />
+          <span class="permiso-check"><i class="ti ti-check"></i></span>
+          <span class="permiso-ico"><i class="ti ti-file-text"></i></span>
+          <span class="permiso-text">
+            <b>Ver información académica</b>
+            <small>Accede a notas, asistencia y reportes.</small>
+          </span>
+        </label>
+      </div>
+    </div>
+  </section>
+
+  <!-- mensajes -->
+  <div class="form-error" *ngIf="error"><i class="ti ti-alert-circle"></i> {{ error }}</div>
+  <div class="form-exito" *ngIf="exito"><i class="ti ti-circle-check"></i> {{ exito }}</div>
+
+  <!-- acciones -->
+  <div class="form-actions">
+    <button type="button" class="btn-cancel" (click)="volver()">
+      {{ modoEdicion ? "Cancelar" : "Volver" }}
+    </button>
+    <button type="button" class="btn-save" [disabled]="guardando" (click)="guardar()">
+      <i class="ti girando" *ngIf="guardando" [ngClass]="'ti-loader-2'"></i>
+      <i class="ti" *ngIf="!guardando" [ngClass]="modoEdicion ? 'ti-device-floppy' : 'ti-plus'"></i>
+      {{
+        guardando
+          ? "Guardando..."
+          : modoEdicion
+            ? "Guardar cambios"
+            : "Crear/vincular acudiente"
+      }}
+    </button>
+  </div>
+
+</div>
