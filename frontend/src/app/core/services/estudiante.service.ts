@@ -62,7 +62,7 @@ export interface EditarEstudianteRequest {
 
 @Injectable({ providedIn: 'root' })
 export class EstudianteService {
-  private readonly API = `${environment.apiUrl}/comunidad/estudiantes`;
+  private readonly API = `${environment.apiUrl}/community/estudiantes`;
   constructor(private http: HttpClient) {}
   listar(): Observable<Estudiante[]> {
     return this.http.get<Estudiante[]>(this.API);
