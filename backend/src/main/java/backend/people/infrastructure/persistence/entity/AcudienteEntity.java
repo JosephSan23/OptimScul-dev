@@ -28,7 +28,8 @@ public class AcudienteEntity {
     private String empresa;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "estado")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "estado", columnDefinition = "estado_acudiente_enum")
     private EstadoAcudiente estado;
 
     @Column(name = "observaciones")

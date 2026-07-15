@@ -38,7 +38,8 @@ public class ProfesorEntity {
     private LocalDate fechaRetiro;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "estado")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "estado", columnDefinition = "estado_profesor_enum")
     private EstadoProfesor estado;
 
     @Column(name = "observaciones")
