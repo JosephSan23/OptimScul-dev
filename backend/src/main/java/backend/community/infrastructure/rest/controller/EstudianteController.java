@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/comunidad/estudiantes")
+@RequestMapping("/api/community/estudiantes")
 public class EstudianteController {
 
     private final ListarEstudiantesUseCase listar;
