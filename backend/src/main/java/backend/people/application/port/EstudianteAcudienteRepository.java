@@ -11,4 +11,6 @@ public interface EstudianteAcudienteRepository {
     Optional<EstudianteAcudiente> findById(UUID id);
     List<EstudianteAcudiente> findAll();
     void deleteById(UUID id);
+    List<EstudianteAcudiente> findByEstudianteId(UUID estudianteId);
+    boolean existsByEstudianteIdAndAcudienteId(UUID estudianteId, UUID acudienteId);
 }

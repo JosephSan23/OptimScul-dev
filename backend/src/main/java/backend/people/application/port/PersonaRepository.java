@@ -12,4 +12,5 @@ public interface PersonaRepository {
     List<Persona> findAll();
     void deleteById(UUID id);
     boolean existsByNumeroDocumento(String numeroDocumento);
+    Optional<Persona> findByNumeroDocumento(String numeroDocumento);
 }

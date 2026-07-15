@@ -45,4 +45,9 @@ public class PersonaRepositoryAdapter implements PersonaRepository {
     public boolean existsByNumeroDocumento(String numeroDocumento) {
         return jpaRepository.existsByNumeroDocumento(numeroDocumento);
     }
+
+    @Override
+    public Optional<Persona> findByNumeroDocumento(String numeroDocumento) {
+        return jpaRepository.findByNumeroDocumento(numeroDocumento).map(mapper::toDomain);
+    }
 }

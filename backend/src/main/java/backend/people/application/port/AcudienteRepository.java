@@ -11,4 +11,5 @@ public interface AcudienteRepository {
     Optional<Acudiente> findById(UUID id);
     List<Acudiente> findAll();
     void deleteById(UUID id);
+    Optional<Acudiente> findByPersonaId(UUID personaId);
 }
