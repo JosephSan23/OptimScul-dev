@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
+
+
 
 export interface InstitucionConfig {
   codigo: string;
@@ -43,7 +46,7 @@ export interface InstitucionConfigRequest {
 
 @Injectable({ providedIn: 'root' })
 export class InstitucionConfigService {
-  private readonly API = 'http://localhost:8080/api/config/institucion';
+  private readonly API = `${environment.apiUrl}/config/institucion`;
   constructor(private http: HttpClient) {}
 
   miInstitucion(): Observable<InstitucionConfig> {

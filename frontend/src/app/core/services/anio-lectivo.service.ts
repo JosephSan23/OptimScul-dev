@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
+
 
 export interface AnioLectivo {
   id: string;
@@ -23,7 +25,7 @@ export interface AnioLectivoRequest {
 
 @Injectable({ providedIn: 'root' })
 export class AnioLectivoService {
-  private readonly API = 'http://localhost:8080/api/config/anios-lectivos';
+  private readonly API = `${environment.apiUrl}/config/anios-lectivos`;
   constructor(private http: HttpClient) {}
   listar(): Observable<AnioLectivo[]> {
     return this.http.get<AnioLectivo[]>(this.API);

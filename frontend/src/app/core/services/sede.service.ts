@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
 
 export interface Sede {
   id: string;
@@ -31,7 +32,7 @@ export interface SedeRequest {
 
 @Injectable({ providedIn: 'root' })
 export class SedeService {
-  private readonly API = 'http://localhost:8080/api/config/sedes';
+  private readonly API = `${environment.apiUrl}/config/sedes`;
   constructor(private http: HttpClient) {}
 
   listar(): Observable<Sede[]> {

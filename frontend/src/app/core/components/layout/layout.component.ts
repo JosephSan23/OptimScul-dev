@@ -52,4 +52,26 @@ export class LayoutComponent {
   cerrarSesion(): void {
     this.authService.logout();
   }
+
+  menu = [
+    { label: 'Administradores',   icon: 'ti ti-user-shield',         ruta: '/dashboard/administradores', soloSuperAdmin: true },
+    { label: 'Instituciones',     icon: 'ti ti-building-community',   ruta: '/dashboard/instituciones',   soloSuperAdmin: true },
+    { label: 'Solicitudes',       icon: 'ti ti-inbox',               ruta: '/dashboard/solicitudes',     soloSuperAdmin: true },
+    { label: 'Personal',          icon: 'ti ti-users',               ruta: '/dashboard/staff',           roles: ['ADMIN_INSTITUCION'] },
+    { label: 'Sedes',             icon: 'ti ti-building',            ruta: '/dashboard/sedes',           roles: ['ADMIN_INSTITUCION'] },
+    { label: 'Jornadas',          icon: 'ti ti-clock-hour-4',        ruta: '/dashboard/jornadas',        roles: ['ADMIN_INSTITUCION'] },
+    { label: 'Año lectivo',       icon: 'ti ti-calendar-event',      ruta: '/dashboard/anios-lectivos',  roles: ['ADMIN_INSTITUCION'] },
+    { label: 'Datos del colegio', icon: 'ti ti-school',              ruta: '/dashboard/institucion',     roles: ['ADMIN_INSTITUCION'] },
+    { label: 'Estudiantes',       icon: 'ti ti-users',               ruta: '/dashboard/estudiantes',     roles: ['COORDINADOR_ACADEMICO'] },
+  ];
+
+  private puedeVer(item: any): boolean {
+    if (item.soloSuperAdmin) return this.esSuperAdmin;
+    if (!item.roles || item.roles.length === 0) return true;   // visible para todos
+    return item.roles.some((r: string) => this.tieneRol(r));
+  }
+
+  get menuVisible() {
+    return this.menu.filter(i => this.puedeVer(i));
+  }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
 
 // Lo que devuelve la API (coincide con tu SolicitudInstitucionResponseDto)
 export interface Solicitud {
@@ -34,7 +35,7 @@ export interface SolicitudRequest {
 @Injectable({ providedIn: 'root' })
 export class SolicitudService {
 
-  private readonly API = 'http://localhost:8080/api/solicitudes';
+  private readonly API = `${environment.apiUrl}/solicitudes`;
 
   constructor(private http: HttpClient) {}
 

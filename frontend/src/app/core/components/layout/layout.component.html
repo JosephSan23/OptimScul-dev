@@ -10,69 +10,19 @@
       </div>
     </div>
 
-    <nav class="sidebar-nav">
+     <nav class="sidebar-nav">
       <ul>
-        <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-          <a routerLink="/dashboard">
+        <li class="nav-item">
+          <a href="#" (click)="$event.preventDefault()">
             <i class="ti ti-home"></i>
             <span class="link-name">Inicio</span>
           </a>
         </li>
 
-        <li class="nav-item" routerLinkActive="active" *ngIf="esSuperAdmin">
-          <a routerLink="/dashboard/administradores">
-            <i class="ti ti-user-shield"></i>
-            <span class="link-name">Administradores</span>
-          </a>
-        </li>
-
-
-        <li class="nav-item" routerLinkActive="active" *ngIf="esSuperAdmin">
-          <a routerLink="/dashboard/instituciones">
-            <i class="ti ti-building-community"></i>
-            <span class="link-name">Instituciones</span>
-          </a>
-        </li>
-
-        <li class="nav-item" routerLinkActive="active" *ngIf="esSuperAdmin">
-          <a routerLink="/dashboard/solicitudes">
-            <i class="ti ti-inbox"></i>
-            <span class="link-name">Solicitudes</span>
-          </a>
-        </li>
-
-        <li class="nav-item" routerLinkActive="active" *ngIf="tieneRol('ADMIN_INSTITUCION')">
-          <a routerLink="/dashboard/staff">
-            <i class="ti ti-users"></i>
-            <span class="link-name">Personal</span>
-          </a>
-        </li>
-
-        <li class="nav-item" routerLinkActive="active" *ngIf="tieneRol('ADMIN_INSTITUCION')">
-          <a routerLink="/dashboard/sedes">
-            <i class="ti ti-building"></i>
-            <span class="link-name">Sedes</span>
-          </a>
-        </li>
-
-        <li class="nav-item" routerLinkActive="active" *ngIf="tieneRol('ADMIN_INSTITUCION')">
-          <a routerLink="/dashboard/jornadas">
-            <i class="ti ti-clock-hour-4"></i>
-            <span class="link-name">Jornadas</span>
-          </a>
-        </li>
-
-        <li class="nav-item" routerLinkActive="active" *ngIf="tieneRol('ADMIN_INSTITUCION')">
-          <a routerLink="/dashboard/institucion">
-            <i class="ti ti-school"></i>
-            <span class="link-name">Datos del colegio</span>
-          </a>
-        </li>
-
-        <li class="nav-item" routerLinkActive="active" *ngIf="tieneRol('ADMIN_INSTITUCION')">
-          <a routerLink="/dashboard/anios-lectivos">
-            <i class="ti ti-calendar-event"></i>
-            <span class="link-name">Año lectivo</span>
+        <li class="nav-item" routerLinkActive="active" *ngFor="let item of menuVisible">
+          <a [routerLink]="item.ruta" routerLinkActive="active">
+            <i [class]="item.icon"></i>
+            <span class="link-name">{{ item.label }}</span>
           </a>
         </li>
       </ul>

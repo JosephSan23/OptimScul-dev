@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
+
 
 // El "molde" de una institución tal como la devuelve tu API
 export interface Institucion {
@@ -53,7 +55,7 @@ export interface InstitucionRequest {
 @Injectable({ providedIn: 'root' })
 export class InstitucionService {
 
-  private readonly API = 'http://localhost:8080/api/instituciones';
+  private readonly API = `${environment.apiUrl}/instituciones`;
 
   constructor(private http: HttpClient) {}
 

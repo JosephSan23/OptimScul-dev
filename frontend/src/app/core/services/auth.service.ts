@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
+
 
 export interface LoginRequest {
   usernameOrEmail: string;
@@ -19,7 +21,7 @@ export interface LoginResponse {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
-  private readonly API        = 'http://localhost:8080/api/auth';
+  private readonly API        = `${environment.apiUrl}/auth`;
   private readonly TOKEN_KEY  = 'optimscul_token';
   private readonly USER_KEY   = 'optimscul_user';
 

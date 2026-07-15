@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
 
 export interface Periodo {
   id: string;
@@ -25,7 +26,7 @@ export interface PeriodoRequest {
 
 @Injectable({ providedIn: 'root' })
 export class PeriodoService {
-  private readonly API = 'http://localhost:8080/api/config/periodos';
+  private readonly API = `${environment.apiUrl}/config/periodos`;
   constructor(private http: HttpClient) {}
   listarPorAnio(anioId: string): Observable<Periodo[]> {
     return this.http.get<Periodo[]>(`${this.API}/por-anio/${anioId}`);

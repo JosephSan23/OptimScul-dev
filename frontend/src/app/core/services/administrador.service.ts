@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
 
 // Lo que ENVIAMOS al crear un administrador
 export interface AdministradorRequest {
@@ -33,7 +34,7 @@ export interface Administrador {
 @Injectable({ providedIn: 'root' })
 export class AdministradorService {
 
-  private readonly API = 'http://localhost:8080/api/administradores';
+  private readonly API = `${environment.apiUrl}/administradores`;
 
   constructor(private http: HttpClient) {}
 

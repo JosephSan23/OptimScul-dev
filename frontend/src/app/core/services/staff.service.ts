@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
 
 export interface StaffRequest {
   rolCodigo: string;
@@ -49,7 +50,7 @@ export interface Staff {
 @Injectable({ providedIn: 'root' })
 export class StaffService {
 
-  private readonly API = 'http://localhost:8080/api/staff';
+  private readonly API = `${environment.apiUrl}/staff`;
 
   constructor(private http: HttpClient) {}
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
 
 export interface Jornada {
   id: string;
@@ -21,7 +22,7 @@ export interface JornadaRequest {
 
 @Injectable({ providedIn: 'root' })
 export class JornadaService {
-  private readonly API = 'http://localhost:8080/api/config/jornadas';
+  private readonly API = `${environment.apiUrl}/config/jornadas`;
   constructor(private http: HttpClient) {}
   listar(): Observable<Jornada[]> {
     return this.http.get<Jornada[]>(this.API);
