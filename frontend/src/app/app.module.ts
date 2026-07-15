@@ -35,6 +35,9 @@ import { AniosLectivosListaComponent } from './features/adminInstitucion/config/
 import { AnioLectivoFormComponent } from './features/adminInstitucion/config/anio-lectivo-form/anio-lectivo-form.component';
 import { PeriodosListaComponent } from './features/adminInstitucion/config/periodos-lista/periodos-lista.component';
 import { PeriodoFormComponent } from './features/adminInstitucion/config/periodo-form/periodo-form.component';
+import { EstudianteFormComponent } from './features/cooracademico/estudiante-form/estudiante-form.component';
+import { EstudiantesListaComponent } from './features/cooracademico/estudiantes-lista/estudiantes-lista.component';
+
 
 @NgModule({
   declarations: [
@@ -67,6 +70,8 @@ import { PeriodoFormComponent } from './features/adminInstitucion/config/periodo
     AnioLectivoFormComponent,
     PeriodosListaComponent,
     PeriodoFormComponent,
+    EstudianteFormComponent,
+    EstudiantesListaComponent,
   ],
   imports: [
     BrowserModule,

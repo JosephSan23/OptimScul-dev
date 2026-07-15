@@ -24,6 +24,9 @@ import { AniosLectivosListaComponent } from './features/adminInstitucion/config/
 import { AnioLectivoFormComponent } from './features/adminInstitucion/config/anio-lectivo-form/anio-lectivo-form.component';
 import { PeriodosListaComponent } from './features/adminInstitucion/config/periodos-lista/periodos-lista.component';
 import { PeriodoFormComponent } from './features/adminInstitucion/config/periodo-form/periodo-form.component';
+import { EstudianteFormComponent } from './features/cooracademico/estudiante-form/estudiante-form.component';
+import { EstudiantesListaComponent } from './features/cooracademico/estudiantes-lista/estudiantes-lista.component';
+
 
 const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -55,6 +58,10 @@ const routes: Routes = [
     { path: 'anios-lectivos/:anioId/periodos',       component: PeriodosListaComponent, canActivate: [roleGuard], data: { roles: ['ADMIN_INSTITUCION'] } },
     { path: 'anios-lectivos/:anioId/periodos/nuevo', component: PeriodoFormComponent,   canActivate: [roleGuard], data: { roles: ['ADMIN_INSTITUCION'] } },
     { path: 'periodos/:id',                          component: PeriodoFormComponent,   canActivate: [roleGuard], data: { roles: ['ADMIN_INSTITUCION'] } },
+
+    { path: 'estudiantes',       component: EstudiantesListaComponent, canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO'] } },
+    { path: 'estudiantes/nuevo', component: EstudianteFormComponent,   canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO'] } },
+    { path: 'estudiantes/:id', component: EstudianteFormComponent, canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO'] } },
 
     { path: 'instituciones',  component: InstitucionesListaComponent, canActivate: [roleGuard], data: { soloSuperAdmin: true } },
     { path: 'solicitudes',    component: SolicitudesListaComponent,   canActivate: [roleGuard], data: { soloSuperAdmin: true } },
