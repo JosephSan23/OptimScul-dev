@@ -26,6 +26,8 @@ import { PeriodosListaComponent } from './features/adminInstitucion/config/perio
 import { PeriodoFormComponent } from './features/adminInstitucion/config/periodo-form/periodo-form.component';
 import { EstudianteFormComponent } from './features/cooracademico/estudiante-form/estudiante-form.component';
 import { EstudiantesListaComponent } from './features/cooracademico/estudiantes-lista/estudiantes-lista.component';
+import { AcudientesListaComponent } from './features/cooracademico/community/acudientes-lista/acudientes-lista.component';
+import { AcudienteFormComponent } from './features/cooracademico/community/acudiente-form/acudiente-form.component';
 
 
 const routes: Routes = [
@@ -62,6 +64,10 @@ const routes: Routes = [
     { path: 'estudiantes',       component: EstudiantesListaComponent, canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO'] } },
     { path: 'estudiantes/nuevo', component: EstudianteFormComponent,   canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO'] } },
     { path: 'estudiantes/:id', component: EstudianteFormComponent, canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO'] } },
+    { path: 'estudiantes/:estudianteId/acudientes',               component: AcudientesListaComponent, canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO'] } },
+    { path: 'estudiantes/:estudianteId/acudientes/nuevo',         component: AcudienteFormComponent,   canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO'] } },
+    { path: 'estudiantes/:estudianteId/acudientes/:vinculoId/editar', component: AcudienteFormComponent, canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO'] } },
+
 
     { path: 'instituciones',  component: InstitucionesListaComponent, canActivate: [roleGuard], data: { soloSuperAdmin: true } },
     { path: 'solicitudes',    component: SolicitudesListaComponent,   canActivate: [roleGuard], data: { soloSuperAdmin: true } },

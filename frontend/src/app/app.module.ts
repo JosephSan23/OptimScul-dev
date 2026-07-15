@@ -37,6 +37,8 @@ import { PeriodosListaComponent } from './features/adminInstitucion/config/perio
 import { PeriodoFormComponent } from './features/adminInstitucion/config/periodo-form/periodo-form.component';
 import { EstudianteFormComponent } from './features/cooracademico/estudiante-form/estudiante-form.component';
 import { EstudiantesListaComponent } from './features/cooracademico/estudiantes-lista/estudiantes-lista.component';
+import { AcudientesListaComponent } from './features/cooracademico/community/acudientes-lista/acudientes-lista.component';
+import { AcudienteFormComponent } from './features/cooracademico/community/acudiente-form/acudiente-form.component';
 
 
 @NgModule({
@@ -72,6 +74,8 @@ import { EstudiantesListaComponent } from './features/cooracademico/estudiantes-
     PeriodoFormComponent,
     EstudianteFormComponent,
     EstudiantesListaComponent,
+    AcudientesListaComponent,
+    AcudienteFormComponent,
   ],
   imports: [
     BrowserModule,
