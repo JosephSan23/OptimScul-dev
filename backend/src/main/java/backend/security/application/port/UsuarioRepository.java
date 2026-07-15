@@ -14,4 +14,5 @@ public interface UsuarioRepository {
     Optional<Usuario> findByUsernameOrEmail(String usernameOrEmail);
     List<String> findRolesByUsuarioId(UUID usuarioId);
     List<String> findRolesByUsuarioIdAndInstitucion(UUID usuarioId, UUID institucionId);
+    Optional<Usuario> findByPersonaId(UUID personaId);
 }

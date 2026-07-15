@@ -60,5 +60,9 @@ public class UsuarioRepositoryAdapter implements UsuarioRepository {
         return jpaRepository.findRolesByUsuarioIdAndInstitucion(usuarioId.toString(), institucionId.toString());
     }
 
+    @Override
+    public Optional<Usuario> findByPersonaId(UUID personaId) {
+        return jpaRepository.findByPersonaId(personaId).map(mapper::toDomain);
+    }
     
 }

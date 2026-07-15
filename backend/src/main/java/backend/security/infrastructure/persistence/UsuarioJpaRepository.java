@@ -35,4 +35,7 @@ public interface UsuarioJpaRepository extends JpaRepository<UsuarioEntity, UUID>
             """, nativeQuery = true)
     List<String> findRolesByUsuarioIdAndInstitucion(@Param("usuarioId") String usuarioId,
                                                      @Param("institucionId") String institucionId);
+
+
+  Optional<UsuarioEntity> findByPersonaId(UUID personaId);
 }

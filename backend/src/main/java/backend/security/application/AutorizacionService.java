@@ -61,11 +61,15 @@ public class AutorizacionService {
     }
 
     public UUID institucionDelAdmin(UUID adminId) {
-        UUID institucionId = usuarioInstitucionRepository.findByUsuarioId(adminId).stream()
+        return institucionConRol(adminId, "ADMIN_INSTITUCION");
+    }
+
+    public UUID institucionConRol(UUID usuarioId, String... rolesPermitidos) {
+        UUID institucionId = usuarioInstitucionRepository.findByUsuarioId(usuarioId).stream()
                 .filter(v -> Boolean.TRUE.equals(v.getEsPrincipal()))
                 .findFirst().map(UsuarioInstitucion::getInstitucionId)
                 .orElseThrow(() -> new SecurityException("No perteneces a ninguna institución."));
-        exigirRolEnInstitucion(adminId, institucionId, "ADMIN_INSTITUCION");
+        exigirRolEnInstitucion(usuarioId, institucionId, rolesPermitidos);
         return institucionId;
     }
 }
