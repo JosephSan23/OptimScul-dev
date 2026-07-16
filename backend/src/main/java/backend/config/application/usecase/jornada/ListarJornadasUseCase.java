@@ -15,6 +15,6 @@ public class ListarJornadasUseCase {
         this.jornadaRepository = jornadaRepository; this.autorizacionService = autorizacionService;
     }
     public List<Jornada> ejecutar(UUID adminId) {
-        return jornadaRepository.findByInstitucionId(autorizacionService.institucionDelAdmin(adminId));
+        return jornadaRepository.findByInstitucionId(autorizacionService.institucionConRol(adminId, "ADMIN_INSTITUCION", "COORDINADOR_ACADEMICO"));
     }
 }

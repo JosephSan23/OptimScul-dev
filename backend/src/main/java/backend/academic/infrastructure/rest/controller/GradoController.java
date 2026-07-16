@@ -33,10 +33,9 @@ public class GradoController {
     @GetMapping
     public ResponseEntity<?> listar(@AuthenticationPrincipal UUID usuarioId) {
         try {
-            return ResponseEntity.ok(listar.ejecutar(usuarioId).stream().map(GradoResponseDto::desde).toList());
-        } catch (SecurityException e) {
-            return forbidden(e);
-        }
+            return ResponseEntity.ok(listar.ejecutar(usuarioId).stream()
+                    .map(r -> GradoResponseDto.desde(r.grado(), r.totalGrupos())).toList());
+        } catch (SecurityException e) { return forbidden(e); }
     }
 
     @GetMapping("/{id}")

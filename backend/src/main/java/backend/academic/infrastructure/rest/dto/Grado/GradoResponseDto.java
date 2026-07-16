@@ -11,8 +11,13 @@ public class GradoResponseDto {
     private String nivel;
     private Short orden;
     private String estado;
+    private Long totalGrupos;   // nuevo atributo, con su getter/setter
 
-    public GradoResponseDto() {}
+    public static GradoResponseDto desde(Grado g, long totalGrupos) {
+        GradoResponseDto d = desde(g);
+        d.setTotalGrupos(totalGrupos);
+        return d;
+    }
 
     public static GradoResponseDto desde(Grado g) {
         GradoResponseDto d = new GradoResponseDto();
@@ -37,4 +42,6 @@ public class GradoResponseDto {
     public void setOrden(Short orden) { this.orden = orden; }
     public String getEstado() { return estado; }
     public void setEstado(String estado) { this.estado = estado; }
+    public Long getTotalGrupos() { return totalGrupos; }
+    public void setTotalGrupos(Long totalGrupos) { this.totalGrupos = totalGrupos; }
 }

@@ -11,4 +11,7 @@ public interface GrupoRepository {
     Optional<Grupo> findById(UUID id);
     List<Grupo> findAll();
     void deleteById(UUID id);
+    List<Grupo> findByGradoId(UUID gradoId);
+    boolean existsByInstitucionIdAndAnioLectivoIdAndCodigo(UUID institucionId, UUID anioLectivoId, String codigo);
+    java.util.Map<UUID, Long> contarPorGradoDeInstitucion(UUID institucionId);
 }

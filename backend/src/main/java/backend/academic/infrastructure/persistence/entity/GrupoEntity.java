@@ -40,7 +40,8 @@ public class GrupoEntity {
     private Integer cupoMaximo;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "estado")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "estado", columnDefinition = "estado_grupo_enum")
     private EstadoGrupo estado;
 
     @Column(name = "observaciones")

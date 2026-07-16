@@ -39,8 +39,12 @@
             <span
               class="badge-estado"
               [ngClass]="'estado-' + g.estado.toLowerCase()"
-              >{{ g.estado | titlecase }}</span
-            >
+              >{{ g.estado | titlecase }}
+            </span>
+            <span class="badge-grupos">
+              <i class="ti ti-users-group"></i>
+              {{ g.totalGrupos || 0 }} {{ g.totalGrupos === 1 ? 'grupo' : 'grupos' }}
+            </span>
           </div>
         </div>
         <div class="acciones">
@@ -68,6 +72,7 @@
           >
             <i class="ti ti-toggle-right"></i>
           </button>
+          <a class="btn-accion" title="Ver grupos" [routerLink]="['/dashboard/grados', g.id, 'grupos']"><i class="ti ti-users-group"></i></a>
         </div>
       </div>
     </div>

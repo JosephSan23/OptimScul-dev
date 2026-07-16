@@ -11,6 +11,7 @@ export interface Grado {
   nivel: string;
   orden: number;
   estado: string;
+  totalGrupos?: number;
 }
 export interface GradoRequest {
   codigo: string;

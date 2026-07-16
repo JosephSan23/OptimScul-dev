@@ -19,7 +19,7 @@ public class ListarSedesUseCase {
     }
 
     public List<Sede> ejecutar(UUID adminId) {
-        UUID institucionId = autorizacionService.institucionDelAdmin(adminId);
+        UUID institucionId = autorizacionService.institucionConRol(adminId, "ADMIN_INSTITUCION", "COORDINADOR_ACADEMICO");
         return sedeRepository.findByInstitucionId(institucionId);
     }
 }
