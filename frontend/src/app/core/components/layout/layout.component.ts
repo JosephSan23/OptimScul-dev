@@ -63,6 +63,7 @@ export class LayoutComponent {
     { label: 'Año lectivo',       icon: 'ti ti-calendar-event',      ruta: '/dashboard/anios-lectivos',  roles: ['ADMIN_INSTITUCION'] },
     { label: 'Datos del colegio', icon: 'ti ti-school',              ruta: '/dashboard/institucion',     roles: ['ADMIN_INSTITUCION'] },
     { label: 'Estudiantes',       icon: 'ti ti-users',               ruta: '/dashboard/estudiantes',     roles: ['COORDINADOR_ACADEMICO'] },
+    { label: 'Grados',            icon: 'ti ti-stairs',               ruta: '/dashboard/grados',         roles: ['COORDINADOR_ACADEMICO'] },
   ];
 
   private puedeVer(item: any): boolean {
