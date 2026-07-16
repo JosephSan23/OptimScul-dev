@@ -1,0 +1,87 @@
+<div class="page-header">
+  <h1>Grupos {{ grado ? "— " + grado.nombre : "" }}</h1>
+  <p>Cursos de este grado por año lectivo</p>
+</div>
+
+<a class="btn-volver" routerLink="/dashboard/grados"
+  ><i class="ti ti-arrow-left"></i> Volver a grados</a
+>
+
+<div *ngIf="cargando" class="estado-msg">
+  <i class="ti ti-loader-2 girando"></i> Cargando grupos...
+</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+
+<app-tabla-paginada
+  *ngIf="!cargando"
+  [items]="grupos"
+  [camposBusqueda]="['codigo', 'nombre']"
+  placeholderBusqueda="Buscar por nombre o código..."
+  mensajeVacio="Este grado aún no tiene grupos."
+>
+  <div acciones>
+    <a
+      class="btn-save"
+      [routerLink]="['/dashboard/grados', gradoId, 'grupos', 'nuevo']"
+    >
+      <i class="ti ti-plus"></i> Nuevo grupo
+    </a>
+  </div>
+
+  <ng-template filaTabla let-pagina>
+    <div class="grupos-lista">
+      <div
+        class="grupo-card"
+        *ngFor="let g of pagina"
+        [class.inactivo]="g.estado !== 'ACTIVO'"
+      >
+        <div class="grupo-info">
+          <div class="grupo-nombre">
+            <h3>{{ g.nombre }}</h3>
+            <span class="grupo-codigo">{{ g.codigo }}</span>
+          </div>
+          <div class="grupo-meta">
+            <span class="badge-anio" *ngIf="nombreAnio(g.anioLectivoId)">
+              <i class="ti ti-calendar-event"></i>
+              {{ nombreAnio(g.anioLectivoId) }}
+            </span>
+            <span class="badge-cupo" *ngIf="g.cupoMaximo">
+              <i class="ti ti-users"></i> Cupo: {{ g.cupoMaximo }}
+            </span>
+            <span
+              class="badge-estado"
+              [ngClass]="'estado-' + g.estado.toLowerCase()"
+              >{{ g.estado | titlecase }}</span
+            >
+          </div>
+        </div>
+        <div class="acciones">
+          <a
+            class="btn-accion"
+            title="Editar"
+            [routerLink]="['/dashboard/grupos', g.id]"
+            ><i class="ti ti-pencil"></i
+          ></a>
+          <button
+            *ngIf="g.estado === 'ACTIVO'"
+            class="btn-accion peligro"
+            title="Inactivar"
+            [disabled]="procesandoId === g.id"
+            (click)="inactivar(g)"
+          >
+            <i class="ti ti-toggle-left"></i>
+          </button>
+          <button
+            *ngIf="g.estado !== 'ACTIVO'"
+            class="btn-accion exito"
+            title="Activar"
+            [disabled]="procesandoId === g.id"
+            (click)="activar(g)"
+          >
+            <i class="ti ti-toggle-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</app-tabla-paginada>

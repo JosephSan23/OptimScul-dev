@@ -1,0 +1,116 @@
+<div class="page-header">
+  <h1>{{ modoEdicion ? "Editar grupo" : "Nuevo grupo" }}</h1>
+  <p>Datos del grupo (curso)</p>
+</div>
+
+<div *ngIf="cargando" class="estado-msg">
+  <i class="ti ti-loader-2 girando"></i> Cargando...
+</div>
+
+<div class="grupo-form" *ngIf="!cargando">
+  <div class="grupo-form-card">
+    <div class="form-grid">
+      <div class="campo">
+        <label>Código <span class="req">*</span></label>
+        <input
+          placeholder="Ej: 6A-2026"
+          [(ngModel)]="form.codigo"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="campo">
+        <label>Nombre <span class="req">*</span></label>
+        <input
+          placeholder="Sexto A"
+          [(ngModel)]="form.nombre"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+
+      <div class="campo">
+        <label>Año lectivo <span class="req">*</span></label>
+        <select
+          [(ngModel)]="form.anioLectivoId"
+          [ngModelOptions]="{ standalone: true }"
+        >
+          <option value="" disabled>Selecciona el año</option>
+          <option *ngFor="let a of anios" [value]="a.id">
+            {{ a.nombre || a.anio }}{{ a.esActual ? " (actual)" : "" }}
+          </option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label>Cupo máximo</label>
+        <input
+          type="number"
+          min="1"
+          placeholder="Opcional"
+          [(ngModel)]="form.cupoMaximo"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+
+      <div class="campo">
+        <label>Sede</label>
+        <select
+          [(ngModel)]="form.sedeId"
+          [ngModelOptions]="{ standalone: true }"
+        >
+          <option value="">Sin sede específica</option>
+          <option *ngFor="let s of sedes" [value]="s.id">{{ s.nombre }}</option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label>Jornada</label>
+        <select
+          [(ngModel)]="form.jornadaId"
+          [ngModelOptions]="{ standalone: true }"
+        >
+          <option value="">Sin jornada específica</option>
+          <option *ngFor="let j of jornadas" [value]="j.id">
+            {{ j.nombre }}
+          </option>
+        </select>
+      </div>
+
+      <div class="campo campo-full">
+        <label>Observaciones</label>
+        <input
+          placeholder="Opcional"
+          [(ngModel)]="form.observaciones"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+    </div>
+
+    <div class="form-error" *ngIf="error">
+      <i class="ti ti-alert-circle"></i> {{ error }}
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" (click)="volver()">
+        Cancelar
+      </button>
+      <button
+        type="button"
+        class="btn-save"
+        [disabled]="guardando"
+        (click)="guardar()"
+      >
+        <i
+          class="ti"
+          [ngClass]="modoEdicion ? 'ti-device-floppy' : 'ti-plus'"
+        ></i>
+        {{
+          guardando
+            ? "Guardando..."
+            : modoEdicion
+              ? "Guardar cambios"
+              : "Crear grupo"
+        }}
+      </button>
+    </div>
+  </div>
+</div>
