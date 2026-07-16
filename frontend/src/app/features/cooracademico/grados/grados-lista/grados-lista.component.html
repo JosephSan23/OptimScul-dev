@@ -1,0 +1,75 @@
+<div class="page-header">
+  <h1>Grados</h1>
+  <p>Estructura de grados de tu institución</p>
+</div>
+
+<div *ngIf="cargando" class="estado-msg">
+  <i class="ti ti-loader-2 girando"></i> Cargando grados...
+</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+
+<app-tabla-paginada
+  *ngIf="!cargando"
+  [items]="grados"
+  [camposBusqueda]="['codigo', 'nombre', 'nivel']"
+  placeholderBusqueda="Buscar por nombre, código o nivel..."
+  mensajeVacio="Aún no hay grados creados."
+>
+  <div acciones>
+    <a class="btn-save" routerLink="/dashboard/grados/nuevo"
+      ><i class="ti ti-plus"></i> Nuevo grado</a
+    >
+  </div>
+
+  <ng-template filaTabla let-pagina>
+    <div class="grados-lista">
+      <div
+        class="grado-card"
+        *ngFor="let g of pagina"
+        [class.inactivo]="g.estado !== 'ACTIVO'"
+      >
+        <div class="grado-orden">{{ g.orden }}</div>
+        <div class="grado-info">
+          <div class="grado-nombre">
+            <h3>{{ g.nombre }}</h3>
+            <span class="grado-codigo">{{ g.codigo }}</span>
+          </div>
+          <div class="grado-meta">
+            <span class="badge-nivel">{{ nivelTexto(g.nivel) }}</span>
+            <span
+              class="badge-estado"
+              [ngClass]="'estado-' + g.estado.toLowerCase()"
+              >{{ g.estado | titlecase }}</span
+            >
+          </div>
+        </div>
+        <div class="acciones">
+          <a
+            class="btn-accion"
+            title="Editar"
+            [routerLink]="['/dashboard/grados', g.id]"
+            ><i class="ti ti-pencil"></i
+          ></a>
+          <button
+            *ngIf="g.estado === 'ACTIVO'"
+            class="btn-accion peligro"
+            title="Inactivar"
+            [disabled]="procesandoId === g.id"
+            (click)="inactivar(g)"
+          >
+            <i class="ti ti-toggle-left"></i>
+          </button>
+          <button
+            *ngIf="g.estado !== 'ACTIVO'"
+            class="btn-accion exito"
+            title="Activar"
+            [disabled]="procesandoId === g.id"
+            (click)="activar(g)"
+          >
+            <i class="ti ti-toggle-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</app-tabla-paginada>

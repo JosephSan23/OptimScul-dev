@@ -1,0 +1,81 @@
+<div class="page-header">
+  <h1>{{ modoEdicion ? "Editar grado" : "Nuevo grado" }}</h1>
+  <p>Datos del grado</p>
+</div>
+
+<div *ngIf="cargando" class="estado-msg">
+  <i class="ti ti-loader-2 girando"></i> Cargando...
+</div>
+
+<div class="grado-form" *ngIf="!cargando">
+  <div class="grado-form-card">
+    <div class="form-grid">
+      <div class="campo">
+        <label>Código <span class="req">*</span></label>
+        <input
+          placeholder="Ej: GR-6"
+          [(ngModel)]="form.codigo"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="campo">
+        <label>Nombre <span class="req">*</span></label>
+        <input
+          placeholder="Sexto, Séptimo..."
+          [(ngModel)]="form.nombre"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="campo">
+        <label>Nivel <span class="req">*</span></label>
+        <select
+          [(ngModel)]="form.nivel"
+          [ngModelOptions]="{ standalone: true }"
+        >
+          <option value="" disabled>Selecciona un nivel</option>
+          <option *ngFor="let n of niveles" [value]="n">
+            {{ n | titlecase }}
+          </option>
+        </select>
+      </div>
+      <div class="campo">
+        <label>Orden <span class="req">*</span></label>
+        <input
+          type="number"
+          min="1"
+          placeholder="Posición en la escalera (1, 2, 3...)"
+          [(ngModel)]="form.orden"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+    </div>
+
+    <div class="form-error" *ngIf="error">
+      <i class="ti ti-alert-circle"></i> {{ error }}
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" (click)="cancelar()">
+        Cancelar
+      </button>
+      <button
+        type="button"
+        class="btn-save"
+        [disabled]="guardando"
+        (click)="guardar()"
+      >
+        <i
+          class="ti"
+          [ngClass]="modoEdicion ? 'ti-device-floppy' : 'ti-plus'"
+        ></i>
+        {{
+          guardando
+            ? "Guardando..."
+            : modoEdicion
+              ? "Guardar cambios"
+              : "Crear grado"
+        }}
+      </button>
+    </div>
+  </div>
+</div>

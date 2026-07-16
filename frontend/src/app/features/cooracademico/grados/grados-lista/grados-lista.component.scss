@@ -1,0 +1,271 @@
+:host {
+  display: block;
+}
+
+.grados-lista {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 6px 0 6px 0;
+
+  /* el riel: hilo vertical que atraviesa los nodos */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 34px;
+    bottom: 34px;
+    left: 33px; /* centro del nodo (col 68 / 2 = 34, -1 óptico) */
+    width: 3px;
+    border-radius: 99px;
+    background: linear-gradient(to bottom, var(--navy-700), var(--orange-500));
+    opacity: 0.35;
+    z-index: 0;
+  }
+}
+
+/* ---------- el peldaño ---------- */
+.grado-card {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 68px 1fr auto;
+  align-items: center;
+  gap: 6px 20px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  box-shadow: var(--clay-card);
+  padding: 16px 20px 16px 14px;
+  transition:
+    transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.22s ease,
+    border-color 0.2s ease;
+
+  &:hover {
+    transform: translateX(7px);
+    box-shadow: var(--shadow-2);
+    border-color: var(--orange-100);
+
+    .grado-orden {
+      transform: scale(1.06);
+      box-shadow: var(--clay-btn), var(--clay-btn-inset);
+    }
+  }
+
+  /* grado inactivo: se apaga y el nodo se vuelve hueco */
+  &.inactivo {
+    opacity: 0.82;
+    background: var(--cream);
+
+    .grado-orden {
+      background: var(--paper);
+      color: var(--ink-soft);
+      border: 2px dashed var(--line);
+      box-shadow: none;
+    }
+
+    .grado-nombre h3 {
+      color: var(--ink-soft);
+    }
+  }
+}
+
+/* ---------- nodo de orden: la cuenta sobre el riel ---------- */
+.grado-orden {
+  grid-row: 1 / -1;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #fff;
+  background: linear-gradient(160deg, var(--orange-500), var(--orange-600));
+  box-shadow:
+    var(--clay-btn-inset),
+    0 0 0 5px var(--paper);
+  transition:
+    transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.22s ease;
+}
+
+/* ---------- info ---------- */
+.grado-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.grado-nombre {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+
+  h3 {
+    font-family: var(--font-display);
+    font-size: 1.12rem;
+    font-weight: 800;
+    color: var(--navy-900);
+    margin: 0;
+    line-height: 1.15;
+  }
+}
+
+.grado-codigo {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  background: var(--cream);
+  border: 1px solid var(--line-soft);
+  padding: 2px 9px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.grado-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* etiqueta de nivel: pill fría con punto de acento */
+.badge-nivel {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 5px 12px 5px 10px;
+  border-radius: 999px;
+  color: var(--navy-700);
+  background: var(--navy-100);
+  white-space: nowrap;
+
+  &::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--navy-700);
+    box-shadow: var(--clay-ico);
+  }
+}
+
+/* estados de la entidad (activo/inactivo) — refinados para la tarjeta */
+.badge-estado {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 13px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.3;
+  white-space: nowrap;
+
+  &::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  &.estado-activo {
+    background: var(--green-100);
+    color: var(--green-500);
+  }
+  &.estado-inactivo {
+    background: var(--line-soft);
+    color: var(--ink-soft);
+  }
+}
+
+/* ---------- acciones por fila ---------- */
+.acciones {
+  grid-row: 1 / -1;
+  display: flex;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+/* botón de acción (variante propia de la escalera, redondo) */
+.btn-accion {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--ink-soft);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  i {
+    font-size: 1rem;
+  }
+
+  &:hover:not(:disabled) {
+    border-color: var(--navy-900);
+    color: var(--navy-900);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-1);
+  }
+
+  &.peligro:hover:not(:disabled) {
+    border-color: var(--red-500);
+    color: var(--red-500);
+    background: var(--red-100);
+  }
+
+  &.exito:hover:not(:disabled) {
+    border-color: var(--green-500);
+    color: var(--green-500);
+    background: var(--green-100);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: wait;
+  }
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 620px) {
+  .grados-lista {
+    gap: 12px;
+    &::before {
+      left: 29px;
+    }
+  }
+
+  .grado-card {
+    grid-template-columns: 56px 1fr;
+    row-gap: 12px;
+    padding: 14px 16px 14px 12px;
+  }
+
+  .grado-orden {
+    width: 48px;
+    height: 48px;
+    font-size: 1.25rem;
+  }
+
+  .acciones {
+    grid-row: auto;
+    grid-column: 2 / -1;
+    justify-content: flex-end;
+  }
+}
