@@ -1,4 +1,4 @@
-package backend.academic.infrastructure.rest.dto;
+package backend.academic.infrastructure.rest.dto.Grupo;
 
 import backend.academic.domain.model.Grupo;
 import java.util.UUID;

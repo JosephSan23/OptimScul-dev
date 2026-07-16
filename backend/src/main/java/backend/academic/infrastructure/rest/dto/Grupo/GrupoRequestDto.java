@@ -1,4 +1,4 @@
-package backend.academic.infrastructure.rest.dto;
+package backend.academic.infrastructure.rest.dto.Grupo;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
