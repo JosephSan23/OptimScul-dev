@@ -39,6 +39,8 @@ import { EstudianteFormComponent } from './features/cooracademico/estudiante-for
 import { EstudiantesListaComponent } from './features/cooracademico/estudiantes-lista/estudiantes-lista.component';
 import { AcudientesListaComponent } from './features/cooracademico/community/acudientes-lista/acudientes-lista.component';
 import { AcudienteFormComponent } from './features/cooracademico/community/acudiente-form/acudiente-form.component';
+import { GradosListaComponent } from './features/cooracademico/grados/grados-lista/grados-lista.component';
+import { GradoFormComponent } from './features/cooracademico/grados/grado-form/grado-form.component';
 
 
 @NgModule({
@@ -76,6 +78,8 @@ import { AcudienteFormComponent } from './features/cooracademico/community/acudi
     EstudiantesListaComponent,
     AcudientesListaComponent,
     AcudienteFormComponent,
+    GradosListaComponent,
+    GradoFormComponent,
   ],
   imports: [
     BrowserModule,
