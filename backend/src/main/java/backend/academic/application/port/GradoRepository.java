@@ -11,4 +11,6 @@ public interface GradoRepository {
     Optional<Grado> findById(UUID id);
     List<Grado> findAll();
     void deleteById(UUID id);
+    List<Grado> findByInstitucionId(UUID institucionId);
+    boolean existsByInstitucionIdAndCodigo(UUID institucionId, String codigo);
 }

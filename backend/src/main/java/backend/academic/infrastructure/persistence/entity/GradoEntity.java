@@ -26,14 +26,16 @@ public class GradoEntity {
     private String nombre;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "nivel")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "nivel", columnDefinition = "nivel_academico_enum")
     private NivelAcademico nivel;
 
     @Column(name = "orden")
     private Short orden;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "estado")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "estado", columnDefinition = "estado_registro_enum")
     private EstadoRegistro estado;
 
     @Column(name = "created_at")
