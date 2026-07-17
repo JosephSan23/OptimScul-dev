@@ -53,11 +53,11 @@
               <a class="btn-accion" title="Editar" [routerLink]="['/dashboard/staff', s.usuarioId]">
                 <i class="ti ti-pencil"></i>
               </a>
-              <button *ngIf="s.estado === 'ACTIVO'" class="btn-accion peligro" title="Inactivar"
+              <button *ngIf="s.estado === 'ACTIVO'" class="btn-accion peligro" title="Retirar del staff"
                       [disabled]="procesandoId === s.usuarioId" (click)="inactivar(s)">
                 <i class="ti ti-user-off"></i>
               </button>
-              <button *ngIf="s.estado !== 'ACTIVO'" class="btn-accion exito" title="Activar"
+              <button *ngIf="s.estado !== 'ACTIVO'" class="btn-accion exito" title="Reintegrar"
                       [disabled]="procesandoId === s.usuarioId" (click)="activar(s)">
                 <i class="ti ti-user-check"></i>
               </button>
