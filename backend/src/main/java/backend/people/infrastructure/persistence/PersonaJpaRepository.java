@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface PersonaJpaRepository extends JpaRepository<PersonaEntity, UUID> {
     boolean existsByNumeroDocumento(String numeroDocumento);
     Optional<PersonaEntity> findByNumeroDocumento(String numeroDocumento);
+    
 }

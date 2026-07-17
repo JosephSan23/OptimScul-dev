@@ -11,4 +11,6 @@ public interface ProfesorRepository {
     Optional<Profesor> findById(UUID id);
     List<Profesor> findAll();
     void deleteById(UUID id);
+    List<Profesor> findByInstitucionId(UUID institucionId);
+    Optional<Profesor> findByInstitucionIdAndPersonaId(UUID institucionId, UUID personaId);
 }
