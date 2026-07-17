@@ -27,6 +27,24 @@ export class LayoutComponent {
     return this.usuario?.roles?.[0] ?? '';
   }
 
+  get modo(): string | null { return this.authService.getModo(); }
+
+  get otrosModos(): string[] {
+    return this.authService.getModosDisponibles().filter(m => m !== this.modo);
+  }
+
+  enModo(modo: string): boolean { return this.authService.enModo(modo); }
+
+  cambiarModo(modo: string): void { this.authService.cambiarModo(modo); }
+
+  nombreModo(modo: string): string {
+    const nombres: Record<string, string> = {
+      'ADMIN_INSTITUCION': 'Administrador', 'COORDINADOR_ACADEMICO': 'Coordinador',
+      'DOCENTE': 'Profesor', 'ESTUDIANTE': 'Estudiante', 'ACUDIENTE': 'Acudiente'
+    };
+    return nombres[modo] ?? modo;
+  }
+
   tieneRol(rol: string): boolean {
     return this.authService.tieneRol(rol);
   }
@@ -63,13 +81,15 @@ export class LayoutComponent {
     { label: 'Año lectivo',       icon: 'ti ti-calendar-event',      ruta: '/dashboard/anios-lectivos',  roles: ['ADMIN_INSTITUCION'] },
     { label: 'Datos del colegio', icon: 'ti ti-school',              ruta: '/dashboard/institucion',     roles: ['ADMIN_INSTITUCION'] },
     { label: 'Estudiantes',       icon: 'ti ti-users',               ruta: '/dashboard/estudiantes',     roles: ['COORDINADOR_ACADEMICO'] },
-    { label: 'Grados',            icon: 'ti ti-stairs',               ruta: '/dashboard/grados',         roles: ['COORDINADOR_ACADEMICO'] },
+    { label: 'Grados y grupos',   icon: 'ti ti-stairs',              ruta: '/dashboard/grados',         roles: ['COORDINADOR_ACADEMICO'] },
+    { label: 'Áreas',             icon: 'ti ti-category',            ruta: '/dashboard/areas',         roles: ['COORDINADOR_ACADEMICO'] },
+    { label: 'Asignaturas',       icon: 'ti ti-book-2',            ruta: '/dashboard/asignaturas',         roles: ['COORDINADOR_ACADEMICO'] },
   ];
 
   private puedeVer(item: any): boolean {
     if (item.soloSuperAdmin) return this.esSuperAdmin;
-    if (!item.roles || item.roles.length === 0) return true;   // visible para todos
-    return item.roles.some((r: string) => this.tieneRol(r));
+    if (!item.roles || item.roles.length === 0) return true;
+    return item.roles.some((r: string) => this.enModo(r));
   }
 
   get menuVisible() {
