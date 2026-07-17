@@ -32,6 +32,11 @@ import { GradosListaComponent } from './features/cooracademico/grados/grados-lis
 import { GradoFormComponent } from './features/cooracademico/grados/grado-form/grado-form.component';
 import { GruposListaComponent } from './features/cooracademico/grupos/grupos-lista/grupos-lista.component';
 import { GrupoFormComponent } from './features/cooracademico/grupos/grupo-form/grupo-form.component';
+import { AreasListaComponent } from './features/cooracademico/areas/areas-lista/areas-lista.component';
+import { AreaFormComponent } from './features/cooracademico/areas/area-form/area-form.component';
+import { AsignaturasListaComponent } from './features/cooracademico/asignaturas/asignaturas-lista/asignaturas-lista.component';
+import { AsignaturaFormComponent } from './features/cooracademico/asignaturas/asignatura-form/asignatura-form.component';
+
 
 const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -76,7 +81,12 @@ const routes: Routes = [
     { path: 'grados/:gradoId/grupos',       component: GruposListaComponent, canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO', 'ADMIN_INSTITUCION'] } },
     { path: 'grados/:gradoId/grupos/nuevo', component: GrupoFormComponent,   canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO', 'ADMIN_INSTITUCION'] } },
     { path: 'grupos/:id',                   component: GrupoFormComponent,   canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO', 'ADMIN_INSTITUCION'] } },
-
+    { path: 'areas',              component: AreasListaComponent,       canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO', 'ADMIN_INSTITUCION'] } },
+    { path: 'areas/nuevo',        component: AreaFormComponent,         canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO', 'ADMIN_INSTITUCION'] } },
+    { path: 'areas/:id',          component: AreaFormComponent,         canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO', 'ADMIN_INSTITUCION'] } },
+    { path: 'asignaturas',        component: AsignaturasListaComponent, canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO', 'ADMIN_INSTITUCION'] } },
+    { path: 'asignaturas/nuevo',  component: AsignaturaFormComponent,   canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO', 'ADMIN_INSTITUCION'] } },
+    { path: 'asignaturas/:id',    component: AsignaturaFormComponent,   canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO', 'ADMIN_INSTITUCION'] } },
 
     { path: 'instituciones',  component: InstitucionesListaComponent, canActivate: [roleGuard], data: { soloSuperAdmin: true } },
     { path: 'solicitudes',    component: SolicitudesListaComponent,   canActivate: [roleGuard], data: { soloSuperAdmin: true } },
