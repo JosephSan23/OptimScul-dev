@@ -39,6 +39,8 @@ public class CrearVincularAcudienteUseCase {
 
     @Transactional
     public Resultado ejecutar(UUID coordId, UUID estudianteId, AcudienteRequestDto dto) {
+        String numeroDocumento = dto.getNumeroDocumento() == null
+                ? null : dto.getNumeroDocumento().trim();                            // ← NUEVA
         UUID inst = auth.institucionConRol(coordId, "COORDINADOR_ACADEMICO");
         Estudiante est = estudianteRepository.findById(estudianteId)
                 .orElseThrow(() -> new RuntimeException("El estudiante no existe."));
@@ -46,36 +48,38 @@ public class CrearVincularAcudienteUseCase {
             throw new SecurityException("El estudiante es de otra institución.");
 
         LocalDateTime ahora = LocalDateTime.now();
-        Acudiente acudiente;
-        String username;
 
-        Optional<Persona> personaExistente = personaRepository.findByNumeroDocumento(dto.getNumeroDocumento());
-        if (personaExistente.isPresent()) {
-            // Reutilizar (hermanos): el documento ya existe y debe ser acudiente
-            Persona persona = personaExistente.get();
-            acudiente = acudienteRepository.findByPersonaId(persona.getId())
-                    .orElseThrow(() -> new RuntimeException(
-                            "Ese documento ya pertenece a otra persona que no es acudiente."));
-            if (!inst.equals(acudiente.getInstitucionId()))
-                throw new RuntimeException("Ese acudiente pertenece a otra institución.");
-            username = null; // ya tiene cuenta
-        } else {
-            // Nuevo: cuenta ACUDIENTE + registro acudiente
+        Optional<Persona> personaExistente = personaRepository.findByNumeroDocumento(numeroDocumento);
+        Acudiente acudiente;
+        String username = null;
+
+        if (personaExistente.isEmpty()) {
+            // ── Caso 1: persona totalmente nueva → cuenta ACUDIENTE + registro acudiente ──
             AltaUsuarioInstitucionService.Resultado cuenta = altaUsuario.provisionar(
-                    inst, "ACUDIENTE", dto.getTipoDocumento(), dto.getNumeroDocumento(),
+                    inst, "ACUDIENTE", dto.getTipoDocumento(), numeroDocumento,
                     dto.getPrimerNombre(), dto.getPrimerApellido(), dto.getCorreo());
             username = cuenta.usuario().getUsername();
+            acudiente = crearRegistroAcudiente(inst, cuenta.persona().getId(), dto, ahora);
 
-            Acudiente nuevo = new Acudiente();
-            nuevo.setId(UUID.randomUUID());
-            nuevo.setInstitucionId(inst);
-            nuevo.setPersonaId(cuenta.persona().getId());
-            nuevo.setOcupacion(dto.getOcupacion());
-            nuevo.setEmpresa(dto.getEmpresa());
-            nuevo.setEstado(EstadoAcudiente.ACTIVO);
-            nuevo.setCreatedAt(ahora);
-            nuevo.setUpdatedAt(ahora);
-            acudiente = acudienteRepository.save(nuevo);
+        } else {
+            Persona persona = personaExistente.get();
+            Acudiente existente = acudienteRepository.findByPersonaId(persona.getId()).orElse(null);
+
+            if (existente != null) {
+                // ── Caso 2 (hermanos): ya es acudiente → solo se vinculará al otro estudiante ──
+                if (!inst.equals(existente.getInstitucionId()))
+                    throw new RuntimeException("Ese acudiente pertenece a otra institución.");
+                acudiente = existente;
+
+            } else {
+                // ── Caso 3 (doble rol): la persona existe (docente, staff...) pero aún no es acudiente.
+                //    provisionar reutiliza su persona y su cuenta, y solo le agrega el rol ACUDIENTE. ──
+                altaUsuario.provisionar(
+                        inst, "ACUDIENTE", dto.getTipoDocumento(), numeroDocumento,
+                        dto.getPrimerNombre(), dto.getPrimerApellido(), dto.getCorreo());
+                acudiente = crearRegistroAcudiente(inst, persona.getId(), dto, ahora);
+                // username queda null: ya tenía cuenta, entra con sus credenciales de siempre
+            }
         }
 
         // Evitar vínculo duplicado
@@ -97,5 +101,18 @@ public class CrearVincularAcudienteUseCase {
         vinculoRepository.save(v);
 
         return new Resultado(username == null, username);
+    }
+
+    private Acudiente crearRegistroAcudiente(UUID inst, UUID personaId, AcudienteRequestDto dto, LocalDateTime ahora) {
+        Acudiente nuevo = new Acudiente();
+        nuevo.setId(UUID.randomUUID());
+        nuevo.setInstitucionId(inst);
+        nuevo.setPersonaId(personaId);
+        nuevo.setOcupacion(dto.getOcupacion());
+        nuevo.setEmpresa(dto.getEmpresa());
+        nuevo.setEstado(EstadoAcudiente.ACTIVO);
+        nuevo.setCreatedAt(ahora);
+        nuevo.setUpdatedAt(ahora);
+        return acudienteRepository.save(nuevo);
     }
 }
