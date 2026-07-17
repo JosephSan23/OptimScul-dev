@@ -1,0 +1,48 @@
+<div class="page-header">
+  <h1>Áreas académicas</h1>
+  <p>Agrupan las asignaturas de tu institución</p>
+</div>
+
+<div *ngIf="cargando" class="estado-msg"><i class="ti ti-loader-2 girando"></i> Cargando áreas...</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+
+<app-tabla-paginada *ngIf="!cargando"
+  [items]="areas"
+  [camposBusqueda]="['codigo','nombre']"
+  placeholderBusqueda="Buscar por nombre o código..."
+  mensajeVacio="Aún no hay áreas creadas.">
+
+  <div acciones>
+    <a class="btn-save" routerLink="/dashboard/areas/nuevo"><i class="ti ti-plus"></i> Nueva área</a>
+  </div>
+
+  <ng-template filaTabla let-pagina>
+    <div class="areas-lista">
+      <div class="area-card" *ngFor="let a of pagina" [class.inactiva]="!a.activa">
+        <div class="area-info">
+          <div class="area-nombre">
+            <h3>{{ a.nombre }}</h3>
+            <span class="area-codigo">{{ a.codigo }}</span>
+          </div>
+          <p class="area-descripcion" *ngIf="a.descripcion">{{ a.descripcion }}</p>
+          <div class="area-meta">
+            <span class="badge-asignaturas">
+              <i class="ti ti-book-2"></i>
+              {{ a.totalAsignaturas || 0 }} {{ a.totalAsignaturas === 1 ? 'asignatura' : 'asignaturas' }}
+            </span>
+            <span class="badge-estado" [ngClass]="a.activa ? 'estado-activo' : 'estado-inactivo'">
+              {{ a.activa ? 'Activa' : 'Inactiva' }}
+            </span>
+          </div>
+        </div>
+        <div class="acciones">
+          <a class="btn-accion" title="Editar" [routerLink]="['/dashboard/areas', a.id]"><i class="ti ti-pencil"></i></a>
+          <button *ngIf="a.activa" class="btn-accion peligro" title="Inactivar"
+                  [disabled]="procesandoId === a.id" (click)="inactivar(a)"><i class="ti ti-toggle-left"></i></button>
+          <button *ngIf="!a.activa" class="btn-accion exito" title="Activar"
+                  [disabled]="procesandoId === a.id" (click)="activar(a)"><i class="ti ti-toggle-right"></i></button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</app-tabla-paginada>

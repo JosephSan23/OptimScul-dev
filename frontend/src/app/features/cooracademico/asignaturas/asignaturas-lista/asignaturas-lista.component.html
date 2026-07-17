@@ -1,0 +1,89 @@
+<div class="page-header">
+  <h1>Asignaturas</h1>
+  <p>Materias que se dictan en tu institución</p>
+</div>
+
+<div *ngIf="cargando" class="estado-msg">
+  <i class="ti ti-loader-2 girando"></i> Cargando asignaturas...
+</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+
+<app-tabla-paginada
+  *ngIf="!cargando"
+  [items]="asignaturas"
+  [camposBusqueda]="['codigo', 'nombre', 'areaNombre']"
+  placeholderBusqueda="Buscar por nombre, código o área..."
+  mensajeVacio="Aún no hay asignaturas creadas."
+>
+  <div acciones>
+    <a class="btn-save" routerLink="/dashboard/asignaturas/nuevo"
+      ><i class="ti ti-plus"></i> Nueva asignatura</a
+    >
+  </div>
+
+  <ng-template filaTabla let-pagina>
+    <div class="asignaturas-lista">
+      <div
+        class="asignatura-card"
+        *ngFor="let a of pagina"
+        [class.inactiva]="!a.activa"
+      >
+        <div class="asignatura-info">
+          <div class="asignatura-nombre">
+            <h3>{{ a.nombre }}</h3>
+            <span class="asignatura-codigo">{{ a.codigo }}</span>
+          </div>
+          <div class="asignatura-meta">
+            <span class="badge-area" *ngIf="a.areaNombre"
+              ><i class="ti ti-category"></i> {{ a.areaNombre }}</span
+            >
+            <span class="badge-area sin-area" *ngIf="!a.areaNombre"
+              >Sin área</span
+            >
+            <span class="badge-intensidad" *ngIf="a.intensidadHorariaSemanal">
+              <i class="ti ti-clock"></i> {{ a.intensidadHorariaSemanal }} h/sem
+            </span>
+            <span class="badge-flag" *ngIf="a.esComportamiento"
+              ><i class="ti ti-mood-smile"></i> Comportamiento</span
+            >
+            <span class="badge-flag" *ngIf="!a.requiereCalificacion"
+              ><i class="ti ti-pencil-off"></i> No califica</span
+            >
+            <span
+              class="badge-estado"
+              [ngClass]="a.activa ? 'estado-activo' : 'estado-inactivo'"
+            >
+              {{ a.activa ? "Activa" : "Inactiva" }}
+            </span>
+          </div>
+        </div>
+        <div class="acciones">
+          <a
+            class="btn-accion"
+            title="Editar"
+            [routerLink]="['/dashboard/asignaturas', a.id]"
+            ><i class="ti ti-pencil"></i
+          ></a>
+          <button
+            *ngIf="a.activa"
+            class="btn-accion peligro"
+            title="Inactivar"
+            [disabled]="procesandoId === a.id"
+            (click)="inactivar(a)"
+          >
+            <i class="ti ti-toggle-left"></i>
+          </button>
+          <button
+            *ngIf="!a.activa"
+            class="btn-accion exito"
+            title="Activar"
+            [disabled]="procesandoId === a.id"
+            (click)="activar(a)"
+          >
+            <i class="ti ti-toggle-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</app-tabla-paginada>

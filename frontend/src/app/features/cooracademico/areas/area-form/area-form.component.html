@@ -1,0 +1,67 @@
+<div class="page-header">
+  <h1>{{ modoEdicion ? "Editar área" : "Nueva área" }}</h1>
+  <p>Datos del área académica</p>
+</div>
+
+<div *ngIf="cargando" class="estado-msg">
+  <i class="ti ti-loader-2 girando"></i> Cargando...
+</div>
+
+<div class="area-form" *ngIf="!cargando">
+  <div class="area-form-card">
+    <div class="form-grid">
+      <div class="campo">
+        <label>Código <span class="req">*</span></label>
+        <input
+          placeholder="Ej: MAT"
+          [(ngModel)]="form.codigo"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="campo">
+        <label>Nombre <span class="req">*</span></label>
+        <input
+          placeholder="Matemáticas, Humanidades..."
+          [(ngModel)]="form.nombre"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="campo campo-full">
+        <label>Descripción</label>
+        <input
+          placeholder="Opcional"
+          [(ngModel)]="form.descripcion"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+    </div>
+
+    <div class="form-error" *ngIf="error">
+      <i class="ti ti-alert-circle"></i> {{ error }}
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" (click)="cancelar()">
+        Cancelar
+      </button>
+      <button
+        type="button"
+        class="btn-save"
+        [disabled]="guardando"
+        (click)="guardar()"
+      >
+        <i
+          class="ti"
+          [ngClass]="modoEdicion ? 'ti-device-floppy' : 'ti-plus'"
+        ></i>
+        {{
+          guardando
+            ? "Guardando..."
+            : modoEdicion
+              ? "Guardar cambios"
+              : "Crear área"
+        }}
+      </button>
+    </div>
+  </div>
+</div>
