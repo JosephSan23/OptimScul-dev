@@ -11,4 +11,7 @@ public interface AsignaturaRepository {
     Optional<Asignatura> findById(UUID id);
     List<Asignatura> findAll();
     void deleteById(UUID id);
+    List<Asignatura> findByInstitucionId(UUID institucionId);
+    boolean existsByInstitucionIdAndCodigo(UUID institucionId, String codigo);
+    java.util.Map<UUID, Long> contarPorAreaDeInstitucion(UUID institucionId);
 }

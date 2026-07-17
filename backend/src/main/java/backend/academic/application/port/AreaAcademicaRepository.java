@@ -11,4 +11,6 @@ public interface AreaAcademicaRepository {
     Optional<AreaAcademica> findById(UUID id);
     List<AreaAcademica> findAll();
     void deleteById(UUID id);
+    List<AreaAcademica> findByInstitucionId(UUID institucionId);
+    boolean existsByInstitucionIdAndCodigo(UUID institucionId, String codigo);
 }
