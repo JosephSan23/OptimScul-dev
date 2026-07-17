@@ -6,6 +6,7 @@ import backend.people.domain.model.Institucion;
 import backend.people.domain.model.Persona;
 import backend.people.domain.model.Sexo;
 import backend.people.domain.model.TipoDocumentoPersona;
+import backend.people.application.PerfilProfesorService;
 import backend.security.application.AutorizacionService;
 import backend.security.application.UsernameGenerator;
 import backend.security.application.port.RolRepository;
@@ -39,13 +40,13 @@ public class EditarStaffUseCase {
         private final AutorizacionService autorizacionService;
         private final UsernameGenerator usernameGenerator;
         private final PasswordEncoder passwordEncoder;
-
+        private final PerfilProfesorService perfilProfesorService;
         public EditarStaffUseCase(UsuarioRepository usuarioRepository, PersonaRepository personaRepository,
                         UsuarioRolRepository usuarioRolRepository,
                         UsuarioInstitucionRepository usuarioInstitucionRepository,
                         RolRepository rolRepository, InstitucionRepository institucionRepository,
                         AutorizacionService autorizacionService, UsernameGenerator usernameGenerator,
-                        PasswordEncoder passwordEncoder) {
+                        PasswordEncoder passwordEncoder, PerfilProfesorService perfilProfesorService) {
                 this.usuarioRepository = usuarioRepository;
                 this.personaRepository = personaRepository;
                 this.usuarioRolRepository = usuarioRolRepository;
@@ -55,6 +56,7 @@ public class EditarStaffUseCase {
                 this.autorizacionService = autorizacionService;
                 this.usernameGenerator = usernameGenerator;
                 this.passwordEncoder = passwordEncoder;
+                this.perfilProfesorService = perfilProfesorService;
         }
 
         @Transactional
@@ -125,17 +127,32 @@ public class EditarStaffUseCase {
                         usuarioRepository.save(usuario);
                 }
 
-                // Cambio de rol (dentro del staff)
+                // Cambio de rol: SOLO la fila del cargo staff — los roles derivados
+                // (ACUDIENTE, etc.) no se tocan aquí.
                 Rol nuevoRol = rolRepository.findByCodigo(dto.getRolCodigo())
                                 .orElseThrow(() -> new RuntimeException(
                                                 "El rol " + dto.getRolCodigo() + " no está configurado."));
+
+                Set<UUID> idsRolesStaff = ROLES_STAFF.stream()
+                                .map(rolRepository::findByCodigo)
+                                .flatMap(java.util.Optional::stream)
+                                .map(Rol::getId)
+                                .collect(java.util.stream.Collectors.toSet());
+
                 usuarioRolRepository.findByUsuarioId(usuarioId).stream()
                                 .filter(ur -> institucionAdmin.equals(ur.getInstitucionId()))
+                                .filter(ur -> idsRolesStaff.contains(ur.getRolId()))
                                 .forEach(ur -> {
                                         ur.setRolId(nuevoRol.getId());
                                         ur.setUpdatedAt(ahora);
                                         usuarioRolRepository.save(ur);
                                 });
+
+                if ("DOCENTE".equals(dto.getRolCodigo())) {
+                        perfilProfesorService.asegurarPerfil(institucionAdmin, p.getId(), dto.getNumeroDocumento());
+                } else {
+                        perfilProfesorService.inactivarPerfil(institucionAdmin, p.getId());
+                }
         }
 
         private UUID institucionDe(UUID usuarioId) {
