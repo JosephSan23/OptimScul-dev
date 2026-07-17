@@ -120,6 +120,7 @@
 
   &.estado-activo               { background: var(--green-100);  color: var(--green-500); }
   &.estado-inactivo             { background: var(--line-soft);  color: var(--ink-soft); }
+  &.estado-retirado             { background: var(--line-soft);  color: var(--ink-soft); }
   &.estado-bloqueado            { background: var(--red-100);    color: var(--red-500); }
   &.estado-pendiente_activacion { background: var(--orange-100); color: var(--orange-600); }
 }
