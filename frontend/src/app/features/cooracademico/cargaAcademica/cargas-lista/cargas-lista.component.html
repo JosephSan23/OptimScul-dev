@@ -1,0 +1,128 @@
+<div class="page-header">
+  <h1>Carga académica</h1>
+  <p>Qué asignatura dicta cada profesor en cada grupo</p>
+</div>
+
+<div class="selector-anio">
+  <label>Año lectivo:</label>
+  <select
+    [(ngModel)]="anioSeleccionado"
+    [ngModelOptions]="{ standalone: true }"
+    (change)="cambioAnio()"
+  >
+    <option *ngFor="let a of anios" [value]="a.id">
+      {{ a.nombre || a.anio }}{{ a.esActual ? " (actual)" : "" }}
+    </option>
+  </select>
+</div>
+
+<div *ngIf="cargando" class="estado-msg">
+  <i class="ti ti-loader-2 girando"></i> Cargando carga académica...
+</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+
+<app-tabla-paginada
+  *ngIf="!cargando"
+  [items]="cargas"
+  [camposBusqueda]="[
+    'profesorNombre',
+    'asignaturaNombre',
+    'grupoNombre',
+    'grupoCodigo',
+    'gradoNombre',
+  ]"
+  [filtros]="filtrosTabla"
+  placeholderBusqueda="Buscar por profesor, asignatura o grupo..."
+  mensajeVacio="Este año lectivo aún no tiene carga académica."
+>
+  <div acciones>
+    <a class="btn-save" routerLink="/dashboard/cargas/nuevo"
+      ><i class="ti ti-plus"></i> Nueva asignación</a
+    >
+  </div>
+
+  <ng-template filaTabla let-pagina>
+    <div class="tabla-card">
+      <table class="tabla-crud">
+        <thead>
+          <tr>
+            <th>Grupo</th>
+            <th>Asignatura</th>
+            <th>Profesor</th>
+            <th>Horas/sem</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let c of pagina"
+            [class.fila-apagada]="c.estado !== 'ACTIVA'"
+          >
+            <td>
+              <b>{{ c.gradoNombre }} — {{ c.grupoNombre }}</b>
+              <!-- <small class="celda-sub">{{ c.grupoCodigo }}</small> -->
+            </td>
+            <td>{{ c.asignaturaNombre }}</td>
+            <td>
+              <div class="celda-usuario">
+                <span class="mini-avatar">{{
+                  c.profesorNombre.charAt(0)
+                }}</span>
+                <div>
+                  <b>{{ c.profesorNombre }}</b>
+                  <small>{{ c.codigoProfesor }}</small>
+                </div>
+              </div>
+            </td>
+            <td>{{ c.intensidadHorariaSemanal || "—" }}</td>
+            <td>
+              <span
+                class="badge-estado"
+                [ngClass]="'estado-' + c.estado.toLowerCase()"
+              >
+                {{ c.estado | titlecase }}
+              </span>
+            </td>
+            <td class="acciones">
+              <a
+                *ngIf="c.estado === 'ACTIVA'"
+                class="btn-accion"
+                title="Editar (cambiar profesor / detalles)"
+                [routerLink]="['/dashboard/cargas', c.id]"
+                ><i class="ti ti-pencil"></i
+              ></a>
+              <button
+                *ngIf="c.estado === 'ACTIVA'"
+                class="btn-accion"
+                title="Finalizar"
+                [disabled]="procesandoId === c.id"
+                (click)="finalizar(c)"
+              >
+                <i class="ti ti-flag-check"></i>
+              </button>
+              <button
+                *ngIf="c.estado === 'ACTIVA'"
+                class="btn-accion peligro"
+                title="Cancelar"
+                [disabled]="procesandoId === c.id"
+                (click)="cancelar(c)"
+              >
+                <i class="ti ti-x"></i>
+              </button>
+              <button
+                *ngIf="c.estado !== 'ACTIVA'"
+                class="btn-accion exito"
+                title="Reactivar"
+                [disabled]="procesandoId === c.id"
+                (click)="reactivar(c)"
+              >
+                <i class="ti ti-rotate-clockwise"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </ng-template>
+</app-tabla-paginada>

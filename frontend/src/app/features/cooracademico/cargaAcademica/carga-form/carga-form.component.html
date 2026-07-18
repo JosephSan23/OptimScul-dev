@@ -1,0 +1,148 @@
+<div class="page-header">
+  <h1>{{ modoEdicion ? "Editar asignación" : "Nueva asignación" }}</h1>
+  <p>
+    {{
+      modoEdicion
+        ? "Puedes cambiar el profesor y los detalles — grupo y asignatura son fijos"
+        : "Asigna una asignatura y un profesor a un grupo"
+    }}
+  </p>
+</div>
+
+<div *ngIf="cargando" class="estado-msg">
+  <i class="ti ti-loader-2 girando"></i> Cargando...
+</div>
+
+<div class="carga-form" *ngIf="!cargando">
+  <div class="carga-form-card">
+    <div class="form-grid">
+      <div class="campo">
+        <label>Año lectivo <span class="req">*</span></label>
+        <select
+          [(ngModel)]="form.anioLectivoId"
+          [ngModelOptions]="{ standalone: true }"
+          (change)="cambioAnio()"
+          [disabled]="modoEdicion"
+        >
+          <option value="" disabled>Selecciona el año</option>
+          <option *ngFor="let a of anios" [value]="a.id">
+            {{ a.nombre || a.anio }}{{ a.esActual ? " (actual)" : "" }}
+          </option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label>Grupo <span class="req">*</span></label>
+        <select
+          [(ngModel)]="form.grupoId"
+          [ngModelOptions]="{ standalone: true }"
+          [disabled]="modoEdicion"
+        >
+          <option value="" disabled>
+            {{
+              form.anioLectivoId
+                ? "Selecciona el grupo"
+                : "Elige primero el año"
+            }}
+          </option>
+          <option *ngFor="let g of grupos" [value]="g.id">
+            {{ g.nombre }} ({{ g.codigo }})
+          </option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label>Asignatura <span class="req">*</span></label>
+        <select
+          [(ngModel)]="form.asignaturaId"
+          [ngModelOptions]="{ standalone: true }"
+          [disabled]="modoEdicion"
+        >
+          <option value="" disabled>Selecciona la asignatura</option>
+          <option *ngFor="let a of asignaturas" [value]="a.id">
+            {{ a.nombre }}
+          </option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label>Profesor <span class="req">*</span></label>
+        <select
+          [(ngModel)]="form.profesorId"
+          [ngModelOptions]="{ standalone: true }"
+        >
+          <option value="" disabled>Selecciona el profesor</option>
+          <option *ngFor="let p of profesores" [value]="p.id">
+            {{ p.nombre }} ({{ p.codigoProfesor }})
+          </option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label>Intensidad horaria semanal</label>
+        <input
+          type="number"
+          min="1"
+          placeholder="Vacío = la de la asignatura"
+          [(ngModel)]="form.intensidadHorariaSemanal"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+
+      <div class="campo">
+        <label>Fecha inicio</label>
+        <input
+          type="date"
+          [(ngModel)]="form.fechaInicio"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+
+      <div class="campo">
+        <label>Fecha fin</label>
+        <input
+          type="date"
+          [(ngModel)]="form.fechaFin"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+
+      <div class="campo campo-full">
+        <label>Observaciones</label>
+        <input
+          placeholder="Opcional"
+          [(ngModel)]="form.observaciones"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+    </div>
+
+    <div class="form-error" *ngIf="error">
+      <i class="ti ti-alert-circle"></i> {{ error }}
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" (click)="cancelar()">
+        Cancelar
+      </button>
+      <button
+        type="button"
+        class="btn-save"
+        [disabled]="guardando"
+        (click)="guardar()"
+      >
+        <i
+          class="ti"
+          [ngClass]="modoEdicion ? 'ti-device-floppy' : 'ti-plus'"
+        ></i>
+        {{
+          guardando
+            ? "Guardando..."
+            : modoEdicion
+              ? "Guardar cambios"
+              : "Crear asignación"
+        }}
+      </button>
+    </div>
+  </div>
+</div>
