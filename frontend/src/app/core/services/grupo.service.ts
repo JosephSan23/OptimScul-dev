@@ -57,4 +57,9 @@ export class GrupoService {
   cerrar(id: string): Observable<{ mensaje: string }> {
     return this.http.patch<{ mensaje: string }>(`${this.API}/${id}/cerrar`, {});
   }
+
+  listarPorAnio(anioId: string): Observable<Grupo[]> {
+    return this.http.get<Grupo[]>(`${this.API}/por-anio/${anioId}`);
+  }
+
 }

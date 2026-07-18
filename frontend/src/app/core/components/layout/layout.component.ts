@@ -84,6 +84,7 @@ export class LayoutComponent {
     { label: 'Grados y grupos',   icon: 'ti ti-stairs',              ruta: '/dashboard/grados',         roles: ['COORDINADOR_ACADEMICO'] },
     { label: 'Áreas',             icon: 'ti ti-category',            ruta: '/dashboard/areas',         roles: ['COORDINADOR_ACADEMICO'] },
     { label: 'Asignaturas',       icon: 'ti ti-book-2',            ruta: '/dashboard/asignaturas',         roles: ['COORDINADOR_ACADEMICO'] },
+    { label: 'Carga académica',   icon: 'ti ti-chalkboard',         ruta: '/dashboard/cargas',          roles: ['COORDINADOR_ACADEMICO'] },
   ];
 
   private puedeVer(item: any): boolean {
