@@ -14,4 +14,5 @@ public interface GrupoRepository {
     List<Grupo> findByGradoId(UUID gradoId);
     boolean existsByInstitucionIdAndAnioLectivoIdAndCodigo(UUID institucionId, UUID anioLectivoId, String codigo);
     java.util.Map<UUID, Long> contarPorGradoDeInstitucion(UUID institucionId);
+    List<Grupo>findByInstitucionIdAndAnioLectivoId(UUID institucionId, UUID anioLectivoId);
 }

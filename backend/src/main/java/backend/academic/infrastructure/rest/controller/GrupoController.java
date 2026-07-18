@@ -20,14 +20,16 @@ public class GrupoController {
     private final CrearGrupoUseCase crear;
     private final EditarGrupoUseCase editar;
     private final CambiarEstadoGrupoUseCase cambiarEstado;
+    private final ListarGruposPorAnioUseCase listarPorAnio;
 
     public GrupoController(ListarGruposPorGradoUseCase listar, ObtenerGrupoUseCase obtener,
-            CrearGrupoUseCase crear, EditarGrupoUseCase editar, CambiarEstadoGrupoUseCase cambiarEstado) {
+            CrearGrupoUseCase crear, EditarGrupoUseCase editar, CambiarEstadoGrupoUseCase cambiarEstado, ListarGruposPorAnioUseCase listarPorAnio) {
         this.listar = listar;
         this.obtener = obtener;
         this.crear = crear;
         this.editar = editar;
         this.cambiarEstado = cambiarEstado;
+        this.listarPorAnio = listarPorAnio;
     }
 
     @GetMapping("/por-grado/{gradoId}")
@@ -112,6 +114,13 @@ public class GrupoController {
         } catch (RuntimeException e) {
             return conflict(e);
         }
+    }
+
+    @GetMapping("/por-anio/{anioId}")
+    public ResponseEntity<?> listarPorAnio(@PathVariable UUID anioId, @AuthenticationPrincipal UUID usuarioId) {
+        try {
+            return ResponseEntity.ok(listarPorAnio.ejecutar(usuarioId, anioId).stream().map(GrupoResponseDto::desde).toList());
+        } catch (SecurityException e) { return forbidden(e); }
     }
 
     private ResponseEntity<?> forbidden(Exception e) {

@@ -57,4 +57,9 @@ public class GrupoRepositoryAdapter implements GrupoRepository {
                         GrupoJpaRepository.ConteoPorGrado::getGradoId,
                         GrupoJpaRepository.ConteoPorGrado::getTotal));
     }
+
+    @Override
+    public List<Grupo> findByInstitucionIdAndAnioLectivoId(UUID inst, UUID anioId) {
+        return jpa.findByInstitucionIdAndAnioLectivoIdOrderByCodigoAsc(inst, anioId).stream().map(mapper::toDomain).toList();
+    }
 }

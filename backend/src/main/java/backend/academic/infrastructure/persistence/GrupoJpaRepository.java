@@ -20,4 +20,7 @@ public interface GrupoJpaRepository extends JpaRepository<GrupoEntity, UUID> {
         UUID getGradoId();
         Long getTotal();
     }
+
+    List<GrupoEntity> findByInstitucionIdAndAnioLectivoIdOrderByCodigoAsc(UUID institucionId, UUID anioLectivoId);
+
 }
