@@ -1,0 +1,97 @@
+<div class="page-header">
+  <h1>Nueva matrícula</h1>
+  <p>Matricula un estudiante en un año lectivo</p>
+</div>
+
+<div class="matricula-form">
+  <div class="matricula-form-card">
+    <div class="form-grid">
+      <div class="campo campo-full">
+        <label>Estudiante <span class="req">*</span></label>
+        <select
+          [(ngModel)]="form.estudianteId"
+          [ngModelOptions]="{ standalone: true }"
+        >
+          <option value="" disabled>Selecciona el estudiante</option>
+          <option *ngFor="let e of estudiantes" [value]="e.estudianteId">
+            {{ e.primerNombre }} {{ e.primerApellido }} —
+            {{ e.numeroDocumento }}
+          </option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label>Año lectivo <span class="req">*</span></label>
+        <select
+          [(ngModel)]="form.anioLectivoId"
+          [ngModelOptions]="{ standalone: true }"
+          (change)="cambioAnio()"
+        >
+          <option value="" disabled>Selecciona el año</option>
+          <option *ngFor="let a of anios" [value]="a.id">
+            {{ a.nombre || a.anio }}{{ a.esActual ? " (actual)" : "" }}
+          </option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label>Tipo <span class="req">*</span></label>
+        <select [(ngModel)]="form.tipo" [ngModelOptions]="{ standalone: true }">
+          <option *ngFor="let t of TIPOS" [value]="t">
+            {{ t | titlecase }}
+          </option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label>Grupo</label>
+        <select
+          [(ngModel)]="form.grupoId"
+          [ngModelOptions]="{ standalone: true }"
+        >
+          <option value="">Sin grupo (prematrícula)</option>
+          <option *ngFor="let g of grupos" [value]="g.id">
+            {{ g.nombre }} ({{ g.codigo }})
+          </option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label>Fecha de matrícula</label>
+        <input
+          type="date"
+          [(ngModel)]="form.fechaMatricula"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+
+      <div class="campo campo-full">
+        <label>Observaciones</label>
+        <input
+          placeholder="Opcional"
+          [(ngModel)]="form.observaciones"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+    </div>
+
+    <div class="form-error" *ngIf="error">
+      <i class="ti ti-alert-circle"></i> {{ error }}
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" (click)="cancelar()">
+        Cancelar
+      </button>
+      <button
+        type="button"
+        class="btn-save"
+        [disabled]="guardando"
+        (click)="guardar()"
+      >
+        <i class="ti ti-plus"></i>
+        {{ guardando ? "Guardando..." : "Crear matrícula" }}
+      </button>
+    </div>
+  </div>
+</div>

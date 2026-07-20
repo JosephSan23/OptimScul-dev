@@ -1,0 +1,148 @@
+<div class="page-header">
+  <h1>Matrículas</h1>
+  <p>Estudiantes matriculados por año lectivo</p>
+</div>
+
+<div class="selector-anio">
+  <label>Año lectivo:</label>
+  <select
+    [(ngModel)]="anioSeleccionado"
+    [ngModelOptions]="{ standalone: true }"
+    (change)="cambioAnio()"
+  >
+    <option *ngFor="let a of anios" [value]="a.id">
+      {{ a.nombre || a.anio }}{{ a.esActual ? " (actual)" : "" }}
+    </option>
+  </select>
+</div>
+
+<div *ngIf="cargando" class="estado-msg">
+  <i class="ti ti-loader-2 girando"></i> Cargando matrículas...
+</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+
+<app-tabla-paginada
+  *ngIf="!cargando"
+  [items]="matriculas"
+  [camposBusqueda]="[
+    'estudianteNombre',
+    'codigoEstudiante',
+    'numeroDocumento',
+    'codigoMatricula',
+    'grupoNombre',
+  ]"
+  [filtros]="filtrosTabla"
+  placeholderBusqueda="Buscar por estudiante, documento o grupo..."
+  mensajeVacio="Este año lectivo aún no tiene matrículas."
+>
+  <div acciones>
+    <a class="btn-save" routerLink="/dashboard/matriculas/nueva"
+      ><i class="ti ti-plus"></i> Nueva matrícula</a
+    >
+  </div>
+
+  <ng-template filaTabla let-pagina>
+    <div class="tabla-card">
+      <table class="tabla-crud">
+        <thead>
+          <tr>
+            <th>Estudiante</th>
+            <th>Grupo</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let m of pagina"
+            [class.fila-apagada]="!vigente(m.estado)"
+          >
+            <td>
+              <div class="celda-usuario">
+                <span class="mini-avatar">{{
+                  m.estudianteNombre.charAt(0)
+                }}</span>
+                <div>
+                  <b>{{ m.estudianteNombre }}</b>
+                  <small
+                    >{{ m.codigoEstudiante }} · {{ m.numeroDocumento }}</small
+                  >
+                </div>
+              </div>
+            </td>
+            <td>
+              <span *ngIf="m.grupoNombre"
+                >{{ m.gradoNombre }} — {{ m.grupoNombre }}</span
+              >
+              <span *ngIf="!m.grupoNombre" class="tag warn">Sin grupo</span>
+            </td>
+            <td>
+              <span class="tag info">{{ m.tipo | titlecase }}</span>
+            </td>
+            <td>
+              <span
+                class="badge-estado"
+                [ngClass]="'estado-' + m.estado.toLowerCase()"
+                >{{ m.estado | titlecase }}</span
+              >
+            </td>
+            <td class="acciones">
+              <button
+                *ngIf="vigente(m.estado)"
+                class="btn-accion"
+                title="Asignar / cambiar grupo"
+                [disabled]="procesandoId === m.id"
+                (click)="abrirAsignar(m)"
+              >
+                <i class="ti ti-users-group"></i>
+              </button>
+              <button
+                *ngIf="vigente(m.estado)"
+                class="btn-accion peligro"
+                title="Retirar"
+                [disabled]="procesandoId === m.id"
+                (click)="retirar(m)"
+              >
+                <i class="ti ti-door-exit"></i>
+              </button>
+              <button
+                *ngIf="!vigente(m.estado)"
+                class="btn-accion exito"
+                title="Reactivar"
+                [disabled]="procesandoId === m.id"
+                (click)="reactivar(m)"
+              >
+                <i class="ti ti-rotate-clockwise"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </ng-template>
+</app-tabla-paginada>
+
+<!-- Modal asignar grupo -->
+<div class="modal-overlay" *ngIf="matriculaAsignando" (click)="cerrarAsignar()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <h3>Asignar grupo</h3>
+    <p>{{ matriculaAsignando.estudianteNombre }}</p>
+    <select [(ngModel)]="grupoElegido" [ngModelOptions]="{ standalone: true }">
+      <option value="" disabled>Selecciona un grupo</option>
+      <option *ngFor="let g of gruposDelAnio" [value]="g.id">
+        {{ g.nombre }} ({{ g.codigo }})
+      </option>
+    </select>
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="cerrarAsignar()">Cancelar</button>
+      <button
+        class="btn-save"
+        [disabled]="!grupoElegido || procesandoId"
+        (click)="confirmarAsignar()"
+      >
+        Asignar
+      </button>
+    </div>
+  </div>
+</div>
