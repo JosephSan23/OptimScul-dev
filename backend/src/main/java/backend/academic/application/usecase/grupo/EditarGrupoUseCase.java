@@ -4,7 +4,7 @@ import backend.academic.application.port.AnioLectivoRepository;
 import backend.academic.application.port.GrupoRepository;
 import backend.academic.domain.model.AnioLectivo;
 import backend.academic.domain.model.Grupo;
-import backend.academic.infrastructure.rest.dto.GrupoRequestDto;
+import backend.academic.infrastructure.rest.dto.Grupo.GrupoRequestDto;
 import backend.security.application.AutorizacionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

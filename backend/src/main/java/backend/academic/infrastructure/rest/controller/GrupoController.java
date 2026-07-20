@@ -1,8 +1,7 @@
 package backend.academic.infrastructure.rest.controller;
 
 import backend.academic.application.usecase.grupo.*;
-import backend.academic.infrastructure.rest.dto.GrupoRequestDto;
-import backend.academic.infrastructure.rest.dto.GrupoResponseDto;
+import backend.academic.infrastructure.rest.dto.Grupo.*;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
