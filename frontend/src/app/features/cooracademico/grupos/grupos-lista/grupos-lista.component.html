@@ -45,8 +45,8 @@
               <i class="ti ti-calendar-event"></i>
               {{ nombreAnio(g.anioLectivoId) }}
             </span>
-            <span class="badge-cupo" *ngIf="g.cupoMaximo">
-              <i class="ti ti-users"></i> Cupo: {{ g.cupoMaximo }}
+            <span class="badge-cupo" [class.cupo-lleno]="cupoLleno(g)">
+              <i class="ti ti-users"></i> {{ cupoTexto(g) }}
             </span>
             <span
               class="badge-estado"
