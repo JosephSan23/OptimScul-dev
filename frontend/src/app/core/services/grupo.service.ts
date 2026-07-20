@@ -14,6 +14,8 @@ export interface Grupo {
   cupoMaximo?: number;
   estado: string;
   observaciones?: string;
+  totalEstudiantes?: number;
+
 }
 export interface GrupoRequest {
   anioLectivoId: string;
