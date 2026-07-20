@@ -1,0 +1,115 @@
+<div class="page-header">
+  <h1>{{ modoEdicion ? "Editar franja" : "Nueva franja" }}</h1>
+  <p>
+    {{
+      modoEdicion
+        ? "La asignación es fija — cambia día, horas o lugar"
+        : "Programa una clase en el horario del grupo"
+    }}
+  </p>
+</div>
+
+<div *ngIf="cargando" class="estado-msg">
+  <i class="ti ti-loader-2 girando"></i> Cargando...
+</div>
+
+<div class="horario-form" *ngIf="!cargando">
+  <div class="horario-form-card">
+    <div class="form-grid">
+      <div class="campo campo-full">
+        <label
+          >Asignación (asignatura — profesor) <span class="req">*</span></label
+        >
+        <select
+          [(ngModel)]="form.cargaAcademicaId"
+          [ngModelOptions]="{ standalone: true }"
+          [disabled]="modoEdicion"
+        >
+          <option value="" disabled>Selecciona la asignación</option>
+          <option *ngFor="let c of cargasDelGrupo" [value]="c.id">
+            {{ c.asignaturaNombre }} — {{ c.profesorNombre }}
+          </option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label>Día <span class="req">*</span></label>
+        <select
+          [(ngModel)]="form.diaSemana"
+          [ngModelOptions]="{ standalone: true }"
+        >
+          <option value="" disabled>Selecciona el día</option>
+          <option *ngFor="let d of DIAS" [value]="d.valor">
+            {{ d.nombre }}
+          </option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label>Aula</label>
+        <input
+          placeholder="Ej: Salón 201 (opcional)"
+          [(ngModel)]="form.aula"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+
+      <div class="campo">
+        <label>Hora inicio <span class="req">*</span></label>
+        <input
+          type="time"
+          [(ngModel)]="form.horaInicio"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+
+      <div class="campo">
+        <label>Hora fin <span class="req">*</span></label>
+        <input
+          type="time"
+          [(ngModel)]="form.horaFin"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+
+      <div class="campo campo-full">
+        <label>Sede</label>
+        <select
+          [(ngModel)]="form.sedeId"
+          [ngModelOptions]="{ standalone: true }"
+        >
+          <option value="">Sin sede específica</option>
+          <option *ngFor="let s of sedes" [value]="s.id">{{ s.nombre }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-error" *ngIf="error">
+      <i class="ti ti-alert-circle"></i> {{ error }}
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" (click)="volver()">
+        Cancelar
+      </button>
+      <button
+        type="button"
+        class="btn-save"
+        [disabled]="guardando"
+        (click)="guardar()"
+      >
+        <i
+          class="ti"
+          [ngClass]="modoEdicion ? 'ti-device-floppy' : 'ti-plus'"
+        ></i>
+        {{
+          guardando
+            ? "Guardando..."
+            : modoEdicion
+              ? "Guardar cambios"
+              : "Crear franja"
+        }}
+      </button>
+    </div>
+  </div>
+</div>

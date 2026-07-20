@@ -1,0 +1,103 @@
+<div class="page-header">
+  <h1>Horarios</h1>
+  <p>Horario semanal de cada grupo</p>
+</div>
+
+<div class="selector-horario">
+  <div class="campo-selector">
+    <label>Año lectivo:</label>
+    <select
+      [(ngModel)]="anioSeleccionado"
+      [ngModelOptions]="{ standalone: true }"
+      (change)="cambioAnio()"
+    >
+      <option *ngFor="let a of anios" [value]="a.id">
+        {{ a.nombre || a.anio }}{{ a.esActual ? " (actual)" : "" }}
+      </option>
+    </select>
+  </div>
+  <div class="campo-selector">
+    <label>Grupo:</label>
+    <select
+      [(ngModel)]="grupoSeleccionado"
+      [ngModelOptions]="{ standalone: true }"
+      (change)="cambioGrupo()"
+    >
+      <option value="" disabled>Selecciona un grupo</option>
+      <option *ngFor="let g of grupos" [value]="g.id">
+        {{ g.nombre }} ({{ g.codigo }})
+      </option>
+    </select>
+  </div>
+  <button class="btn-save" *ngIf="grupoSeleccionado" (click)="irANueva()">
+    <i class="ti ti-plus"></i> Nueva franja
+  </button>
+</div>
+
+<div *ngIf="cargando" class="estado-msg">
+  <i class="ti ti-loader-2 girando"></i> Cargando horario...
+</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+
+<div
+  *ngIf="!cargando && grupoSeleccionado && horarios.length === 0 && !error"
+  class="estado-msg"
+>
+  Este grupo aún no tiene horario. Crea la primera franja.
+</div>
+
+<div class="horario-semana" *ngIf="!cargando && horarios.length > 0">
+  <div class="dia-columna" *ngFor="let dia of diasConClase">
+    <h3 class="dia-titulo">{{ NOMBRE_DIA[dia] }}</h3>
+
+    <div
+      class="franja-card"
+      *ngFor="let h of franjasDe(dia)"
+      [class.inactiva]="!h.activo"
+    >
+      <div class="franja-horas">
+        <b>{{ h.horaInicio }}</b> – <b>{{ h.horaFin }}</b>
+      </div>
+      <div class="franja-info">
+        <span class="franja-asignatura">{{ h.asignaturaNombre }}</span>
+        <small class="franja-profesor"
+          ><i class="ti ti-user"></i> {{ h.profesorNombre }}</small
+        >
+        <small class="franja-lugar" *ngIf="h.aula || h.sedeNombre">
+          <i class="ti ti-map-pin"></i>
+          {{ h.aula || "" }}{{ h.aula && h.sedeNombre ? " · " : ""
+          }}{{ h.sedeNombre || "" }}
+        </small>
+        <span class="badge-estado estado-inactivo" *ngIf="!h.activo"
+          >Inactiva</span
+        >
+      </div>
+      <div class="acciones">
+        <a
+          class="btn-accion"
+          title="Editar"
+          [routerLink]="['/dashboard/horarios', h.id]"
+          ><i class="ti ti-pencil"></i
+        ></a>
+        <button
+          *ngIf="h.activo"
+          class="btn-accion peligro"
+          title="Inactivar"
+          [disabled]="procesandoId === h.id"
+          (click)="inactivar(h)"
+        >
+          <i class="ti ti-toggle-left"></i>
+        </button>
+        <button
+          *ngIf="!h.activo"
+          class="btn-accion exito"
+          title="Activar"
+          [disabled]="procesandoId === h.id"
+          (click)="activar(h)"
+        >
+          <i class="ti ti-toggle-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
