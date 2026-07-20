@@ -85,6 +85,9 @@ export class LayoutComponent {
     { label: 'Áreas',             icon: 'ti ti-category',            ruta: '/dashboard/areas',         roles: ['COORDINADOR_ACADEMICO'] },
     { label: 'Asignaturas',       icon: 'ti ti-book-2',            ruta: '/dashboard/asignaturas',         roles: ['COORDINADOR_ACADEMICO'] },
     { label: 'Carga académica',   icon: 'ti ti-chalkboard',         ruta: '/dashboard/cargas',          roles: ['COORDINADOR_ACADEMICO'] },
+    { label: 'Horarios', icon: 'ti ti-calendar-time', ruta: '/dashboard/horarios', roles: ['COORDINADOR_ACADEMICO'] },
+    { label: 'Matrículas', icon: 'ti ti-clipboard-check', ruta: '/dashboard/matriculas', roles: ['COORDINADOR_ACADEMICO'] },
+
   ];
 
   private puedeVer(item: any): boolean {
