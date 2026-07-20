@@ -42,4 +42,12 @@ public class MatriculaRepositoryAdapter implements MatriculaRepository {
     public long contarMatriculadosEnGrupo(UUID grupoId) {
         return jpa.countByGrupoIdAndEstado(grupoId, EstadoMatricula.MATRICULADO);
     }
+
+    @Override
+    public java.util.Map<UUID, Long> contarMatriculadosPorGrupoDeInstitucion(UUID inst) {
+        return jpa.contarMatriculadosPorGrupo(inst.toString()).stream()
+                .collect(java.util.stream.Collectors.toMap(
+                        MatriculaJpaRepository.ConteoPorGrupo::getGrupoId,
+                        MatriculaJpaRepository.ConteoPorGrupo::getTotal));
+    }
 }

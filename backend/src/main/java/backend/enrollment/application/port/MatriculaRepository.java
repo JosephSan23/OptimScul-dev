@@ -4,6 +4,7 @@ import backend.enrollment.domain.model.Matricula;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.Map;
 
 public interface MatriculaRepository {
 
@@ -13,4 +14,5 @@ public interface MatriculaRepository {
     void deleteById(UUID id);
     Optional<Matricula> findByInstitucionIdAndEstudianteIdAndAnioLectivoId(UUID institucionId, UUID estudianteId, UUID anioLectivoId);
     long contarMatriculadosEnGrupo(UUID grupoId);
+    Map<UUID, Long> contarMatriculadosPorGrupoDeInstitucion(UUID institucionId);
 }
