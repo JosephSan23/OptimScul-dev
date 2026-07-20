@@ -49,6 +49,10 @@ import { AsignaturasListaComponent } from './features/cooracademico/asignaturas/
 import { AsignaturaFormComponent } from './features/cooracademico/asignaturas/asignatura-form/asignatura-form.component';
 import { CargasListaComponent } from './features/cooracademico/cargaAcademica/cargas-lista/cargas-lista.component';
 import { CargaFormComponent } from './features/cooracademico/cargaAcademica/carga-form/carga-form.component';
+import { HorariosListaComponent } from './features/cooracademico/horarios/horarios-lista/horarios-lista.component';
+import { HorarioFormComponent } from './features/cooracademico/horarios/horario-form/horario-form.component';
+import { MatriculasListaComponent } from './features/cooracademico/matriculas/matriculas-lista/matriculas-lista.component';
+import { MatriculaFormComponent } from './features/cooracademico/matriculas/matricula-form/matricula-form.component';
 
 
 @NgModule({
@@ -96,6 +100,10 @@ import { CargaFormComponent } from './features/cooracademico/cargaAcademica/carg
     AsignaturaFormComponent,
     CargasListaComponent,
     CargaFormComponent,
+    HorariosListaComponent,
+    HorarioFormComponent,
+    MatriculasListaComponent,
+    MatriculaFormComponent,
   ],
   imports: [
     BrowserModule,
