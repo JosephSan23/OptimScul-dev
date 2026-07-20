@@ -11,4 +11,6 @@ public interface MatriculaRepository {
     Optional<Matricula> findById(UUID id);
     List<Matricula> findAll();
     void deleteById(UUID id);
+    Optional<Matricula> findByInstitucionIdAndEstudianteIdAndAnioLectivoId(UUID institucionId, UUID estudianteId, UUID anioLectivoId);
+    long contarMatriculadosEnGrupo(UUID grupoId);
 }

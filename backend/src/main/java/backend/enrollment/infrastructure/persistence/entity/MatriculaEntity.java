@@ -33,11 +33,13 @@ public class MatriculaEntity {
     private String codigoMatricula;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "tipo")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "tipo", columnDefinition = "tipo_matricula_enum")
     private TipoMatricula tipo;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "estado")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "estado", columnDefinition = "estado_matricula_enum")
     private EstadoMatricula estado;
 
     @Column(name = "fecha_matricula")
