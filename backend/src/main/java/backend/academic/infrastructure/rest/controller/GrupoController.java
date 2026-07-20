@@ -34,8 +34,8 @@ public class GrupoController {
     @GetMapping("/por-grado/{gradoId}")
     public ResponseEntity<?> listar(@PathVariable UUID gradoId, @AuthenticationPrincipal UUID usuarioId) {
         try {
-            return ResponseEntity
-                    .ok(listar.ejecutar(usuarioId, gradoId).stream().map(GrupoResponseDto::desde).toList());
+            return ResponseEntity.ok(listar.ejecutar(usuarioId, gradoId).stream()
+                    .map(r -> GrupoResponseDto.desde(r.grupo(), r.totalEstudiantes())).toList());
         } catch (SecurityException e) {
             return forbidden(e);
         } catch (RuntimeException e) {
