@@ -18,14 +18,16 @@ public class DocenteController {
     private final EstudiantesDeMiClaseUseCase estudiantes;
     private final ObtenerAsistenciaUseCase obtenerAsistencia;
     private final GuardarAsistenciaUseCase guardarAsistencia;
+    private final ReporteAsistenciaUseCase reporte;
 
     public DocenteController(MisClasesUseCase misClases, MiHorarioUseCase miHorario,
-            EstudiantesDeMiClaseUseCase estudiantes, ObtenerAsistenciaUseCase obtenerAsistencia, GuardarAsistenciaUseCase guardarAsistencia) {
+            EstudiantesDeMiClaseUseCase estudiantes, ObtenerAsistenciaUseCase obtenerAsistencia, GuardarAsistenciaUseCase guardarAsistencia, ReporteAsistenciaUseCase reporte) {
         this.misClases = misClases;
         this.miHorario = miHorario;
         this.estudiantes = estudiantes;
         this.obtenerAsistencia = obtenerAsistencia;
         this.guardarAsistencia = guardarAsistencia;
+        this.reporte = reporte;
     }
 
     @GetMapping("/mis-clases/{anioId}")
@@ -79,6 +81,13 @@ public class DocenteController {
         try { guardarAsistencia.ejecutar(usuarioId, cargaId, req); return ResponseEntity.ok(new Msg("Asistencia guardada.")); }
         catch (SecurityException e) { return forbidden(e); }
         catch (RuntimeException e) { return ResponseEntity.status(HttpStatus.CONFLICT).body(new Msg(e.getMessage())); }
+    }
+
+    @GetMapping("/clases/{cargaId}/reporte-asistencia")
+    public ResponseEntity<?> reporteAsistencia(@PathVariable UUID cargaId, @AuthenticationPrincipal UUID usuarioId) {
+        try { return ResponseEntity.ok(reporte.ejecutar(usuarioId, cargaId)); }
+        catch (SecurityException e) { return forbidden(e); }
+        catch (RuntimeException e) { return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Msg(e.getMessage())); }
     }
 
     private ResponseEntity<?> forbidden(Exception e) {
