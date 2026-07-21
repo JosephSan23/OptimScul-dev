@@ -7,6 +7,6 @@ import java.util.List;
 
 
 public interface GradoJpaRepository extends JpaRepository<GradoEntity, UUID> {
-     List<GradoEntity> findByInstitucionIdOrderByOrdenAsc(UUID institucionId);
+    List<GradoEntity> findByInstitucionIdOrderByOrdenAsc(UUID institucionId);
     boolean existsByInstitucionIdAndCodigoIgnoreCase(UUID institucionId, String codigo);
 }

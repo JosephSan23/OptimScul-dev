@@ -11,4 +11,6 @@ public interface AsistenciaClaseRepository {
     Optional<AsistenciaClase> findById(UUID id);
     List<AsistenciaClase> findAll();
     void deleteById(UUID id);
+    List<AsistenciaClase> findBySesionClaseId(UUID sesionClaseId);
+    Optional<AsistenciaClase> findBySesionClaseIdAndEstudianteId(UUID sesionClaseId, UUID estudianteId);
 }

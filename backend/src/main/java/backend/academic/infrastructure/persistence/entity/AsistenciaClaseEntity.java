@@ -22,7 +22,8 @@ public class AsistenciaClaseEntity {
     private UUID estudianteId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "tipo_asistencia")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "tipo_asistencia", columnDefinition = "tipo_asistencia_enum")
     private TipoAsistencia tipoAsistencia;
 
     @Column(name = "observacion")

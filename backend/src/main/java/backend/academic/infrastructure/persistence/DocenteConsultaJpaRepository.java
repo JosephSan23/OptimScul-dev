@@ -3,6 +3,7 @@ package backend.academic.infrastructure.persistence;
 import backend.academic.application.port.EstudianteDeClase;
 import backend.academic.application.port.Horario.HorarioResumen;
 import backend.academic.application.port.MiClaseResumen;
+import backend.academic.application.port.Asistencia.ReporteAsistenciaFila;
 import backend.academic.infrastructure.persistence.entity.CargaAcademicaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -75,4 +76,25 @@ public interface DocenteConsultaJpaRepository extends JpaRepository<CargaAcademi
             ORDER BY p.primer_apellido, p.primer_nombre
             """, nativeQuery = true)
     List<EstudianteDeClase> estudiantesDeGrupo(@Param("grupoId") String grupoId);
+
+    @Query(value = """
+            SELECT e.id                AS "estudianteId",
+                   (p.primer_nombre || ' ' || p.primer_apellido) AS "nombre",
+                   e.codigo_estudiante AS "codigoEstudiante",
+                   count(*) FILTER (WHERE ac.tipo_asistencia = 'PRESENTE')    AS "presente",
+                   count(*) FILTER (WHERE ac.tipo_asistencia = 'AUSENTE')     AS "ausente",
+                   count(*) FILTER (WHERE ac.tipo_asistencia = 'TARDE')       AS "tarde",
+                   count(*) FILTER (WHERE ac.tipo_asistencia = 'JUSTIFICADA') AS "justificada",
+                   count(ac.id)        AS "totalRegistros"
+            FROM optimscul.sesion_clase s
+            JOIN optimscul.asistencia_clase ac ON ac.sesion_clase_id = s.id
+            JOIN optimscul.estudiante e        ON e.id = ac.estudiante_id
+            JOIN optimscul.persona p           ON p.id = e.persona_id
+            WHERE s.carga_academica_id = CAST(:cargaId AS uuid)
+              AND s.estado = 'DICTADA'
+            GROUP BY e.id, p.primer_nombre, p.primer_apellido, e.codigo_estudiante
+            ORDER BY count(*) FILTER (WHERE ac.tipo_asistencia = 'AUSENTE') DESC,
+                     p.primer_apellido, p.primer_nombre
+            """, nativeQuery = true)
+    List<ReporteAsistenciaFila> reporteAsistencia(@Param("cargaId") String cargaId);
 }
