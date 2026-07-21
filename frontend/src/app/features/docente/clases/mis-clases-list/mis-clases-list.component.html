@@ -1,0 +1,89 @@
+<div class="page-header">
+  <h1>Mis clases</h1>
+  <p>Las materias que dictas este año</p>
+</div>
+
+<div class="barra-docente">
+  <div class="campo-selector">
+    <label>Año lectivo:</label>
+    <select
+      [(ngModel)]="anioSeleccionado"
+      [ngModelOptions]="{ standalone: true }"
+      (change)="cambioAnio()"
+    >
+      <option *ngFor="let a of anios" [value]="a.id">
+        {{ a.nombre || a.anio }}{{ a.esActual ? " (actual)" : "" }}
+      </option>
+    </select>
+  </div>
+  <div class="tabs-vista">
+    <button [class.activa]="vista === 'clases'" (click)="vista = 'clases'">
+      <i class="ti ti-layout-grid"></i> Clases
+    </button>
+    <button [class.activa]="vista === 'horario'" (click)="vista = 'horario'">
+      <i class="ti ti-calendar-time"></i> Mi horario
+    </button>
+  </div>
+</div>
+
+<div *ngIf="cargando" class="estado-msg">
+  <i class="ti ti-loader-2 girando"></i> Cargando...
+</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+
+<!-- Vista: tarjetas de clases -->
+<div *ngIf="!cargando && vista === 'clases'">
+  <div *ngIf="clases.length === 0 && !error" class="estado-msg">
+    No tienes clases asignadas este año.
+  </div>
+
+  <div class="clases-grid">
+    <div class="clase-card" *ngFor="let c of clases" (click)="abrirClase(c)">
+      <div class="clase-icono"><i class="ti ti-book-2"></i></div>
+      <div class="clase-body">
+        <h3>{{ c.asignaturaNombre }}</h3>
+        <p class="clase-grupo">
+          {{ c.gradoNombre }} — {{ c.grupoNombre }}
+          <span class="clase-codigo">{{ c.grupoCodigo }}</span>
+        </p>
+        <div class="clase-meta">
+          <span
+            ><i class="ti ti-users"></i>
+            {{ c.totalEstudiantes }} estudiantes</span
+          >
+          <span *ngIf="c.intensidadHorariaSemanal"
+            ><i class="ti ti-clock"></i>
+            {{ c.intensidadHorariaSemanal }} h/sem</span
+          >
+        </div>
+      </div>
+      <i class="ti ti-chevron-right clase-flecha"></i>
+    </div>
+  </div>
+</div>
+
+<!-- Vista: horario semanal -->
+<div *ngIf="!cargando && vista === 'horario'">
+  <div *ngIf="horario.length === 0" class="estado-msg">
+    No tienes horario programado este año.
+  </div>
+
+  <div class="horario-semana" *ngIf="horario.length > 0">
+    <div class="dia-columna" *ngFor="let dia of diasConClase">
+      <h3 class="dia-titulo">{{ NOMBRE_DIA[dia] }}</h3>
+      <div class="franja-card" *ngFor="let h of franjasDe(dia)">
+        <div class="franja-horas">
+          <b>{{ h.horaInicio }}</b> – <b>{{ h.horaFin }}</b>
+        </div>
+        <div class="franja-info">
+          <span class="franja-asignatura">{{ h.asignaturaNombre }}</span>
+          <small class="franja-lugar" *ngIf="h.aula || h.sedeNombre">
+            <i class="ti ti-map-pin"></i>
+            {{ h.aula || "" }}{{ h.aula && h.sedeNombre ? " · " : ""
+            }}{{ h.sedeNombre || "" }}
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

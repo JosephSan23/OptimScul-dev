@@ -1,0 +1,46 @@
+<div class="page-header">
+  <h1>Estudiantes de la clase</h1>
+  <p>Lista de matriculados en este grupo</p>
+</div>
+
+<a class="btn-volver" (click)="volver()" style="cursor: pointer"
+  ><i class="ti ti-arrow-left"></i> Volver a mis clases</a
+>
+<a class="btn-save" [routerLink]="['/dashboard/mis-clases', cargaId, 'asistencia']">
+  <i class="ti ti-clipboard-check"></i> Tomar asistencia
+</a>
+
+<div *ngIf="cargando" class="estado-msg">
+  <i class="ti ti-loader-2 girando"></i> Cargando estudiantes...
+</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+
+<div class="tabla-card" *ngIf="!cargando && !error">
+  <div *ngIf="estudiantes.length === 0" class="estado-msg">
+    Este grupo aún no tiene estudiantes matriculados.
+  </div>
+
+  <table class="tabla-crud" *ngIf="estudiantes.length > 0">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Estudiante</th>
+        <th>Código</th>
+        <th>Documento</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let e of estudiantes; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>
+          <div class="celda-usuario">
+            <span class="mini-avatar">{{ e.nombre.charAt(0) }}</span>
+            <b>{{ e.nombre }}</b>
+          </div>
+        </td>
+        <td class="celda-mono">{{ e.codigoEstudiante }}</td>
+        <td class="celda-mono">{{ e.numeroDocumento }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
