@@ -10,6 +10,10 @@
   <i class="ti ti-clipboard-check"></i> Tomar asistencia
 </a>
 
+<a class="btn-secundario" [routerLink]="['/dashboard/mis-clases', cargaId, 'reporte']">
+  <i class="ti ti-report-analytics"></i> Reporte de asistencia
+</a>
+
 <div *ngIf="cargando" class="estado-msg">
   <i class="ti ti-loader-2 girando"></i> Cargando estudiantes...
 </div>

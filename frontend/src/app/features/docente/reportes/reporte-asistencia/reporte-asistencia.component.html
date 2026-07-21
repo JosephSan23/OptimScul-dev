@@ -1,0 +1,82 @@
+<div class="page-header">
+  <h1>Reporte de asistencia</h1>
+  <p>Consolidado por estudiante — ordenado por quién tiene más faltas</p>
+</div>
+
+<a class="btn-volver" (click)="volver()" style="cursor: pointer"
+  ><i class="ti ti-arrow-left"></i> Volver</a
+>
+
+<div class="reporte-barra">
+  <div class="campo-selector">
+    <label>Clase:</label>
+    <select
+      [(ngModel)]="cargaSeleccionada"
+      [ngModelOptions]="{ standalone: true }"
+      (change)="cambioClase()"
+    >
+      <option *ngFor="let c of clases" [value]="c.cargaId">
+        {{ c.asignaturaNombre }} — {{ c.gradoNombre }} {{ c.grupoNombre }}
+      </option>
+    </select>
+  </div>
+  <span class="total-sesiones" *ngIf="!cargando && filas.length">
+    <i class="ti ti-calendar"></i> {{ totalSesiones }} sesiones dictadas
+  </span>
+</div>
+
+<div *ngIf="cargando" class="estado-msg">
+  <i class="ti ti-loader-2 girando"></i> Cargando reporte...
+</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+
+<div *ngIf="!cargando && !error">
+  <div *ngIf="filas.length === 0" class="estado-msg">
+    Esta clase aún no tiene sesiones con asistencia registrada.
+  </div>
+
+  <div class="tabla-card" *ngIf="filas.length > 0">
+    <table class="tabla-crud tabla-reporte">
+      <thead>
+        <tr>
+          <th>Estudiante</th>
+          <th class="col-num">Presente</th>
+          <th class="col-num">Ausente</th>
+          <th class="col-num">Tarde</th>
+          <th class="col-num">Justif.</th>
+          <th class="col-pct">% Asistencia</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let f of filas">
+          <td>
+            <div class="celda-usuario">
+              <span class="mini-avatar">{{ f.nombre.charAt(0) }}</span>
+              <div>
+                <b>{{ f.nombre }}</b
+                ><small>{{ f.codigoEstudiante }}</small>
+              </div>
+            </div>
+          </td>
+          <td class="col-num">{{ f.presente }}</td>
+          <td class="col-num num-ausente" [class.resaltar]="f.ausente > 0">
+            {{ f.ausente }}
+          </td>
+          <td class="col-num">{{ f.tarde }}</td>
+          <td class="col-num">{{ f.justificada }}</td>
+          <td class="col-pct">
+            <div class="pct-wrap">
+              <div class="pct-barra">
+                <span
+                  [ngClass]="'riesgo-' + claseRiesgo(f)"
+                  [style.width.%]="porcentaje(f)"
+                ></span>
+              </div>
+              <b [ngClass]="'texto-' + claseRiesgo(f)">{{ porcentaje(f) }}%</b>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
