@@ -56,6 +56,7 @@ import { MatriculaFormComponent } from './features/cooracademico/matriculas/matr
 import { MisClasesListComponent } from './features/docente/clases/mis-clases-list/mis-clases-list.component';
 import { ClaseDetalleComponent } from './features/docente/clases/clase-detalle/clase-detalle.component';
 import { AsistenciaComponent } from './features/docente/clases/asistencia/asistencia.component';
+import { ReporteAsistenciaComponent } from './features/docente/reportes/reporte-asistencia/reporte-asistencia.component';
 
 
 @NgModule({
@@ -110,6 +111,7 @@ import { AsistenciaComponent } from './features/docente/clases/asistencia/asiste
     MisClasesListComponent,
     ClaseDetalleComponent,
     AsistenciaComponent,
+    ReporteAsistenciaComponent,
   ],
   imports: [
     BrowserModule,

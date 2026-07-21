@@ -45,6 +45,7 @@ import { MatriculaFormComponent } from './features/cooracademico/matriculas/matr
 import { MisClasesListComponent } from './features/docente/clases/mis-clases-list/mis-clases-list.component';
 import { ClaseDetalleComponent } from './features/docente/clases/clase-detalle/clase-detalle.component';
 import { AsistenciaComponent } from './features/docente/clases/asistencia/asistencia.component';
+import { ReporteAsistenciaComponent } from './features/docente/reportes/reporte-asistencia/reporte-asistencia.component';
 
 
 
@@ -117,6 +118,7 @@ const routes: Routes = [
     { path: 'mis-clases',          component: MisClasesListComponent,   canActivate: [roleGuard], data: { roles: ['DOCENTE'] } },
     { path: 'mis-clases/:cargaId', component: ClaseDetalleComponent, canActivate: [roleGuard], data: { roles: ['DOCENTE'] } },
     { path: 'mis-clases/:cargaId/asistencia', component: AsistenciaComponent, canActivate: [roleGuard], data: { roles: ['DOCENTE'] } },
+    { path: 'mis-clases/:cargaId/reporte', component: ReporteAsistenciaComponent, canActivate: [roleGuard], data: { roles: ['DOCENTE'] } },
 
     { path: 'estudiante',     component: DashboardComponent,          canActivate: [roleGuard], data: { roles: ['ESTUDIANTE'] } },
     { path: 'acudiente',      component: DashboardComponent,          canActivate: [roleGuard], data: { roles: ['ACUDIENTE'] } },
