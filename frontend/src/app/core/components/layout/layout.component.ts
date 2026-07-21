@@ -87,7 +87,7 @@ export class LayoutComponent {
     { label: 'Carga académica',   icon: 'ti ti-chalkboard',         ruta: '/dashboard/cargas',          roles: ['COORDINADOR_ACADEMICO'] },
     { label: 'Horarios', icon: 'ti ti-calendar-time', ruta: '/dashboard/horarios', roles: ['COORDINADOR_ACADEMICO'] },
     { label: 'Matrículas', icon: 'ti ti-clipboard-check', ruta: '/dashboard/matriculas', roles: ['COORDINADOR_ACADEMICO'] },
-
+    { label: 'Mis clases', icon: 'ti ti-chalkboard', ruta: '/dashboard/mis-clases', roles: ['DOCENTE'] },
   ];
 
   private puedeVer(item: any): boolean {

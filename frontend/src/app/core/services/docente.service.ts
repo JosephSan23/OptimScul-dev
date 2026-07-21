@@ -33,6 +33,22 @@ export interface EstudianteDeClase {
   numeroDocumento: string;
 }
 
+export interface AsistenciaMarca {
+  estudianteId: string;
+  codigoEstudiante: string;
+  nombre: string;
+  numeroDocumento: string;
+  tipo: string;
+  minutosTarde?: number | null;
+  observacion?: string | null;
+}
+export interface AsistenciaVista {
+  sesionId?: string;
+  fecha: string;
+  tema?: string;
+  estudiantes: AsistenciaMarca[];
+}
+
 @Injectable({ providedIn: 'root' })
 export class DocenteService {
   private readonly API = `${environment.apiUrl}/docente`;
@@ -46,5 +62,12 @@ export class DocenteService {
   }
   estudiantesDeClase(cargaId: string): Observable<EstudianteDeClase[]> {
     return this.http.get<EstudianteDeClase[]>(`${this.API}/clases/${cargaId}/estudiantes`);
+  }
+
+  obtenerAsistencia(cargaId: string, fecha: string): Observable<AsistenciaVista> {
+    return this.http.get<AsistenciaVista>(`${this.API}/clases/${cargaId}/asistencia?fecha=${fecha}`);
+  }
+  guardarAsistencia(cargaId: string, body: any): Observable<{ mensaje: string }> {
+    return this.http.post<{ mensaje: string }>(`${this.API}/clases/${cargaId}/asistencia`, body);
   }
 }
