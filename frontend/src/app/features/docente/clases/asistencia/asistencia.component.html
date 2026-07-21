@@ -1,0 +1,111 @@
+<div class="page-header">
+  <h1>Tomar asistencia</h1>
+  <p>Marca a cada estudiante — todos arrancan en Presente</p>
+</div>
+
+<a class="btn-volver" (click)="volver()" style="cursor: pointer"
+  ><i class="ti ti-arrow-left"></i> Volver a la clase</a
+>
+
+<div class="asistencia-barra">
+  <div class="campo-selector">
+    <label>Fecha:</label>
+    <input
+      type="date"
+      [(ngModel)]="fecha"
+      [ngModelOptions]="{ standalone: true }"
+      (change)="cambioFecha()"
+    />
+  </div>
+  <div class="campo-selector tema">
+    <label>Tema (opcional):</label>
+    <input
+      placeholder="Tema de la clase"
+      [(ngModel)]="tema"
+      [ngModelOptions]="{ standalone: true }"
+    />
+  </div>
+  <button class="btn-secundario" (click)="todosPresente()">
+    <i class="ti ti-checks"></i> Todos presente
+  </button>
+</div>
+
+<div *ngIf="cargando" class="estado-msg">
+  <i class="ti ti-loader-2 girando"></i> Cargando...
+</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+
+<div *ngIf="!cargando && !error">
+  <!-- contador vivo -->
+  <div class="conteo-barra">
+    <span class="chip est-presente">{{ conteo("PRESENTE") }} presentes</span>
+    <span class="chip est-ausente">{{ conteo("AUSENTE") }} ausentes</span>
+    <span class="chip est-tarde">{{ conteo("TARDE") }} tarde</span>
+    <span class="chip est-justificada"
+      >{{ conteo("JUSTIFICADA") }} justificados</span
+    >
+  </div>
+
+  <div *ngIf="marcas.length === 0" class="estado-msg">
+    Este grupo no tiene estudiantes matriculados.
+  </div>
+
+  <div class="tabla-card" *ngIf="marcas.length > 0">
+    <table class="tabla-crud tabla-asistencia">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Estudiante</th>
+          <th class="col-marcado">Asistencia</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let m of marcas; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>
+            <div class="celda-usuario">
+              <span class="mini-avatar">{{ m.nombre.charAt(0) }}</span>
+              <div>
+                <b>{{ m.nombre }}</b
+                ><small>{{ m.codigoEstudiante }}</small>
+              </div>
+            </div>
+          </td>
+          <td class="col-marcado">
+            <div class="segmentado">
+              <button
+                *ngFor="let e of ESTADOS"
+                class="seg-btn"
+                [ngClass]="e.clase"
+                [class.activo]="m.tipo === e.valor"
+                [title]="e.titulo"
+                (click)="marcar(m, e.valor)"
+              >
+                {{ e.label }}
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="form-error" *ngIf="error">
+    <i class="ti ti-alert-circle"></i> {{ error }}
+  </div>
+  <div class="estado-msg exito" *ngIf="exito">
+    <i class="ti ti-check"></i> {{ exito }}
+  </div>
+
+  <div class="form-actions" *ngIf="marcas.length > 0">
+    <button
+      type="button"
+      class="btn-save"
+      [disabled]="guardando"
+      (click)="guardar()"
+    >
+      <i class="ti ti-device-floppy"></i>
+      {{ guardando ? "Guardando..." : "Guardar asistencia" }}
+    </button>
+  </div>
+</div>
