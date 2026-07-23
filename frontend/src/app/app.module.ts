@@ -57,6 +57,10 @@ import { MisClasesListComponent } from './features/docente/clases/mis-clases-lis
 import { ClaseDetalleComponent } from './features/docente/clases/clase-detalle/clase-detalle.component';
 import { AsistenciaComponent } from './features/docente/clases/asistencia/asistencia.component';
 import { ReporteAsistenciaComponent } from './features/docente/reportes/reporte-asistencia/reporte-asistencia.component';
+import { ConfigAcademicaComponent } from './features/adminInstitucion/config-academica/config-academica/config-academica.component';
+import { EscalasListaComponent } from './features/adminInstitucion/config-academica/escalas-lista/escalas-lista.component';
+import { EscalaFormComponent } from './features/adminInstitucion/config-academica/escala-form/escala-form.component';
+import { MatrizAsistenciaComponent } from './features/cooracademico/asistencia/matriz-asistencia/matriz-asistencia.component';
 
 
 @NgModule({
@@ -112,6 +116,10 @@ import { ReporteAsistenciaComponent } from './features/docente/reportes/reporte-
     ClaseDetalleComponent,
     AsistenciaComponent,
     ReporteAsistenciaComponent,
+    ConfigAcademicaComponent,
+    EscalasListaComponent,
+    EscalaFormComponent,
+    MatrizAsistenciaComponent,
   ],
   imports: [
     BrowserModule,

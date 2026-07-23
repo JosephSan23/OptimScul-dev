@@ -46,8 +46,10 @@ import { MisClasesListComponent } from './features/docente/clases/mis-clases-lis
 import { ClaseDetalleComponent } from './features/docente/clases/clase-detalle/clase-detalle.component';
 import { AsistenciaComponent } from './features/docente/clases/asistencia/asistencia.component';
 import { ReporteAsistenciaComponent } from './features/docente/reportes/reporte-asistencia/reporte-asistencia.component';
-
-
+import { ConfigAcademicaComponent } from './features/adminInstitucion/config-academica/config-academica/config-academica.component';
+import { EscalasListaComponent } from './features/adminInstitucion/config-academica/escalas-lista/escalas-lista.component';
+import { EscalaFormComponent } from './features/adminInstitucion/config-academica/escala-form/escala-form.component';
+import { MatrizAsistenciaComponent } from './features/cooracademico/asistencia/matriz-asistencia/matriz-asistencia.component';
 
 
 const routes: Routes = [
@@ -80,6 +82,10 @@ const routes: Routes = [
     { path: 'anios-lectivos/:anioId/periodos',       component: PeriodosListaComponent, canActivate: [roleGuard], data: { roles: ['ADMIN_INSTITUCION'] } },
     { path: 'anios-lectivos/:anioId/periodos/nuevo', component: PeriodoFormComponent,   canActivate: [roleGuard], data: { roles: ['ADMIN_INSTITUCION'] } },
     { path: 'periodos/:id',                          component: PeriodoFormComponent,   canActivate: [roleGuard], data: { roles: ['ADMIN_INSTITUCION'] } },
+    { path: 'config-academica', component: ConfigAcademicaComponent, canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO', 'ADMIN_INSTITUCION'] } },
+    { path: 'escalas',       component: EscalasListaComponent, canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO', 'ADMIN_INSTITUCION'] } },
+    { path: 'escalas/nuevo', component: EscalaFormComponent,   canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO', 'ADMIN_INSTITUCION'] } },
+    { path: 'escalas/:id',   component: EscalaFormComponent,   canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO', 'ADMIN_INSTITUCION'] } },
 
     { path: 'estudiantes',       component: EstudiantesListaComponent, canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO'] } },
     { path: 'estudiantes/nuevo', component: EstudianteFormComponent,   canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO'] } },
@@ -107,6 +113,9 @@ const routes: Routes = [
     { path: 'horarios/:id',   component: HorarioFormComponent,   canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO', 'ADMIN_INSTITUCION'] } },
     { path: 'matriculas',       component: MatriculasListaComponent, canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO'] } },
     { path: 'matriculas/nueva', component: MatriculaFormComponent,   canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO'] } },
+    { path: 'reportes/matriz', component: MatrizAsistenciaComponent, canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO'] } },
+
+
 
     { path: 'instituciones',  component: InstitucionesListaComponent, canActivate: [roleGuard], data: { soloSuperAdmin: true } },
     { path: 'solicitudes',    component: SolicitudesListaComponent,   canActivate: [roleGuard], data: { soloSuperAdmin: true } },
@@ -119,6 +128,7 @@ const routes: Routes = [
     { path: 'mis-clases/:cargaId', component: ClaseDetalleComponent, canActivate: [roleGuard], data: { roles: ['DOCENTE'] } },
     { path: 'mis-clases/:cargaId/asistencia', component: AsistenciaComponent, canActivate: [roleGuard], data: { roles: ['DOCENTE'] } },
     { path: 'mis-clases/:cargaId/reporte', component: ReporteAsistenciaComponent, canActivate: [roleGuard], data: { roles: ['DOCENTE'] } },
+
 
     { path: 'estudiante',     component: DashboardComponent,          canActivate: [roleGuard], data: { roles: ['ESTUDIANTE'] } },
     { path: 'acudiente',      component: DashboardComponent,          canActivate: [roleGuard], data: { roles: ['ACUDIENTE'] } },
