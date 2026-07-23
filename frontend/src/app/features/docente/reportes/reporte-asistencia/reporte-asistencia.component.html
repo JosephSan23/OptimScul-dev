@@ -19,6 +19,9 @@
         {{ c.asignaturaNombre }} — {{ c.gradoNombre }} {{ c.grupoNombre }}
       </option>
     </select>
+    <button class="btn-save" *ngIf="cargaSeleccionada" (click)="descargarMatriz()">
+      <i class="ti ti-file-spreadsheet"></i> Descargar Excel (por fecha)
+    </button>
   </div>
   <span class="total-sesiones" *ngIf="!cargando && filas.length">
     <i class="ti ti-calendar"></i> {{ totalSesiones }} sesiones dictadas

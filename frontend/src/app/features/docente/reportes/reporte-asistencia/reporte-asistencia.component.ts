@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DocenteService, ReporteAsistenciaFila, MiClase } from '../../../../core/services/docente.service';
+import { descargarMatrizExcel } from '../../../../core/utils/matriz-excel.util';
 import { AnioLectivoService } from '../../../../core/services/anio-lectivo.service';
+
+
 
 @Component({
   selector: 'app-reporte-asistencia',
@@ -77,4 +80,18 @@ export class ReporteAsistenciaComponent implements OnInit {
     if (this.cargaSeleccionada) this.router.navigate(['/dashboard/mis-clases', this.cargaSeleccionada]);
     else this.router.navigate(['/dashboard/mis-clases']);
   }
+
+  descargarMatriz(): void {
+    if (!this.cargaSeleccionada) return;
+    this.docenteService.matrizClase(this.cargaSeleccionada).subscribe({
+      next: (m) => {
+        const c = this.clases.find(x => x.cargaId === this.cargaSeleccionada);
+        const nombre = c ? `asistencia_${c.asignaturaNombre}_${c.grupoNombre}.xlsx` : 'asistencia.xlsx';
+        descargarMatrizExcel(m, nombre.replace(/\s+/g, '_'));
+      },
+      error: () => { this.error = 'No se pudo generar el Excel.'; }
+    });
+  }
+
+
 }
