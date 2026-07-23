@@ -1,6 +1,10 @@
 package backend.academic.infrastructure.persistence.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import java.math.BigDecimal;
@@ -9,6 +13,9 @@ import java.util.UUID;
 import backend.academic.domain.model.EstadoActividad;
 import backend.academic.domain.model.TipoActividad;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "actividad_academica", schema = "optimscul")
 public class ActividadAcademicaEntity {
@@ -30,7 +37,7 @@ public class ActividadAcademicaEntity {
     private UUID sesionClaseId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "tipo")
+    @Column(name = "tipo", columnDefinition = "tipo_actividad_enum")
     private TipoActividad tipo;
 
     @Column(name = "titulo")
@@ -58,7 +65,8 @@ public class ActividadAcademicaEntity {
     private Boolean permiteEntregaTardia;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "estado")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "estado", columnDefinition = "estado_actividad_enum")
     private EstadoActividad estado;
 
     @Column(name = "creada_por_usuario_id")
@@ -73,44 +81,4 @@ public class ActividadAcademicaEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public ActividadAcademicaEntity() {}
-
-    public UUID getId() { return id; }
-    public void setId(UUID id) { this.id = id; }
-    public UUID getInstitucionId() { return institucionId; }
-    public void setInstitucionId(UUID institucionId) { this.institucionId = institucionId; }
-    public UUID getCargaAcademicaId() { return cargaAcademicaId; }
-    public void setCargaAcademicaId(UUID cargaAcademicaId) { this.cargaAcademicaId = cargaAcademicaId; }
-    public UUID getPeriodoAcademicoId() { return periodoAcademicoId; }
-    public void setPeriodoAcademicoId(UUID periodoAcademicoId) { this.periodoAcademicoId = periodoAcademicoId; }
-    public UUID getSesionClaseId() { return sesionClaseId; }
-    public void setSesionClaseId(UUID sesionClaseId) { this.sesionClaseId = sesionClaseId; }
-    public TipoActividad getTipo() { return tipo; }
-    public void setTipo(TipoActividad tipo) { this.tipo = tipo; }
-    public String getTitulo() { return titulo; }
-    public void setTitulo(String titulo) { this.titulo = titulo; }
-    public String getDescripcion() { return descripcion; }
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
-    public LocalDateTime getFechaPublicacion() { return fechaPublicacion; }
-    public void setFechaPublicacion(LocalDateTime fechaPublicacion) { this.fechaPublicacion = fechaPublicacion; }
-    public LocalDateTime getFechaEntrega() { return fechaEntrega; }
-    public void setFechaEntrega(LocalDateTime fechaEntrega) { this.fechaEntrega = fechaEntrega; }
-    public LocalDateTime getFechaCierre() { return fechaCierre; }
-    public void setFechaCierre(LocalDateTime fechaCierre) { this.fechaCierre = fechaCierre; }
-    public BigDecimal getPorcentaje() { return porcentaje; }
-    public void setPorcentaje(BigDecimal porcentaje) { this.porcentaje = porcentaje; }
-    public BigDecimal getNotaMaxima() { return notaMaxima; }
-    public void setNotaMaxima(BigDecimal notaMaxima) { this.notaMaxima = notaMaxima; }
-    public Boolean getPermiteEntregaTardia() { return permiteEntregaTardia; }
-    public void setPermiteEntregaTardia(Boolean permiteEntregaTardia) { this.permiteEntregaTardia = permiteEntregaTardia; }
-    public EstadoActividad getEstado() { return estado; }
-    public void setEstado(EstadoActividad estado) { this.estado = estado; }
-    public UUID getCreadaPorUsuarioId() { return creadaPorUsuarioId; }
-    public void setCreadaPorUsuarioId(UUID creadaPorUsuarioId) { this.creadaPorUsuarioId = creadaPorUsuarioId; }
-    public UUID getUpdatedBy() { return updatedBy; }
-    public void setUpdatedBy(UUID updatedBy) { this.updatedBy = updatedBy; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 }
