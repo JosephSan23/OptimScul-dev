@@ -1,0 +1,62 @@
+<div class="page-header">
+  <h1>Asistencia por clase</h1>
+  <p>Matriz de asistencia por fecha — descargable a Excel</p>
+</div>
+
+<div class="matriz-barra">
+  <div class="campo-selector">
+    <label>Año lectivo:</label>
+    <select [(ngModel)]="anioSeleccionado" [ngModelOptions]="{standalone:true}" (change)="cambioAnio()">
+      <option *ngFor="let a of anios" [value]="a.id">{{ a.nombre || a.anio }}{{ a.esActual ? ' (actual)' : '' }}</option>
+    </select>
+  </div>
+  <div class="campo-selector">
+    <label>Clase:</label>
+    <select [(ngModel)]="cargaSeleccionada" [ngModelOptions]="{standalone:true}" (change)="cambioClase()">
+      <option value="" disabled>Selecciona una clase</option>
+      <option *ngFor="let c of clases" [value]="c.id">
+        {{ c.asignaturaNombre }} — {{ c.gradoNombre }} {{ c.grupoNombre }} ({{ c.profesorNombre }})
+      </option>
+    </select>
+  </div>
+  <button class="btn-save" *ngIf="matriz && matriz.sesiones.length > 0" (click)="descargar()">
+    <i class="ti ti-file-spreadsheet"></i> Descargar Excel
+  </button>
+</div>
+
+<div *ngIf="cargando" class="estado-msg"><i class="ti ti-loader-2 girando"></i> Cargando matriz...</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+
+<div *ngIf="!cargando && !error && matriz">
+  <div *ngIf="matriz.sesiones.length === 0" class="estado-msg">
+    Esta clase aún no tiene sesiones con asistencia registrada.
+  </div>
+
+  <div class="tabla-scroll" *ngIf="matriz.sesiones.length > 0">
+    <table class="tabla-matriz">
+      <thead>
+        <tr>
+          <th class="col-fija">Estudiante</th>
+          <th *ngFor="let s of matriz.sesiones" class="col-fecha">{{ s.fecha }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let e of matriz.estudiantes">
+          <td class="col-fija">
+            <b>{{ e.nombre }}</b><small>{{ e.codigoEstudiante }}</small>
+          </td>
+          <td *ngFor="let mk of e.marcas" class="celda-marca" [ngClass]="claseCelda(mk)" [title]="mk">
+            {{ sigla(mk) }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="leyenda" *ngIf="matriz.sesiones.length > 0">
+    <span class="m-presente">P</span> Presente
+    <span class="m-ausente">A</span> Ausente
+    <span class="m-tarde">T</span> Tarde
+    <span class="m-justificada">J</span> Justificada
+  </div>
+</div>
