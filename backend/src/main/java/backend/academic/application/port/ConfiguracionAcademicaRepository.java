@@ -11,4 +11,5 @@ public interface ConfiguracionAcademicaRepository {
     Optional<ConfiguracionAcademica> findById(UUID id);
     List<ConfiguracionAcademica> findAll();
     void deleteById(UUID id);
+    Optional<ConfiguracionAcademica> findByInstitucionId(UUID institucionId);
 }

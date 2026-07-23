@@ -1,58 +1,36 @@
 package backend.academic.infrastructure.rest.dto;
 
+import backend.academic.domain.model.ConfiguracionAcademica;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+@Data
+@NoArgsConstructor
 public class ConfiguracionAcademicaResponseDto {
-
-    private UUID institucionId;
-
+    private UUID id;
     private Boolean usaPeriodos;
-
-    private Integer numeroPeriodos;
-
-    private BigDecimal notaMinimaAprobacion;
-
-    private BigDecimal notaMinima;
-
-    private BigDecimal notaMaxima;
-
-    private Integer decimalesNota;
-
-    private Boolean usaRecuperacion;
-
-    private Boolean asistenciaPorClase;
-
-    private Boolean manejaComportamiento;
-
-    private Boolean manejaPuestos;
-
+    private Short numeroPeriodos;
+    private BigDecimal notaMinimaAprobacion, notaMinima, notaMaxima;
+    private Short decimalesNota;
+    private Boolean usaRecuperacion, asistenciaPorClase, manejaComportamiento, manejaPuestos;
     private BigDecimal porcentajeInasistenciaReprobacion;
 
-    public ConfiguracionAcademicaResponseDto() {}
-
-    public UUID getInstitucionId() { return institucionId; }
-    public void setInstitucionId(UUID institucionId) { this.institucionId = institucionId; }
-    public Boolean getUsaPeriodos() { return usaPeriodos; }
-    public void setUsaPeriodos(Boolean usaPeriodos) { this.usaPeriodos = usaPeriodos; }
-    public Integer getNumeroPeriodos() { return numeroPeriodos; }
-    public void setNumeroPeriodos(Integer numeroPeriodos) { this.numeroPeriodos = numeroPeriodos; }
-    public BigDecimal getNotaMinimaAprobacion() { return notaMinimaAprobacion; }
-    public void setNotaMinimaAprobacion(BigDecimal notaMinimaAprobacion) { this.notaMinimaAprobacion = notaMinimaAprobacion; }
-    public BigDecimal getNotaMinima() { return notaMinima; }
-    public void setNotaMinima(BigDecimal notaMinima) { this.notaMinima = notaMinima; }
-    public BigDecimal getNotaMaxima() { return notaMaxima; }
-    public void setNotaMaxima(BigDecimal notaMaxima) { this.notaMaxima = notaMaxima; }
-    public Integer getDecimalesNota() { return decimalesNota; }
-    public void setDecimalesNota(Integer decimalesNota) { this.decimalesNota = decimalesNota; }
-    public Boolean getUsaRecuperacion() { return usaRecuperacion; }
-    public void setUsaRecuperacion(Boolean usaRecuperacion) { this.usaRecuperacion = usaRecuperacion; }
-    public Boolean getAsistenciaPorClase() { return asistenciaPorClase; }
-    public void setAsistenciaPorClase(Boolean asistenciaPorClase) { this.asistenciaPorClase = asistenciaPorClase; }
-    public Boolean getManejaComportamiento() { return manejaComportamiento; }
-    public void setManejaComportamiento(Boolean manejaComportamiento) { this.manejaComportamiento = manejaComportamiento; }
-    public Boolean getManejaPuestos() { return manejaPuestos; }
-    public void setManejaPuestos(Boolean manejaPuestos) { this.manejaPuestos = manejaPuestos; }
-    public BigDecimal getPorcentajeInasistenciaReprobacion() { return porcentajeInasistenciaReprobacion; }
-    public void setPorcentajeInasistenciaReprobacion(BigDecimal porcentajeInasistenciaReprobacion) { this.porcentajeInasistenciaReprobacion = porcentajeInasistenciaReprobacion; }
+    public static ConfiguracionAcademicaResponseDto desde(ConfiguracionAcademica c) {
+        ConfiguracionAcademicaResponseDto d = new ConfiguracionAcademicaResponseDto();
+        d.setId(c.getId());
+        d.setUsaPeriodos(c.getUsaPeriodos());
+        d.setNumeroPeriodos(c.getNumeroPeriodos());
+        d.setNotaMinimaAprobacion(c.getNotaMinimaAprobacion());
+        d.setNotaMinima(c.getNotaMinima());
+        d.setNotaMaxima(c.getNotaMaxima());
+        d.setDecimalesNota(c.getDecimalesNota());
+        d.setUsaRecuperacion(c.getUsaRecuperacion());
+        d.setAsistenciaPorClase(c.getAsistenciaPorClase());
+        d.setManejaComportamiento(c.getManejaComportamiento());
+        d.setManejaPuestos(c.getManejaPuestos());
+        d.setPorcentajeInasistenciaReprobacion(c.getPorcentajeInasistenciaReprobacion());
+        return d;
+    }
 }

@@ -11,4 +11,5 @@ public interface EscalaValorativaRepository {
     Optional<EscalaValorativa> findById(UUID id);
     List<EscalaValorativa> findAll();
     void deleteById(UUID id);
+    List<EscalaValorativa> findByInstitucionId(UUID institucionId);
 }

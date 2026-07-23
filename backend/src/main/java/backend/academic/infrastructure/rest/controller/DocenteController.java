@@ -19,15 +19,17 @@ public class DocenteController {
     private final ObtenerAsistenciaUseCase obtenerAsistencia;
     private final GuardarAsistenciaUseCase guardarAsistencia;
     private final ReporteAsistenciaUseCase reporte;
+    private final MatrizAsistenciaDocenteUseCase matrizDocente;
 
     public DocenteController(MisClasesUseCase misClases, MiHorarioUseCase miHorario,
-            EstudiantesDeMiClaseUseCase estudiantes, ObtenerAsistenciaUseCase obtenerAsistencia, GuardarAsistenciaUseCase guardarAsistencia, ReporteAsistenciaUseCase reporte) {
+            EstudiantesDeMiClaseUseCase estudiantes, ObtenerAsistenciaUseCase obtenerAsistencia, GuardarAsistenciaUseCase guardarAsistencia, ReporteAsistenciaUseCase reporte, MatrizAsistenciaDocenteUseCase matrizDocente) {
         this.misClases = misClases;
         this.miHorario = miHorario;
         this.estudiantes = estudiantes;
         this.obtenerAsistencia = obtenerAsistencia;
         this.guardarAsistencia = guardarAsistencia;
         this.reporte = reporte;
+        this.matrizDocente = matrizDocente;
     }
 
     @GetMapping("/mis-clases/{anioId}")
@@ -86,6 +88,13 @@ public class DocenteController {
     @GetMapping("/clases/{cargaId}/reporte-asistencia")
     public ResponseEntity<?> reporteAsistencia(@PathVariable UUID cargaId, @AuthenticationPrincipal UUID usuarioId) {
         try { return ResponseEntity.ok(reporte.ejecutar(usuarioId, cargaId)); }
+        catch (SecurityException e) { return forbidden(e); }
+        catch (RuntimeException e) { return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Msg(e.getMessage())); }
+    }
+
+    @GetMapping("/clases/{cargaId}/matriz-asistencia")
+    public ResponseEntity<?> matriz(@PathVariable UUID cargaId, @AuthenticationPrincipal UUID usuarioId) {
+        try { return ResponseEntity.ok(matrizDocente.ejecutar(usuarioId, cargaId)); }
         catch (SecurityException e) { return forbidden(e); }
         catch (RuntimeException e) { return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Msg(e.getMessage())); }
     }
