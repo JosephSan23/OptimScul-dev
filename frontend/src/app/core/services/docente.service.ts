@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { MatrizAsistencia } from './reporte.service'
 import { environment } from '../../../environments/environment.development';
 
 export interface MiClase {
@@ -84,5 +85,9 @@ export class DocenteService {
 
   reporteAsistencia(cargaId: string): Observable<ReporteAsistenciaFila[]> {
     return this.http.get<ReporteAsistenciaFila[]>(`${this.API}/clases/${cargaId}/reporte-asistencia`);
+  }
+
+  matrizClase(cargaId: string): Observable<MatrizAsistencia> {
+    return this.http.get<MatrizAsistencia>(`${this.API}/clases/${cargaId}/matriz-asistencia`);
   }
 }

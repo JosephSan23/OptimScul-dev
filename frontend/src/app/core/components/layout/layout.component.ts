@@ -80,6 +80,8 @@ export class LayoutComponent {
     { label: 'Jornadas',          icon: 'ti ti-clock-hour-4',        ruta: '/dashboard/jornadas',        roles: ['ADMIN_INSTITUCION'] },
     { label: 'Año lectivo',       icon: 'ti ti-calendar-event',      ruta: '/dashboard/anios-lectivos',  roles: ['ADMIN_INSTITUCION'] },
     { label: 'Datos del colegio', icon: 'ti ti-school',              ruta: '/dashboard/institucion',     roles: ['ADMIN_INSTITUCION'] },
+    { label: 'Config. académica', icon: 'ti ti-adjustments', ruta: '/dashboard/config-academica', roles: ['ADMIN_INSTITUCION'] },
+    { label: 'Escala valorativa', icon: 'ti ti-award',       ruta: '/dashboard/escalas',          roles: ['ADMIN_INSTITUCION'] },
     { label: 'Estudiantes',       icon: 'ti ti-users',               ruta: '/dashboard/estudiantes',     roles: ['COORDINADOR_ACADEMICO'] },
     { label: 'Grados y grupos',   icon: 'ti ti-stairs',              ruta: '/dashboard/grados',         roles: ['COORDINADOR_ACADEMICO'] },
     { label: 'Áreas',             icon: 'ti ti-category',            ruta: '/dashboard/areas',         roles: ['COORDINADOR_ACADEMICO'] },
@@ -88,6 +90,7 @@ export class LayoutComponent {
     { label: 'Horarios', icon: 'ti ti-calendar-time', ruta: '/dashboard/horarios', roles: ['COORDINADOR_ACADEMICO'] },
     { label: 'Matrículas', icon: 'ti ti-clipboard-check', ruta: '/dashboard/matriculas', roles: ['COORDINADOR_ACADEMICO'] },
     { label: 'Mis clases', icon: 'ti ti-chalkboard', ruta: '/dashboard/mis-clases', roles: ['DOCENTE'] },
+    { label: 'Asistencia por clase', icon: 'ti ti-table', ruta: '/dashboard/reportes/matriz', roles: ['COORDINADOR_ACADEMICO'] },
   ];
 
   private puedeVer(item: any): boolean {
