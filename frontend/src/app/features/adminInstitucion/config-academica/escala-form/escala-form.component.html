@@ -1,0 +1,99 @@
+<div class="page-header">
+  <h1>{{ modoEdicion ? "Editar banda" : "Nueva banda" }}</h1>
+  <p>Rango de notas de la escala valorativa</p>
+</div>
+
+<div *ngIf="cargando" class="estado-msg">
+  <i class="ti ti-loader-2 girando"></i> Cargando...
+</div>
+
+<div class="escala-form" *ngIf="!cargando">
+  <div class="escala-form-card">
+    <div class="form-grid">
+      <div class="campo">
+        <label>Nombre <span class="req">*</span></label>
+        <input
+          placeholder="Superior, Alto, Básico, Bajo..."
+          [(ngModel)]="form.nombre"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="campo">
+        <label>Abreviatura</label>
+        <input
+          placeholder="Ej: S, A, Bs, Bj"
+          [(ngModel)]="form.abreviatura"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="campo">
+        <label>Nota mínima <span class="req">*</span></label>
+        <input
+          type="number"
+          step="0.01"
+          [(ngModel)]="form.notaMinima"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="campo">
+        <label>Nota máxima <span class="req">*</span></label>
+        <input
+          type="number"
+          step="0.01"
+          [(ngModel)]="form.notaMaxima"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="campo">
+        <label>Orden <span class="req">*</span></label>
+        <input
+          type="number"
+          min="1"
+          placeholder="1 = más alta"
+          [(ngModel)]="form.orden"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="campo campo-check">
+        <label
+          ><input
+            type="checkbox"
+            [(ngModel)]="form.aprueba"
+            [ngModelOptions]="{ standalone: true }"
+          />
+          Esta banda aprueba</label
+        >
+      </div>
+    </div>
+    <div class="campo campo-full">
+        <small class="ayuda-rango">
+          Rango permitido: {{ rangoMin }} a {{ rangoMax }}. El límite superior es exclusivo
+          (una banda 3–4 cubre de 3.0 a 3.99); haz que cada banda empiece donde termina la anterior.
+        </small>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" (click)="cancelar()">
+        Cancelar
+      </button>
+      <button
+        type="button"
+        class="btn-save"
+        [disabled]="guardando"
+        (click)="guardar()"
+      >
+        <i
+          class="ti"
+          [ngClass]="modoEdicion ? 'ti-device-floppy' : 'ti-plus'"
+        ></i>
+        {{
+          guardando
+            ? "Guardando..."
+            : modoEdicion
+              ? "Guardar cambios"
+              : "Crear banda"
+        }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,99 @@
+<div class="page-header">
+  <h1>Escala valorativa</h1>
+  <p>
+    Bandas de desempeño (Superior, Alto, Básico, Bajo...) con su rango de notas
+  </p>
+</div>
+
+<div *ngIf="cargando" class="estado-msg">
+  <i class="ti ti-loader-2 girando"></i> Cargando escalas...
+</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+<div *ngIf="!cargando && problemas.length > 0" class="banner-cobertura advertencia">
+  <i class="ti ti-alert-triangle"></i>
+  <div>
+    <b>La escala no cubre todo el rango de notas:</b>
+    <ul><li *ngFor="let p of problemas">{{ p }}</li></ul>
+  </div>
+</div>
+
+<div *ngIf="!cargando && problemas.length === 0 && escalas.length > 0 && cfgMax != null" class="banner-cobertura ok">
+  <i class="ti ti-circle-check"></i> Cobertura completa de {{ cfgMin }} a {{ cfgMax }}.
+</div>
+
+<app-tabla-paginada
+  *ngIf="!cargando"
+  [items]="escalas"
+  [camposBusqueda]="['nombre', 'abreviatura']"
+  placeholderBusqueda="Buscar por nombre..."
+  mensajeVacio="Aún no hay bandas creadas."
+>
+  <div acciones>
+    <a class="btn-save" routerLink="/dashboard/escalas/nuevo"
+      ><i class="ti ti-plus"></i> Nueva banda</a
+    >
+  </div>
+
+  <ng-template filaTabla let-pagina>
+    <div class="escalas-lista">
+      <div
+        class="escala-card"
+        *ngFor="let e of pagina"
+        [class.inactiva]="!e.activa"
+      >
+        <div class="escala-orden">{{ e.orden }}</div>
+        <div class="escala-info">
+          <div class="escala-nombre">
+            <h3>{{ e.nombre }}</h3>
+            <span class="escala-abrev" *ngIf="e.abreviatura">{{
+              e.abreviatura
+            }}</span>
+          </div>
+          <div class="escala-meta">
+            <span class="badge-rango"
+              >{{ e.notaMinima }} – {{ e.notaMaxima }}</span
+            >
+            <span
+              class="badge-aprueba"
+              [ngClass]="e.aprueba ? 'aprueba-si' : 'aprueba-no'"
+            >
+              {{ e.aprueba ? "Aprueba" : "No aprueba" }}
+            </span>
+            <span
+              class="badge-estado"
+              [ngClass]="e.activa ? 'estado-activo' : 'estado-inactivo'"
+            >
+              {{ e.activa ? "Activa" : "Inactiva" }}
+            </span>
+          </div>
+        </div>
+        <div class="acciones">
+          <a
+            class="btn-accion"
+            title="Editar"
+            [routerLink]="['/dashboard/escalas', e.id]"
+            ><i class="ti ti-pencil"></i
+          ></a>
+          <button
+            *ngIf="e.activa"
+            class="btn-accion peligro"
+            title="Inactivar"
+            [disabled]="procesandoId === e.id"
+            (click)="inactivar(e)"
+          >
+            <i class="ti ti-toggle-left"></i>
+          </button>
+          <button
+            *ngIf="!e.activa"
+            class="btn-accion exito"
+            title="Activar"
+            [disabled]="procesandoId === e.id"
+            (click)="activar(e)"
+          >
+            <i class="ti ti-toggle-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</app-tabla-paginada>
