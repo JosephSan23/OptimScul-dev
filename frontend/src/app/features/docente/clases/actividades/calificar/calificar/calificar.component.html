@@ -1,0 +1,57 @@
+<div class="page-header">
+  <h1>Calificar: {{ titulo }}</h1>
+  <p>Nota máxima {{ notaMaxima }} — deja en blanco a quien aún no calificas</p>
+</div>
+
+<a class="btn-volver" (click)="volver()" style="cursor:pointer"><i class="ti ti-arrow-left"></i> Volver a actividades</a>
+
+<div *ngIf="cargando" class="estado-msg"><i class="ti ti-loader-2 girando"></i> Cargando...</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+
+<div *ngIf="bloqueado && !cargando" class="estado-msg error">
+  Esta actividad está anulada; no se puede calificar.
+</div>
+
+<div *ngIf="!cargando && !error && !bloqueado">
+  <div class="conteo-barra">
+    <span class="chip">{{ calificados }} de {{ notas.length }} calificados</span>
+  </div>
+
+  <div *ngIf="notas.length === 0" class="estado-msg">Este grupo no tiene estudiantes matriculados.</div>
+
+  <div class="tabla-card" *ngIf="notas.length > 0">
+    <table class="tabla-crud tabla-calificar">
+      <thead>
+        <tr><th>#</th><th>Estudiante</th><th class="col-nota">Nota (0–{{ notaMaxima }})</th><th>Observación</th></tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let n of notas; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>
+            <div class="celda-usuario">
+              <span class="mini-avatar">{{ n.nombre.charAt(0) }}</span>
+              <div><b>{{ n.nombre }}</b><small>{{ n.codigoEstudiante }}</small></div>
+            </div>
+          </td>
+          <td class="col-nota">
+            <input type="number" step="0.01" min="0" [max]="notaMaxima"
+                   [class.nota-invalida]="!notaValida(n)"
+                   [(ngModel)]="n.notaObtenida" [ngModelOptions]="{standalone:true}">
+          </td>
+          <td>
+            <input type="text" placeholder="Opcional" [(ngModel)]="n.observacion" [ngModelOptions]="{standalone:true}">
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="form-error" *ngIf="error"><i class="ti ti-alert-circle"></i> {{ error }}</div>
+  <div class="estado-msg exito" *ngIf="exito"><i class="ti ti-check"></i> {{ exito }}</div>
+
+  <div class="form-actions" *ngIf="notas.length > 0">
+    <button type="button" class="btn-save" [disabled]="guardando || hayErrores" (click)="guardar()">
+      <i class="ti ti-device-floppy"></i> {{ guardando ? 'Guardando...' : 'Guardar calificaciones' }}
+    </button>
+  </div>
+</div>

@@ -1,0 +1,121 @@
+<div class="page-header">
+  <h1>Actividades</h1>
+  <p>Tareas, quizzes y evaluaciones de la clase</p>
+</div>
+
+<a class="btn-volver" (click)="volver()" style="cursor: pointer"
+  ><i class="ti ti-arrow-left"></i> Volver a la clase</a
+>
+
+<div class="actividades-barra">
+  <div class="campo-selector">
+    <label>Periodo:</label>
+    <select
+      [(ngModel)]="periodoSeleccionado"
+      [ngModelOptions]="{ standalone: true }"
+      (change)="cambioPeriodo()"
+    >
+      <option *ngFor="let p of periodos" [value]="p.id">
+        {{ p.nombre || "Periodo " + p.numero }}
+      </option>
+    </select>
+  </div>
+  <button class="btn-save" *ngIf="periodoSeleccionado" (click)="nueva()">
+    <i class="ti ti-plus"></i> Nueva actividad
+  </button>
+</div>
+
+<div *ngIf="cargando" class="estado-msg">
+  <i class="ti ti-loader-2 girando"></i> Cargando actividades...
+</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+
+<div *ngIf="!cargando && !error">
+  <div *ngIf="actividades.length === 0" class="estado-msg">
+    Este periodo aún no tiene actividades.
+  </div>
+
+  <div class="actividades-lista">
+    <div
+      class="actividad-card"
+      *ngFor="let a of actividades"
+      [class.anulada]="a.estado === 'ANULADA'"
+    >
+      <div class="actividad-info">
+        <div class="actividad-nombre">
+          <h3>{{ a.titulo }}</h3>
+          <span class="tag info">{{ tipoTexto(a.tipo) }}</span>
+          <span
+            class="badge-estado"
+            [ngClass]="'estado-' + a.estado.toLowerCase()"
+            >{{ a.estado | titlecase }}</span
+          >
+        </div>
+        <div class="actividad-meta">
+          <span *ngIf="a.porcentaje != null"
+            ><i class="ti ti-percentage"></i> {{ a.porcentaje }}%</span
+          >
+          <span *ngIf="a.notaMaxima != null"
+            ><i class="ti ti-star"></i> sobre {{ a.notaMaxima }}</span
+          >
+          <span *ngIf="a.fechaEntrega"
+            ><i class="ti ti-calendar"></i> entrega {{ a.fechaEntrega }}</span
+          >
+        </div>
+      </div>
+      <div class="acciones">
+        <button class="btn-accion" title="Calificar" (click)="calificar(a)">
+          <i class="ti ti-writing"></i>
+        </button>
+        <button
+          *ngIf="a.estado !== 'ANULADA'"
+          class="btn-accion"
+          title="Editar"
+          (click)="editar(a)"
+        >
+          <i class="ti ti-pencil"></i>
+        </button>
+        <button
+          *ngIf="a.estado === 'PUBLICADA'"
+          class="btn-accion"
+          title="Cerrar"
+          [disabled]="procesandoId === a.id"
+          (click)="cerrar(a)"
+        >
+          <i class="ti ti-lock"></i>
+        </button>
+        <button
+          *ngIf="a.estado === 'CERRADA'"
+          class="btn-accion exito"
+          title="Reabrir"
+          [disabled]="procesandoId === a.id"
+          (click)="publicar(a)"
+        >
+          <i class="ti ti-lock-open"></i>
+        </button>
+        <button
+          *ngIf="a.estado === 'ANULADA'"
+          class="btn-accion exito"
+          title="Restaurar"
+          [disabled]="procesandoId === a.id"
+          (click)="publicar(a)"
+        >
+          <i class="ti ti-arrow-back-up"></i>
+        </button>
+        <button
+          *ngIf="a.estado !== 'ANULADA'"
+          class="btn-accion peligro"
+          title="Anular"
+          [disabled]="procesandoId === a.id"
+          (click)="anular(a)"
+        >
+          <i class="ti ti-ban"></i>
+        </button>
+        <button *ngIf="a.estado === 'PUBLICADA'" class="btn-accion peligro" title="Eliminar (solo si no tiene notas)"
+                [disabled]="procesandoId === a.id" (click)="eliminar(a)">
+          <i class="ti ti-trash"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,49 @@
+<div class="page-header">
+  <h1>{{ modoEdicion ? 'Editar actividad' : 'Nueva actividad' }}</h1>
+  <p>Datos de la actividad</p>
+</div>
+
+<div *ngIf="cargando" class="estado-msg"><i class="ti ti-loader-2 girando"></i> Cargando...</div>
+
+<div class="actividad-form" *ngIf="!cargando">
+  <div class="actividad-form-card">
+    <div class="form-grid">
+      <div class="campo campo-full"><label>Título <span class="req">*</span></label>
+        <input placeholder="Ej: Taller de fracciones" [(ngModel)]="form.titulo" [ngModelOptions]="{standalone:true}"></div>
+
+      <div class="campo"><label>Tipo <span class="req">*</span></label>
+        <select [(ngModel)]="form.tipo" [ngModelOptions]="{standalone:true}">
+          <option *ngFor="let t of TIPOS" [value]="t.valor">{{ t.nombre }}</option>
+        </select></div>
+
+      <div class="campo"><label>Peso en el periodo (%)</label>
+        <input type="number" step="0.01" min="0" max="100" placeholder="Ej: 20" [(ngModel)]="form.porcentaje" [ngModelOptions]="{standalone:true}"></div>
+
+      <div class="campo"><label>Nota máxima</label>
+        <input type="number" step="0.01" placeholder="Vacío = la de la config" [(ngModel)]="form.notaMaxima" [ngModelOptions]="{standalone:true}"></div>
+
+      <div class="campo"><label>Fecha de entrega</label>
+        <input type="date" [(ngModel)]="form.fechaEntrega" [ngModelOptions]="{standalone:true}"></div>
+
+      <div class="campo"><label>Fecha de cierre</label>
+        <input type="date" [(ngModel)]="form.fechaCierre" [ngModelOptions]="{standalone:true}"></div>
+
+      <div class="campo campo-check">
+        <label><input type="checkbox" [(ngModel)]="form.permiteEntregaTardia" [ngModelOptions]="{standalone:true}"> Permite entrega tardía</label>
+      </div>
+
+      <div class="campo campo-full"><label>Descripción</label>
+        <input placeholder="Opcional" [(ngModel)]="form.descripcion" [ngModelOptions]="{standalone:true}"></div>
+    </div>
+
+    <div class="form-error" *ngIf="error"><i class="ti ti-alert-circle"></i> {{ error }}</div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" (click)="volver()">Cancelar</button>
+      <button type="button" class="btn-save" [disabled]="guardando" (click)="guardar()">
+        <i class="ti" [ngClass]="modoEdicion ? 'ti-device-floppy' : 'ti-plus'"></i>
+        {{ guardando ? 'Guardando...' : (modoEdicion ? 'Guardar cambios' : 'Crear actividad') }}
+      </button>
+    </div>
+  </div>
+</div>
