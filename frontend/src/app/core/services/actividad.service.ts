@@ -43,6 +43,21 @@ export interface CalificacionesVista {
   estudiantes: NotaEstudiante[];
 }
 
+export interface ConsolidadoFila {
+  estudianteId: string;
+  codigoEstudiante: string;
+  nombre: string;
+  notaFinal: number | null;
+  aprueba: boolean;
+  calificadas: number;
+  totalActividades: number;
+}
+export interface ConsolidadoVista {
+  sumaPorcentajes: number;
+  notaAprobacion: number;
+  estudiantes: ConsolidadoFila[];
+}
+
 @Injectable({ providedIn: 'root' })
 export class ActividadService {
   private readonly API = `${environment.apiUrl}/docente`;
@@ -92,5 +107,9 @@ export class ActividadService {
   }
   eliminarActividad(actividadId: string): Observable<{ mensaje: string }> {
     return this.http.delete<{ mensaje: string }>(`${this.API}/actividades/${actividadId}`);
+  }
+
+  consolidado(cargaId: string, periodoId: string): Observable<ConsolidadoVista> {
+    return this.http.get<ConsolidadoVista>(`${this.API}/clases/${cargaId}/consolidado?periodoId=${periodoId}`);
   }
 }
