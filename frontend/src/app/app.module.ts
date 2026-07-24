@@ -64,6 +64,7 @@ import { MatrizAsistenciaComponent } from './features/cooracademico/asistencia/m
 import { ActividadesListaComponent } from './features/docente/clases/actividades/actividades-lista/actividades-lista.component';
 import { ActividadFormComponent } from './features/docente/clases/actividades/actividad-form/actividad-form.component';
 import { CalificarComponent } from './features/docente/clases/actividades/calificar/calificar/calificar.component';
+import { ConsolidadoComponent } from './features/docente/clases/actividades/consolidado/consolidado/consolidado.component';
 
 
 @NgModule({
@@ -126,6 +127,7 @@ import { CalificarComponent } from './features/docente/clases/actividades/califi
     ActividadesListaComponent,
     ActividadFormComponent,
     CalificarComponent,
+    ConsolidadoComponent,
   ],
   imports: [
     BrowserModule,
