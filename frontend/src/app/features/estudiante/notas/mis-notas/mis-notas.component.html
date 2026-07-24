@@ -1,0 +1,54 @@
+<div class="page-header">
+  <h1>Mis notas</h1>
+  <p>Tus calificaciones del periodo</p>
+</div>
+
+<div class="notas-barra">
+  <div class="campo-selector">
+    <label>Año:</label>
+    <select [(ngModel)]="anioSeleccionado" [ngModelOptions]="{standalone:true}" (change)="cambioAnio()">
+      <option *ngFor="let a of anios" [value]="a.id">{{ a.nombre || a.anio }}{{ a.esActual ? ' (actual)' : '' }}</option>
+    </select>
+  </div>
+  <div class="campo-selector">
+    <label>Periodo:</label>
+    <select [(ngModel)]="periodoSeleccionado" [ngModelOptions]="{standalone:true}" (change)="cambioPeriodo()">
+      <option *ngFor="let p of periodos" [value]="p.id">{{ p.nombre || ('Periodo ' + p.numero) }}</option>
+    </select>
+  </div>
+</div>
+
+<div *ngIf="cargando" class="estado-msg"><i class="ti ti-loader-2 girando"></i> Cargando...</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+
+<div *ngIf="!cargando && !error && vista">
+  <div *ngIf="!vista.matriculado" class="estado-msg">No estás matriculado en este año lectivo.</div>
+
+  <div *ngIf="vista.matriculado">
+    <div class="resumen-notas">
+      <span *ngIf="vista.grupoNombre"><i class="ti ti-users"></i> {{ vista.gradoNombre }} — {{ vista.grupoNombre }}</span>
+      <span class="promedio" *ngIf="vista.promedio != null"><i class="ti ti-chart-bar"></i> Promedio: <b>{{ vista.promedio }}</b></span>
+    </div>
+
+    <div class="tabla-card">
+      <table class="tabla-crud">
+        <thead>
+          <tr><th>Asignatura</th><th>Profesor</th><th class="col-num">Nota</th><th>Estado</th></tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let m of vista.materias">
+            <td><b>{{ m.asignaturaNombre }}</b></td>
+            <td>{{ m.profesorNombre }}</td>
+            <td class="col-num"><b>{{ m.notaFinal != null ? m.notaFinal : '—' }}</b></td>
+            <td>
+              <span *ngIf="m.notaFinal != null" class="badge-estado" [ngClass]="m.aprueba ? 'estado-activo' : 'estado-inactivo'">
+                {{ m.aprueba ? 'Aprueba' : 'Reprueba' }}
+              </span>
+              <span *ngIf="m.notaFinal == null" class="tag warn">Sin notas</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
