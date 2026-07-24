@@ -54,6 +54,8 @@ import { ActividadesListaComponent } from './features/docente/clases/actividades
 import { ActividadFormComponent } from './features/docente/clases/actividades/actividad-form/actividad-form.component';
 import { CalificarComponent } from './features/docente/clases/actividades/calificar/calificar/calificar.component';
 import { ConsolidadoComponent } from './features/docente/clases/actividades/consolidado/consolidado/consolidado.component';
+import { MisNotasComponent } from './features/estudiante/notas/mis-notas/mis-notas.component';
+
 
 const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -138,6 +140,9 @@ const routes: Routes = [
     { path: 'mis-clases/:cargaId/consolidado', component: ConsolidadoComponent, canActivate: [roleGuard], data: { roles: ['DOCENTE'] } },
 
     { path: 'estudiante',     component: DashboardComponent,          canActivate: [roleGuard], data: { roles: ['ESTUDIANTE'] } },
+    { path: 'estudiante/notas', component: MisNotasComponent, canActivate: [roleGuard], data: { roles: ['ESTUDIANTE'] } },
+
+    
     { path: 'acudiente',      component: DashboardComponent,          canActivate: [roleGuard], data: { roles: ['ACUDIENTE'] } },
   ]
   },

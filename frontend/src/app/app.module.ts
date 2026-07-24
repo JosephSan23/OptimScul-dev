@@ -65,6 +65,7 @@ import { ActividadesListaComponent } from './features/docente/clases/actividades
 import { ActividadFormComponent } from './features/docente/clases/actividades/actividad-form/actividad-form.component';
 import { CalificarComponent } from './features/docente/clases/actividades/calificar/calificar/calificar.component';
 import { ConsolidadoComponent } from './features/docente/clases/actividades/consolidado/consolidado/consolidado.component';
+import { MisNotasComponent } from './features/estudiante/notas/mis-notas/mis-notas.component';
 
 
 @NgModule({
@@ -128,6 +129,7 @@ import { ConsolidadoComponent } from './features/docente/clases/actividades/cons
     ActividadFormComponent,
     CalificarComponent,
     ConsolidadoComponent,
+    MisNotasComponent,
   ],
   imports: [
     BrowserModule,
