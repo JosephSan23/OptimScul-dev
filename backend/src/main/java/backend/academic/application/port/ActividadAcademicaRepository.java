@@ -11,4 +11,5 @@ public interface ActividadAcademicaRepository {
     Optional<ActividadAcademica> findById(UUID id);
     List<ActividadAcademica> findAll();
     void deleteById(UUID id);
+    List<ActividadAcademica> findByCargaYPeriodo(UUID cargaAcademicaId, UUID periodoAcademicoId);
 }

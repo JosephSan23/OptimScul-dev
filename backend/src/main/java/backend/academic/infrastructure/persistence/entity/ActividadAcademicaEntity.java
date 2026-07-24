@@ -36,7 +36,9 @@ public class ActividadAcademicaEntity {
     @Column(name = "sesion_clase_id")
     private UUID sesionClaseId;
 
+    
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "tipo", columnDefinition = "tipo_actividad_enum")
     private TipoActividad tipo;
 
