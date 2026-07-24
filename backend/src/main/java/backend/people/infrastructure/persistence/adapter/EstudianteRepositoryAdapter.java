@@ -44,4 +44,10 @@ public class EstudianteRepositoryAdapter implements EstudianteRepository {
     public List<Estudiante> findByInstitucionId(UUID inst) {
         return jpa.findByInstitucionId(inst).stream().map(mapper::toDomain).toList();
     }
+
+    @Override
+    public Optional<Estudiante> findByInstitucionIdAndPersonaId(UUID inst, UUID personaId) {
+        return jpa.findByInstitucionIdAndPersonaId(inst, personaId).map(mapper::toDomain);
+    }
+
 }

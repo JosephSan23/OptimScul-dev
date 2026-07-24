@@ -12,4 +12,5 @@ public interface EstudianteRepository {
     List<Estudiante> findAll();
     void deleteById(UUID id);
     List<Estudiante> findByInstitucionId(UUID institucionId);
+    Optional<Estudiante> findByInstitucionIdAndPersonaId(UUID institucionId, UUID personaId);
 }
