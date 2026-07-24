@@ -90,7 +90,7 @@ export class MisClasesListComponent implements OnInit {
   }
 
   abrirClase(c: MiClase): void {
-    this.router.navigate(['/dashboard/mis-clases', c.cargaId]);
+    this.router.navigate(['/dashboard/mis-clases', c.cargaId], { queryParams: { anio: c.anioLectivoId } });
   }
 
   franjasDe(dia: string): MiFranja[] {
@@ -99,4 +99,6 @@ export class MisClasesListComponent implements OnInit {
   get diasConClase(): string[] {
     return this.DIAS.filter((d) => this.franjasDe(d).length > 0);
   }
+
+
 }

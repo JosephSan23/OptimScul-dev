@@ -6,6 +6,10 @@
 <a class="btn-volver" (click)="volver()" style="cursor: pointer"
   ><i class="ti ti-arrow-left"></i> Volver a mis clases</a
 >
+<a class="btn-save" [routerLink]="['/dashboard/mis-clases', cargaId, 'actividades']" [queryParams]="{ anio: anio }">
+  <i class="ti ti-clipboard-list"></i> Actividades y notas
+</a>
+
 <a class="btn-save" [routerLink]="['/dashboard/mis-clases', cargaId, 'asistencia']">
   <i class="ti ti-clipboard-check"></i> Tomar asistencia
 </a>

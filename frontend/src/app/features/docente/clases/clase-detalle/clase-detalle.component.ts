@@ -15,6 +15,7 @@ export class ClaseDetalleComponent implements OnInit {
   estudiantes: EstudianteDeClase[] = [];
   cargando = false;
   error = '';
+  anio = '';
 
   constructor(
     private docenteService: DocenteService,
@@ -25,6 +26,7 @@ export class ClaseDetalleComponent implements OnInit {
   ngOnInit(): void {
     this.cargaId = this.route.snapshot.paramMap.get('cargaId')!;
     this.cargar();
+        this.anio = this.route.snapshot.queryParamMap.get('anio') ?? '';
   }
 
   cargar(): void {
