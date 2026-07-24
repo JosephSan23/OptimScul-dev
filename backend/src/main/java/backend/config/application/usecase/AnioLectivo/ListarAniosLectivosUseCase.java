@@ -18,6 +18,6 @@ public class ListarAniosLectivosUseCase {
     }
 
     public List<AnioLectivo> ejecutar(UUID adminId) {
-        return repo.findByInstitucionId(auth.institucionConRol(adminId, "ADMIN_INSTITUCION", "COORDINADOR_ACADEMICO", "DOCENTE"));
+        return repo.findByInstitucionId(auth.institucionConRol(adminId, "ADMIN_INSTITUCION", "COORDINADOR_ACADEMICO", "DOCENTE", "ESTUDIANTE"));
     }
 }

@@ -18,7 +18,7 @@ public class ListarPeriodosUseCase {
         this.periodoRepo = periodoRepo; this.anioRepo = anioRepo; this.auth = auth;
     }
     public List<PeriodoAcademico> ejecutar(UUID adminId, UUID anioId) {
-        UUID inst = auth.institucionConRol(adminId, "ADMIN_INSTITUCION", "COORDINADOR_ACADEMICO", "DOCENTE");
+        UUID inst = auth.institucionConRol(adminId, "ADMIN_INSTITUCION", "COORDINADOR_ACADEMICO", "DOCENTE", "ESTUDIANTE");
         AnioLectivo anio = anioRepo.findById(anioId).orElseThrow(() -> new RuntimeException("El año lectivo no existe."));
         if (!inst.equals(anio.getInstitucionId())) throw new SecurityException("No puedes ver periodos de otra institución.");
         return periodoRepo.findByAnioLectivoId(anioId);
