@@ -23,6 +23,9 @@
   <button class="btn-save" *ngIf="periodoSeleccionado" (click)="nueva()">
     <i class="ti ti-plus"></i> Nueva actividad
   </button>
+  <button class="btn-secundario" *ngIf="periodoSeleccionado" (click)="verConsolidado()">
+  <i class="ti ti-report"></i> Consolidado
+</button>
 </div>
 
 <div *ngIf="cargando" class="estado-msg">

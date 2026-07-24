@@ -88,6 +88,11 @@ export class ActividadesListaComponent implements OnInit {
     });
   }
 
+  verConsolidado(): void {
+    this.router.navigate(['/dashboard/mis-clases', this.cargaId, 'consolidado'],
+      { queryParams: { anio: this.anio, periodo: this.periodoSeleccionado } });
+  }
+
   volver(): void {
     this.router.navigate(['/dashboard/mis-clases', this.cargaId], { queryParams: { anio: this.anio } });
   }

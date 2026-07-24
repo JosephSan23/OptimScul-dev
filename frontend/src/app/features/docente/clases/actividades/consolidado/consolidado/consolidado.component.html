@@ -1,0 +1,42 @@
+<div class="page-header">
+  <h1>Consolidado del periodo</h1>
+  <p>Nota definitiva ponderando las actividades por su peso</p>
+</div>
+
+<a class="btn-volver" (click)="volver()" style="cursor:pointer"><i class="ti ti-arrow-left"></i> Volver a actividades</a>
+
+<div *ngIf="cargando" class="estado-msg"><i class="ti ti-loader-2 girando"></i> Calculando...</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+
+<div *ngIf="!cargando && !error && vista">
+  <div *ngIf="pesoIncompleto" class="banner-cobertura advertencia">
+    <i class="ti ti-alert-triangle"></i>
+    Los pesos de las actividades suman {{ vista.sumaPorcentajes }}% (no 100%). La nota se calcula sobre lo calificado, pero revisa los porcentajes.
+  </div>
+
+  <div class="tabla-card">
+    <table class="tabla-crud">
+      <thead>
+        <tr><th>Estudiante</th><th class="col-num">Calificadas</th><th class="col-num">Nota final</th><th>Estado</th></tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let f of vista.estudiantes">
+          <td>
+            <div class="celda-usuario">
+              <span class="mini-avatar">{{ f.nombre.charAt(0) }}</span>
+              <div><b>{{ f.nombre }}</b><small>{{ f.codigoEstudiante }}</small></div>
+            </div>
+          </td>
+          <td class="col-num">{{ f.calificadas }} / {{ f.totalActividades }}</td>
+          <td class="col-num"><b>{{ f.notaFinal != null ? f.notaFinal : '—' }}</b></td>
+          <td>
+            <span *ngIf="f.notaFinal != null" class="badge-estado" [ngClass]="f.aprueba ? 'estado-activo' : 'estado-inactivo'">
+              {{ f.aprueba ? 'Aprueba' : 'Reprueba' }}
+            </span>
+            <span *ngIf="f.notaFinal == null" class="tag warn">Sin notas</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
