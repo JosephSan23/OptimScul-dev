@@ -32,6 +32,7 @@ public class DocenteController {
     private final CambiarEstadoActividadUseCase cambiarEstadoActividad;
     private final ObtenerCalificacionesUseCase obtenerCalificaciones;
     private final GuardarCalificacionesUseCase guardarCalificaciones;
+    private final ConsolidadoPeriodoUseCase consolidadoPeriodo;
 
     public DocenteController(MisClasesUseCase misClases, MiHorarioUseCase miHorario,
             EstudiantesDeMiClaseUseCase estudiantes, ObtenerAsistenciaUseCase obtenerAsistencia,
@@ -40,7 +41,7 @@ public class DocenteController {
             ObtenerActividadUseCase obtenerActividad, CrearActividadUseCase crearActividad,
             EditarActividadUseCase editarActividad, CambiarEstadoActividadUseCase cambiarEstadoActividad,
             ObtenerCalificacionesUseCase obtenerCalificaciones, GuardarCalificacionesUseCase guardarCalificaciones,
-            EliminarActividadUseCase eliminarActividad) {
+            ConsolidadoPeriodoUseCase consolidadoPeriodo, EliminarActividadUseCase eliminarActividad) {
         this.misClases = misClases;
         this.miHorario = miHorario;
         this.estudiantes = estudiantes;
@@ -55,6 +56,7 @@ public class DocenteController {
         this.cambiarEstadoActividad = cambiarEstadoActividad;
         this.obtenerCalificaciones = obtenerCalificaciones;
         this.guardarCalificaciones = guardarCalificaciones;
+        this.consolidadoPeriodo = consolidadoPeriodo;
         this.eliminarActividad = eliminarActividad;
     }
 
@@ -267,6 +269,15 @@ public class DocenteController {
         } catch (RuntimeException e) {
             return conflict(e);
         }
+    }
+
+    @GetMapping("/clases/{cargaId}/consolidado")
+    public ResponseEntity<?> consolidado(@PathVariable UUID cargaId,
+            @RequestParam UUID periodoId,
+            @AuthenticationPrincipal UUID usuarioId) {
+        try { return ResponseEntity.ok(consolidadoPeriodo.ejecutar(usuarioId, cargaId, periodoId)); }
+        catch (SecurityException e) { return forbidden(e); }
+        catch (RuntimeException e) { return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Msg(e.getMessage())); }
     }
 
     private ResponseEntity<?> forbidden(Exception e) {
