@@ -22,6 +22,7 @@ public class PeriodoAcademicoMapper {
         domain.setEstado(entity.getEstado());
         domain.setCreatedAt(entity.getCreatedAt());
         domain.setUpdatedAt(entity.getUpdatedAt());
+        domain.setBoletinHabilitado(entity.getBoletinHabilitado());
         return domain;
     }
 
@@ -40,6 +41,7 @@ public class PeriodoAcademicoMapper {
         entity.setEstado(domain.getEstado());
         entity.setCreatedAt(domain.getCreatedAt());
         entity.setUpdatedAt(domain.getUpdatedAt());
+        entity.setBoletinHabilitado(domain.getBoletinHabilitado());
         return entity;
     }
 }
