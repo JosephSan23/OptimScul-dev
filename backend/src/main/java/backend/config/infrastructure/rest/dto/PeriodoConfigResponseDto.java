@@ -16,6 +16,7 @@ public class PeriodoConfigResponseDto {
     private String fechaInicio, fechaFin;
     private BigDecimal peso;
     private String estado;
+    private Boolean boletinHabilitado;
 
     public static PeriodoConfigResponseDto desde(PeriodoAcademico p) {
         PeriodoConfigResponseDto d = new PeriodoConfigResponseDto();
@@ -28,6 +29,7 @@ public class PeriodoConfigResponseDto {
         d.setFechaFin(p.getFechaFin() != null ? p.getFechaFin().toString() : null);
         d.setPeso(p.getPeso());
         d.setEstado(p.getEstado() != null ? p.getEstado().name() : null);
+        d.setBoletinHabilitado(p.getBoletinHabilitado());
         return d;
     }
 }
