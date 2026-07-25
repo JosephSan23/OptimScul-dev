@@ -23,9 +23,13 @@
   <button class="btn-save" *ngIf="periodoSeleccionado" (click)="nueva()">
     <i class="ti ti-plus"></i> Nueva actividad
   </button>
-  <button class="btn-secundario" *ngIf="periodoSeleccionado" (click)="verConsolidado()">
-  <i class="ti ti-report"></i> Consolidado
-</button>
+  <button
+    class="btn-secundario"
+    *ngIf="periodoSeleccionado"
+    (click)="verConsolidado()"
+  >
+    <i class="ti ti-report"></i> Consolidado
+  </button>
 </div>
 
 <div *ngIf="cargando" class="estado-msg">
@@ -114,8 +118,13 @@
         >
           <i class="ti ti-ban"></i>
         </button>
-        <button *ngIf="a.estado === 'PUBLICADA'" class="btn-accion peligro" title="Eliminar (solo si no tiene notas)"
-                [disabled]="procesandoId === a.id" (click)="eliminar(a)">
+        <button
+          *ngIf="a.estado === 'PUBLICADA'"
+          class="btn-accion peligro"
+          title="Eliminar (solo si no tiene notas)"
+          [disabled]="procesandoId === a.id"
+          (click)="eliminar(a)"
+        >
           <i class="ti ti-trash"></i>
         </button>
       </div>
