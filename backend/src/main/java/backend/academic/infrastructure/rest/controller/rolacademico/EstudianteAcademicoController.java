@@ -1,4 +1,4 @@
-package backend.academic.infrastructure.rest.controller.estudiante;
+package backend.academic.infrastructure.rest.controller.rolacademico;
 
 import backend.academic.application.usecase.estudiante.MisNotasUseCase;
 import org.springframework.http.HttpStatus;
