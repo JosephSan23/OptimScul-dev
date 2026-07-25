@@ -92,6 +92,9 @@ export class LayoutComponent {
     { label: 'Mis clases', icon: 'ti ti-chalkboard', ruta: '/dashboard/mis-clases', roles: ['DOCENTE'] },
     { label: 'Asistencia por clase', icon: 'ti ti-table', ruta: '/dashboard/reportes/matriz', roles: ['COORDINADOR_ACADEMICO'] },
     { label: 'Mis notas', icon: 'ti ti-report-analytics', ruta: '/dashboard/estudiante/notas', roles: ['ESTUDIANTE'] },
+    { label: 'Notas de mis hijos', icon: 'ti ti-report-analytics', ruta: '/dashboard/acudiente/notas', roles: ['ACUDIENTE'] }
+
+
   ];
 
   private puedeVer(item: any): boolean {
