@@ -19,13 +19,15 @@ public class PeriodoController {
     private final ObtenerPeriodoUseCase obtener;
     private final CrearPeriodoUseCase crear;
     private final EditarPeriodoUseCase editar;
+    private final HabilitarBoletinUseCase habilitarBoletin;
 
     public PeriodoController(ListarPeriodosUseCase listar, ObtenerPeriodoUseCase obtener,
-            CrearPeriodoUseCase crear, EditarPeriodoUseCase editar) {
+            CrearPeriodoUseCase crear, EditarPeriodoUseCase editar, HabilitarBoletinUseCase habilitarBoletin) {
         this.listar = listar;
         this.obtener = obtener;
         this.crear = crear;
         this.editar = editar;
+        this.habilitarBoletin = habilitarBoletin;
     }
 
     @GetMapping("/por-anio/{anioId}")
@@ -74,6 +76,17 @@ public class PeriodoController {
         } catch (RuntimeException e) {
             return conflict(e);
         }
+    }
+
+    @PatchMapping("/{id}/boletin")
+    public ResponseEntity<?> boletin(@PathVariable UUID id,
+            @RequestParam boolean habilitado,
+            @AuthenticationPrincipal UUID adminId) {
+        try {
+            habilitarBoletin.ejecutar(adminId, id, habilitado);
+            return ResponseEntity.ok(new MensajeResponse(habilitado ? "Boletines habilitados." : "Boletines deshabilitados."));
+        } catch (SecurityException e) { return forbidden(e); }
+          catch (RuntimeException e) { return conflict(e); }
     }
 
     private ResponseEntity<?> forbidden(Exception e) {
