@@ -67,6 +67,10 @@ import { CalificarComponent } from './features/docente/clases/actividades/califi
 import { ConsolidadoComponent } from './features/docente/clases/actividades/consolidado/consolidado/consolidado.component';
 import { MisNotasComponent } from './features/estudiante/notas/mis-notas/mis-notas.component';
 import { NotasHijoComponent } from './features/acudiente/notas-hijo/notas-hijo/notas-hijo.component';
+import { MiHorarioComponent } from './features/estudiante/mi-horario/mi-horario/mi-horario.component';
+import { MiAsistenciaComponent } from './features/estudiante/mi-horario/mi-asistencia/mi-asistencia.component';
+import { HorarioHijoComponent } from './features/acudiente/horario/horario-hijo/horario-hijo.component';
+import { AsistenciaHijoComponent } from './features/acudiente/horario/asistencia-hijo/asistencia-hijo.component';
 
 
 @NgModule({
@@ -132,6 +136,10 @@ import { NotasHijoComponent } from './features/acudiente/notas-hijo/notas-hijo/n
     ConsolidadoComponent,
     MisNotasComponent,
     NotasHijoComponent,
+    MiHorarioComponent,
+    MiAsistenciaComponent,
+    HorarioHijoComponent,
+    AsistenciaHijoComponent,
   ],
   imports: [
     BrowserModule,

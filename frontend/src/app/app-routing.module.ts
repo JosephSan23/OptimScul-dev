@@ -56,6 +56,10 @@ import { CalificarComponent } from './features/docente/clases/actividades/califi
 import { ConsolidadoComponent } from './features/docente/clases/actividades/consolidado/consolidado/consolidado.component';
 import { MisNotasComponent } from './features/estudiante/notas/mis-notas/mis-notas.component';
 import { NotasHijoComponent } from './features/acudiente/notas-hijo/notas-hijo/notas-hijo.component';
+import { MiHorarioComponent } from './features/estudiante/mi-horario/mi-horario/mi-horario.component';
+import { MiAsistenciaComponent } from './features/estudiante/mi-horario/mi-asistencia/mi-asistencia.component';
+import { HorarioHijoComponent } from './features/acudiente/horario/horario-hijo/horario-hijo.component';
+import { AsistenciaHijoComponent } from './features/acudiente/horario/asistencia-hijo/asistencia-hijo.component';
 
 
 const routes: Routes = [
@@ -142,11 +146,13 @@ const routes: Routes = [
 
     { path: 'estudiante',     component: DashboardComponent,          canActivate: [roleGuard], data: { roles: ['ESTUDIANTE'] } },
     { path: 'estudiante/notas', component: MisNotasComponent, canActivate: [roleGuard], data: { roles: ['ESTUDIANTE'] } },
-
+    { path: 'estudiante/horario',    component: MiHorarioComponent,    canActivate: [roleGuard], data: { roles: ['ESTUDIANTE'] } },
+    { path: 'estudiante/asistencia', component: MiAsistenciaComponent, canActivate: [roleGuard], data: { roles: ['ESTUDIANTE'] } },
 
     { path: 'acudiente',      component: DashboardComponent,          canActivate: [roleGuard], data: { roles: ['ACUDIENTE'] } },
-    { path: 'acudiente/notas', component: NotasHijoComponent, canActivate: [roleGuard], data: { roles: ['ACUDIENTE'] } }
-
+    { path: 'acudiente/notas', component: NotasHijoComponent, canActivate: [roleGuard], data: { roles: ['ACUDIENTE'] } },
+    { path: 'acudiente/horario',    component: HorarioHijoComponent,    canActivate: [roleGuard], data: { roles: ['ACUDIENTE'] } },
+    { path: 'acudiente/asistencia', component: AsistenciaHijoComponent, canActivate: [roleGuard], data: { roles: ['ACUDIENTE'] } },
   ]
   },
 
