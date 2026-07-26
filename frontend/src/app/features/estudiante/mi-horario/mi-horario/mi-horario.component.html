@@ -1,0 +1,51 @@
+<div class="page-header">
+  <h1>Mi horario</h1>
+  <p>Tus clases de la semana</p>
+</div>
+
+<div class="campo-selector">
+  <label>Año:</label>
+  <select
+    [(ngModel)]="anioSeleccionado"
+    [ngModelOptions]="{ standalone: true }"
+    (change)="cambioAnio()"
+  >
+    <option *ngFor="let a of anios" [value]="a.id">
+      {{ a.nombre || a.anio }}{{ a.esActual ? " (actual)" : "" }}
+    </option>
+  </select>
+</div>
+
+<div *ngIf="cargando" class="estado-msg">
+  <i class="ti ti-loader-2 girando"></i> Cargando...
+</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+<div *ngIf="!cargando && !matriculado" class="estado-msg">
+  No estás matriculado en este año.
+</div>
+<div
+  *ngIf="!cargando && matriculado && franjas.length === 0 && !error"
+  class="estado-msg"
+>
+  Tu grupo aún no tiene horario.
+</div>
+
+<div class="horario-semana" *ngIf="!cargando && franjas.length > 0">
+  <div class="dia-columna" *ngFor="let dia of diasConClase">
+    <h3 class="dia-titulo">{{ NOMBRE_DIA[dia] }}</h3>
+    <div class="franja-card" *ngFor="let f of franjasDe(dia)">
+      <div class="franja-horas">
+        <b>{{ f.horaInicio }}</b> – <b>{{ f.horaFin }}</b>
+      </div>
+      <div class="franja-info">
+        <span class="franja-asignatura">{{ f.asignaturaNombre }}</span>
+        <small><i class="ti ti-user"></i> {{ f.profesorNombre }}</small>
+        <small *ngIf="f.aula || f.sedeNombre"
+          ><i class="ti ti-map-pin"></i> {{ f.aula || ""
+          }}{{ f.aula && f.sedeNombre ? " · " : ""
+          }}{{ f.sedeNombre || "" }}</small
+        >
+      </div>
+    </div>
+  </div>
+</div>
