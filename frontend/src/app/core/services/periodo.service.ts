@@ -13,6 +13,7 @@ export interface Periodo {
   fechaFin?: string;
   peso?: number;
   estado: string;
+  boletinHabilitado: boolean;
 }
 export interface PeriodoRequest {
   numero: number | null;
@@ -39,5 +40,8 @@ export class PeriodoService {
   }
   editar(id: string, d: PeriodoRequest): Observable<Periodo> {
     return this.http.put<Periodo>(`${this.API}/${id}`, d);
+  }
+  habilitarBoletin(id: string, habilitado: boolean) {
+  return this.http.patch(`${this.API}/${id}/boletin?habilitado=${habilitado}`, {});
   }
 }

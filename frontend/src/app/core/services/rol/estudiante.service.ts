@@ -16,6 +16,9 @@ export interface MisNotasVista {
   promedio: number | null;
   notaAprobacion: number;
   materias: MateriaNota[];
+  institucionNombre: string;
+  estudianteNombre: string;
+  boletinHabilitado: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
