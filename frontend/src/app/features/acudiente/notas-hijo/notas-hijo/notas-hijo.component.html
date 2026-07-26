@@ -99,6 +99,14 @@
           </tr>
         </tbody>
       </table>
+      <div class="boletin-accion" *ngIf="vista && vista.matriculado">
+        <button *ngIf="vista.boletinHabilitado" class="btn-save" (click)="descargarBoletin()">
+          <i class="ti ti-download"></i> Descargar boletín (PDF)
+        </button>
+        <span *ngIf="!vista.boletinHabilitado" class="tag warn">
+          <i class="ti ti-clock"></i> El boletín de este periodo aún no está disponible
+        </span>
+      </div>
     </div>
   </div>
 </div>
