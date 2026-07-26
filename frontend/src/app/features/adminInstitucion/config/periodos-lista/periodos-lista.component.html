@@ -17,6 +17,7 @@
 <div *ngIf="cargando" class="estado-msg"><i class="ti ti-loader-2 girando"></i> Cargando...</div>
 <div *ngIf="error" class="estado-msg error">{{ error }}</div>
 
+
 <ng-container *ngIf="!cargando && periodos.length > 0">
 
   <!-- ══════════ PRESUPUESTO DE CALIFICACIÓN ══════════ -->
@@ -63,6 +64,13 @@
       <div class="periodo-num">{{ dosDigitos(p.numero) }}</div>
 
       <div class="periodo-body">
+        <span class="badge-estado" [ngClass]="p.boletinHabilitado ? 'estado-activo' : 'estado-inactivo'">
+            Boletín {{ p.boletinHabilitado ? 'habilitado' : 'oculto' }}
+        </span>
+        <button class="btn-accion" [title]="p.boletinHabilitado ? 'Ocultar boletines' : 'Habilitar boletines'"
+            (click)="toggleBoletin(p)"><i class="ti" [ngClass]="p.boletinHabilitado ? 'ti-eye-off' : 'ti-eye'"></i>
+        </button>
+
         <div class="periodo-top">
           <h3>{{ p.nombre }}</h3>
           <span class="badge-estado" [ngClass]="'estado-' + p.estado.toLowerCase()">{{ p.estado | titlecase }}</span>

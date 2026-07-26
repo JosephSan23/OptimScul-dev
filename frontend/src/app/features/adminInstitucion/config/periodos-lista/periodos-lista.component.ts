@@ -65,4 +65,8 @@ export class PeriodosListaComponent implements OnInit {
   dosDigitos(n?: number | null): string {
     return String(n ?? 0).padStart(2, '0');
   }
+
+  toggleBoletin(p: any): void {
+    this.periodoService.habilitarBoletin(p.id, !p.boletinHabilitado).subscribe({ next: () => this.cargar() });
+  }
 }
