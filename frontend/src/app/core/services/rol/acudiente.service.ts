@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
 import { MisNotasVista } from './estudiante.service';
+import { MiHorarioVista, AsistenciaMateria } from './estudiante.service';
 
 export interface Hijo {
   estudianteId: string;
@@ -26,5 +27,12 @@ export class AcudienteService {
     return this.http.get<MisNotasVista>(
       `${this.API}/hijos/${estudianteId}/notas?anioId=${anioId}&periodoId=${periodoId}`,
     );
+  }
+
+  horarioHijo(estudianteId: string, anioId: string): Observable<MiHorarioVista> {
+    return this.http.get<MiHorarioVista>(`${this.API}/hijos/${estudianteId}/horario?anioId=${anioId}`);
+  }
+  asistenciaHijo(estudianteId: string, anioId: string): Observable<AsistenciaMateria[]> {
+    return this.http.get<AsistenciaMateria[]>(`${this.API}/hijos/${estudianteId}/asistencia?anioId=${anioId}`);
   }
 }

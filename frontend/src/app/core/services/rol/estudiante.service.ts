@@ -21,6 +21,29 @@ export interface MisNotasVista {
   boletinHabilitado: boolean;
 }
 
+export interface FranjaHorario {
+  id: string;
+  diaSemana: string;
+  horaInicio: string;
+  horaFin: string;
+  aula?: string;
+  asignaturaNombre: string;
+  profesorNombre: string;
+  sedeNombre?: string;
+}
+export interface MiHorarioVista {
+  matriculado: boolean;
+  franjas: FranjaHorario[];
+}
+export interface AsistenciaMateria {
+  asignaturaNombre: string;
+  presente: number;
+  ausente: number;
+  tarde: number;
+  justificada: number;
+  total: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class EstudianteService {
   private readonly API = `${environment.apiUrl}/estudiante`;
@@ -29,5 +52,12 @@ export class EstudianteService {
     return this.http.get<MisNotasVista>(
       `${this.API}/mis-notas?anioId=${anioId}&periodoId=${periodoId}`,
     );
+  }
+
+  miHorario(anioId: string): Observable<MiHorarioVista> {
+    return this.http.get<MiHorarioVista>(`${this.API}/mi-horario?anioId=${anioId}`);
+  }
+  miAsistencia(anioId: string): Observable<AsistenciaMateria[]> {
+    return this.http.get<AsistenciaMateria[]>(`${this.API}/mi-asistencia?anioId=${anioId}`);
   }
 }
