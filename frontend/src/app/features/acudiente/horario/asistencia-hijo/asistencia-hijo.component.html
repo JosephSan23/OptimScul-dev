@@ -1,0 +1,76 @@
+<div class="page-header">
+  <h1>Asistencia</h1>
+  <p>Asistencia por materia de tu hijo</p>
+</div>
+
+<div class="notas-barra">
+  <div class="campo-selector">
+    <label>Estudiante:</label>
+    <select
+      [(ngModel)]="hijoSeleccionado"
+      [ngModelOptions]="{ standalone: true }"
+      (change)="cambioHijo()"
+    >
+      <option *ngFor="let h of hijos" [value]="h.estudianteId">
+        {{ h.nombre }}
+      </option>
+    </select>
+  </div>
+  <div class="campo-selector">
+    <label>Año:</label>
+    <select
+      [(ngModel)]="anioSeleccionado"
+      [ngModelOptions]="{ standalone: true }"
+      (change)="cambioAnio()"
+    >
+      <option *ngFor="let a of anios" [value]="a.id">
+        {{ a.nombre || a.anio }}{{ a.esActual ? " (actual)" : "" }}
+      </option>
+    </select>
+  </div>
+</div>
+
+<div *ngIf="cargando" class="estado-msg">
+  <i class="ti ti-loader-2 girando"></i> Cargando...
+</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+<div *ngIf="hijos.length === 0 && !cargando" class="estado-msg">
+  No tienes estudiantes vinculados.
+</div>
+<div
+  *ngIf="!cargando && materias.length === 0 && !error && hijos.length > 0"
+  class="estado-msg"
+>
+  Aún no hay registros de asistencia.
+</div>
+
+<div class="tabla-card" *ngIf="!cargando && materias.length > 0">
+  <table class="tabla-crud">
+    <thead>
+      <tr>
+        <th>Asignatura</th>
+        <th class="col-num">P</th>
+        <th class="col-num">A</th>
+        <th class="col-num">T</th>
+        <th class="col-num">J</th>
+        <th class="col-num">Clases</th>
+        <th class="col-num">% Asist.</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let m of materias">
+        <td>
+          <b>{{ m.asignaturaNombre }}</b>
+        </td>
+        <td class="col-num">{{ m.presente }}</td>
+        <td class="col-num">{{ m.ausente }}</td>
+        <td class="col-num">{{ m.tarde }}</td>
+        <td class="col-num">{{ m.justificada }}</td>
+        <td class="col-num">{{ m.total }}</td>
+        <td class="col-num">
+          <b>{{ porcentaje(m) }}%</b>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
