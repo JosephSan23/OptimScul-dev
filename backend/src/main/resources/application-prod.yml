@@ -23,3 +23,12 @@ logging:
 jwt:
   secret: ${JWT_SECRET}
   expiration-ms: ${JWT_EXPIRATION_MS:86400000}
+
+storage:
+  endpoint: ${STORAGE_ENDPOINT}          
+  region: ${STORAGE_REGION:auto}        
+  access-key: ${STORAGE_ACCESS_KEY}
+  secret-key: ${STORAGE_SECRET_KEY}
+  bucket: ${STORAGE_BUCKET}
+  path-style-access: ${STORAGE_PATH_STYLE:true}
+  url-expiration-minutes: ${STORAGE_URL_EXP:15}
