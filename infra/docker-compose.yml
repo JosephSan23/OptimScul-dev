@@ -1,6 +1,7 @@
 services:
   backend:
     image: optimscul-backend
+    profiles: ["prod"]
     environment:
       SPRING_PROFILES_ACTIVE: prod
       JWT_SECRET: ${JWT_SECRET}
@@ -42,8 +43,44 @@ services:
     networks:
       - optimscul_net
 
+  minio:
+    image: minio/minio:latest
+    container_name: optimscul_minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    ports:
+      - "9000:9000"   # API S3
+      - "9001:9001"   # Consola web
+    volumes:
+      - minio_data:/data
+    networks:
+      - optimscul_net
+
+  # Crea el bucket automáticamente la primera vez
+  minio-init:
+    image: minio/mc:latest
+    depends_on:
+      - minio
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      STORAGE_BUCKET: ${STORAGE_BUCKET}
+    entrypoint: >
+      /bin/sh -c "
+      until (/usr/bin/mc alias set local http://minio:9000 $${MINIO_ROOT_USER} $${MINIO_ROOT_PASSWORD}) do echo 'esperando minio...'; sleep 2; done;
+      /usr/bin/mc mb -p local/$${STORAGE_BUCKET};
+      /usr/bin/mc anonymous set none local/$${STORAGE_BUCKET};
+      exit 0;
+      "
+    networks:
+      - optimscul_net
+
 volumes:
   postgres_data:
+  minio_data:
 
 networks:
   optimscul_net:
