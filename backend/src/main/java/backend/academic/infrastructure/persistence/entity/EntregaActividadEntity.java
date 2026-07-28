@@ -1,12 +1,19 @@
 package backend.academic.infrastructure.persistence.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import backend.academic.domain.model.EstadoEntregaActividad;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "entrega_actividad", schema = "optimscul")
 public class EntregaActividadEntity {
@@ -31,7 +38,8 @@ public class EntregaActividadEntity {
     private String archivoUrl;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "estado")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "estado", columnDefinition = "estado_entrega_actividad_enum")
     private EstadoEntregaActividad estado;
 
     @Column(name = "created_at")
@@ -39,25 +47,4 @@ public class EntregaActividadEntity {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    public EntregaActividadEntity() {}
-
-    public UUID getId() { return id; }
-    public void setId(UUID id) { this.id = id; }
-    public UUID getActividadId() { return actividadId; }
-    public void setActividadId(UUID actividadId) { this.actividadId = actividadId; }
-    public UUID getEstudianteId() { return estudianteId; }
-    public void setEstudianteId(UUID estudianteId) { this.estudianteId = estudianteId; }
-    public LocalDateTime getFechaEntrega() { return fechaEntrega; }
-    public void setFechaEntrega(LocalDateTime fechaEntrega) { this.fechaEntrega = fechaEntrega; }
-    public String getComentarioEstudiante() { return comentarioEstudiante; }
-    public void setComentarioEstudiante(String comentarioEstudiante) { this.comentarioEstudiante = comentarioEstudiante; }
-    public String getArchivoUrl() { return archivoUrl; }
-    public void setArchivoUrl(String archivoUrl) { this.archivoUrl = archivoUrl; }
-    public EstadoEntregaActividad getEstado() { return estado; }
-    public void setEstado(EstadoEntregaActividad estado) { this.estado = estado; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 }

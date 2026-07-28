@@ -11,4 +11,6 @@ public interface EntregaActividadRepository {
     Optional<EntregaActividad> findById(UUID id);
     List<EntregaActividad> findAll();
     void deleteById(UUID id);
+
+    Optional<EntregaActividad> findByActividadIdAndEstudianteId(UUID actividadId, UUID estudianteId);
 }
