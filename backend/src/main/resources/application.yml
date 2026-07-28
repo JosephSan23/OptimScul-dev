@@ -3,6 +3,10 @@ spring:
     name: optimscul-backend
   profiles:
     active: dev
+  servlet:
+    multipart:
+      max-file-size: 25MB
+      max-request-size: 100MB
 
 server:
   port: 8080
