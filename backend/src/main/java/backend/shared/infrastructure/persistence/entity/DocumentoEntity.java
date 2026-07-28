@@ -19,7 +19,8 @@ public class DocumentoEntity {
     private UUID institucionId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "modulo")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "modulo", columnDefinition = "modulo_documento_enum")
     private ModuloDocumento modulo;
 
     @Column(name = "entidad_id")
