@@ -12,6 +12,7 @@ import backend.shared.ModuloDocumento;
 import backend.shared.application.port.DocumentoRepository;
 import backend.shared.application.port.StoragePort;
 import backend.shared.domain.model.Documento;
+import backend.shared.infrastructure.storage.SubidaProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,12 +33,13 @@ public class SubirEntregaUseCase {
     private final EntregaActividadRepository entregaRepo;
     private final DocumentoRepository documentoRepo;
     private final StoragePort storage;
+    private final SubidaProperties subida;
     private final ObtenerMiEntregaUseCase obtenerMiEntrega;
 
     public SubirEntregaUseCase(ContextoEstudianteService contexto, ActividadAcademicaRepository actividadRepo,
             CargaAcademicaRepository cargaRepo, DocenteConsultaRepository docenteConsulta,
             EntregaActividadRepository entregaRepo, DocumentoRepository documentoRepo,
-            StoragePort storage, ObtenerMiEntregaUseCase obtenerMiEntrega) {
+            StoragePort storage, SubidaProperties subida, ObtenerMiEntregaUseCase obtenerMiEntrega) {
         this.contexto = contexto;
         this.actividadRepo = actividadRepo;
         this.cargaRepo = cargaRepo;
@@ -45,10 +47,10 @@ public class SubirEntregaUseCase {
         this.entregaRepo = entregaRepo;
         this.documentoRepo = documentoRepo;
         this.storage = storage;
+        this.subida = subida;
         this.obtenerMiEntrega = obtenerMiEntrega;
     }
 
-    /** Archivo que llega desde el controlador, sin acoplar la capa de aplicación a Spring web. */
     public record ArchivoEntrada(String nombreOriginal, String mimeType, long tamano, InputStream contenido) {}
 
     @Transactional
@@ -64,7 +66,6 @@ public class SubirEntregaUseCase {
         if (act.getEstado() != EstadoActividad.PUBLICADA)
             throw new RuntimeException("La actividad no está disponible para entregas.");
 
-        // El estudiante debe pertenecer al grupo de esa clase
         CargaAcademica carga = cargaRepo.findById(act.getCargaAcademicaId())
                 .orElseThrow(() -> new RuntimeException("La clase no existe."));
         Set<UUID> delGrupo = docenteConsulta.estudiantesDeGrupo(carga.getGrupoId()).stream()
@@ -74,7 +75,6 @@ public class SubirEntregaUseCase {
 
         LocalDateTime ahora = LocalDateTime.now();
 
-        // Validar cierre y calcular si es entrega tardía
         boolean cerrada = act.getFechaCierre() != null && ahora.isAfter(act.getFechaCierre());
         boolean permiteTardia = Boolean.TRUE.equals(act.getPermiteEntregaTardia());
         if (cerrada && !permiteTardia)
@@ -83,7 +83,7 @@ public class SubirEntregaUseCase {
         EstadoEntregaActividad estadoEntrega =
                 tardia ? EstadoEntregaActividad.ENTREGADA_TARDE : EstadoEntregaActividad.ENTREGADA;
 
-        // Buscar la entrega existente o crear una nueva
+        // Buscar o crear la entrega (sin guardar todavía)
         EntregaActividad entrega = entregaRepo.findByActividadIdAndEstudianteId(actividadId, ctx.estudianteId())
                 .orElseGet(() -> {
                     EntregaActividad nueva = new EntregaActividad();
@@ -96,6 +96,24 @@ public class SubirEntregaUseCase {
         if (entrega.getEstado() == EstadoEntregaActividad.CALIFICADA)
             throw new RuntimeException("La entrega ya fue calificada; no se puede modificar.");
 
+        // ---- VALIDACIÓN DE ARCHIVOS (antes de subir nada) ----
+        int existentes = documentoRepo.findByModuloAndEntidadId(ModuloDocumento.ACTIVIDAD, entrega.getId()).size();
+        if (existentes + archivos.size() > subida.getMaxArchivosPorEntrega())
+            throw new RuntimeException("Máximo " + subida.getMaxArchivosPorEntrega()
+                    + " archivos por entrega (ya tienes " + existentes + ").");
+
+        long maxBytes = subida.getMaxTamanoMb() * 1024L * 1024L;
+        for (ArchivoEntrada a : archivos) {
+            if (a.tamano() > maxBytes)
+                throw new RuntimeException("El archivo '" + a.nombreOriginal() + "' supera "
+                        + subida.getMaxTamanoMb() + " MB.");
+            String mime = a.mimeType() != null ? a.mimeType() : "";
+            if (!subida.getMimePermitidos().isEmpty() && !subida.getMimePermitidos().contains(mime))
+                throw new RuntimeException("Tipo de archivo no permitido: '" + a.nombreOriginal()
+                        + "' (" + (mime.isBlank() ? "desconocido" : mime) + ").");
+        }
+        // -------------------------------------------------------
+
         entrega.setComentarioEstudiante(comentario);
         entrega.setFechaEntrega(ahora);
         entrega.setEstado(estadoEntrega);
@@ -103,7 +121,6 @@ public class SubirEntregaUseCase {
         entrega = entregaRepo.save(entrega);
         final UUID entregaId = entrega.getId();
 
-        // Subir cada archivo al storage y registrar su Documento
         for (ArchivoEntrada a : archivos) {
             String limpio = sanitizar(a.nombreOriginal());
             String clave = ctx.institucionId() + "/actividades/" + actividadId
@@ -119,7 +136,7 @@ public class SubirEntregaUseCase {
             doc.setEntidadId(entregaId);
             doc.setNombreArchivo(clave);
             doc.setNombreOriginal(a.nombreOriginal());
-            doc.setUrlArchivo(clave);          // guardamos la clave interna, no una URL pública
+            doc.setUrlArchivo(clave);
             doc.setMimeType(a.mimeType());
             doc.setTamanoBytes(a.tamano());
             doc.setSubidoPorUsuarioId(usuarioId);

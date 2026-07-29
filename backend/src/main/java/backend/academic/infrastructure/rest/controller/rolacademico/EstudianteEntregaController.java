@@ -3,6 +3,7 @@ package backend.academic.infrastructure.rest.controller.rolacademico;
 import backend.academic.application.usecase.actividad.entrega.ObtenerMiEntregaUseCase;
 import backend.academic.application.usecase.actividad.entrega.SubirEntregaUseCase;
 import backend.academic.application.usecase.actividad.estudiante.ListarMisActividadesUseCase;
+import backend.academic.application.usecase.actividad.entrega.EliminarArchivoEntregaUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +23,14 @@ public class EstudianteEntregaController {
     private final SubirEntregaUseCase subir;
     private final ObtenerMiEntregaUseCase obtener;
     private final ListarMisActividadesUseCase listar;
+    private final EliminarArchivoEntregaUseCase eliminar;
 
     public EstudianteEntregaController(SubirEntregaUseCase subir, ObtenerMiEntregaUseCase obtener,
-            ListarMisActividadesUseCase listar) {
+            ListarMisActividadesUseCase listar, EliminarArchivoEntregaUseCase eliminar) {
         this.subir = subir;
         this.obtener = obtener;
         this.listar = listar;
+        this.eliminar = eliminar;
     }
 
     @GetMapping
@@ -73,6 +76,18 @@ public class EstudianteEntregaController {
     public ResponseEntity<?> miEntrega(@PathVariable UUID actividadId, @AuthenticationPrincipal UUID usuarioId) {
         try {
             return ResponseEntity.ok(obtener.ejecutar(usuarioId, actividadId));
+        } catch (SecurityException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Msg(e.getMessage()));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Msg(e.getMessage()));
+        }
+    }
+
+    @DeleteMapping("/{actividadId}/entrega/documentos/{documentoId}")
+    public ResponseEntity<?> eliminarArchivo(@PathVariable UUID actividadId, @PathVariable UUID documentoId,
+            @AuthenticationPrincipal UUID usuarioId) {
+        try {
+            return ResponseEntity.ok(eliminar.ejecutar(usuarioId, actividadId, documentoId));
         } catch (SecurityException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Msg(e.getMessage()));
         } catch (RuntimeException e) {
