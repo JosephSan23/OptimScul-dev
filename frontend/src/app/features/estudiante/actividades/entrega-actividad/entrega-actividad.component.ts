@@ -14,6 +14,9 @@ export class EntregaActividadComponent implements OnInit {
   archivos: File[] = [];
   comentario = '';
   cargando = false; enviando = false; error = ''; ok = '';
+  readonly MAX_MB = 25;
+  readonly TIPOS_OK = ['pdf','png','jpg','jpeg','webp','doc','docx','xls','xlsx','ppt','pptx','txt','zip'];
+
 
   constructor(
     private actividadService: ActividadEstudianteService,
@@ -36,7 +39,21 @@ export class EntregaActividadComponent implements OnInit {
 
   onArchivos(event: Event): void {
     const input = event.target as HTMLInputElement;
-    if (input.files) { this.archivos = Array.from(input.files); }
+    this.error = '';
+    if (!input.files) return;
+    const seleccionados = Array.from(input.files);
+    for (const f of seleccionados) {
+      const ext = (f.name.split('.').pop() ?? '').toLowerCase();
+      if (!this.TIPOS_OK.includes(ext)) {
+        this.error = `Tipo de archivo no permitido: ${f.name}`;
+        input.value = ''; this.archivos = []; return;
+      }
+      if (f.size > this.MAX_MB * 1024 * 1024) {
+        this.error = `"${f.name}" supera ${this.MAX_MB} MB.`;
+        input.value = ''; this.archivos = []; return;
+      }
+    }
+    this.archivos = seleccionados;
   }
 
   quitar(i: number): void { this.archivos.splice(i, 1); }
@@ -62,4 +79,14 @@ export class EntregaActividadComponent implements OnInit {
   }
 
   volver(): void { this.router.navigate(['/dashboard/estudiante/actividades']); }
+
+  eliminarArchivo(documentoId: string): void {
+    if (this.calificada) return;
+    if (!confirm('¿Eliminar este archivo de tu entrega?')) return;
+    this.actividadService.eliminarArchivo(this.actividadId, documentoId).subscribe({
+      next: (e) => { this.entrega = e; this.ok = 'Archivo eliminado.'; },
+      error: (err) => { this.error = err?.error?.mensaje ?? 'No se pudo eliminar.'; }
+    });
+  }
+
 }

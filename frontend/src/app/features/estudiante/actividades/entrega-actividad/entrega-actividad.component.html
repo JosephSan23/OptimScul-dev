@@ -25,7 +25,13 @@
         <tr *ngFor="let d of entrega.documentos">
           <td><i class="ti ti-file"></i> {{ d.nombreOriginal }}</td>
           <td>{{ formatoTamano(d.tamanoBytes) }}</td>
-          <td><a [href]="d.urlDescarga" target="_blank" rel="noopener">Descargar</a></td>
+          <td>
+            <a [href]="d.urlDescarga" target="_blank" rel="noopener">Descargar</a>
+            <button *ngIf="!calificada" class="btn-sm" style="margin-left:.5rem;"
+                    (click)="eliminarArchivo(d.id)">
+              <i class="ti ti-trash"></i> Eliminar
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -38,7 +44,9 @@
               placeholder="Escribe un comentario para tu profesor..."></textarea>
 
     <label>Archivos</label>
-    <input type="file" multiple (change)="onArchivos($event)" />
+    <input type="file" multiple
+           accept=".pdf,.png,.jpg,.jpeg,.webp,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip"
+           (change)="onArchivos($event)" />
 
     <ul *ngIf="archivos.length" class="lista-archivos">
       <li *ngFor="let f of archivos; let i = index">
