@@ -1,0 +1,42 @@
+<div class="page-header">
+  <h1>Mis actividades</h1>
+  <p>Tareas y trabajos de tus asignaturas</p>
+</div>
+
+<div class="notas-barra">
+  <div class="campo-selector">
+    <label>Año:</label>
+    <select [(ngModel)]="anioSeleccionado" [ngModelOptions]="{standalone:true}" (change)="cambioAnio()">
+      <option *ngFor="let a of anios" [value]="a.id">{{ a.nombre || a.anio }}{{ a.esActual ? ' (actual)' : '' }}</option>
+    </select>
+  </div>
+</div>
+
+<div *ngIf="cargando" class="estado-msg"><i class="ti ti-loader-2 girando"></i> Cargando...</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+
+<div *ngIf="!cargando && !error">
+  <div *ngIf="actividades.length === 0" class="estado-msg">No tienes actividades por ahora.</div>
+
+  <div *ngIf="actividades.length" class="tabla-card">
+    <table class="tabla-crud">
+      <thead>
+        <tr>
+          <th>Asignatura</th><th>Actividad</th><th>Tipo</th>
+          <th>Entrega</th><th>Estado</th><th class="col-num">Nota</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let a of actividades">
+          <td>{{ a.asignatura }}</td>
+          <td><b>{{ a.titulo }}</b></td>
+          <td>{{ a.tipo }}</td>
+          <td>{{ a.fechaEntrega ? (a.fechaEntrega | date:'short') : '—' }}</td>
+          <td><span class="badge-estado" [ngClass]="claseEstado(a.estadoEntrega)">{{ etiquetaEstado(a.estadoEntrega) }}</span></td>
+          <td class="col-num"><b>{{ a.notaObtenida != null ? a.notaObtenida : '—' }}</b></td>
+          <td><button class="btn-sm" (click)="abrir(a)">Abrir</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

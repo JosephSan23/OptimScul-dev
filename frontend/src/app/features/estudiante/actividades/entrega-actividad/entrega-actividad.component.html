@@ -1,0 +1,56 @@
+<div class="page-header">
+  <h1>Entrega de actividad</h1>
+  <p>Sube tu evidencia y consulta el estado</p>
+</div>
+
+<button class="btn-sm" (click)="volver()"><i class="ti ti-arrow-left"></i> Volver</button>
+
+<div *ngIf="cargando" class="estado-msg"><i class="ti ti-loader-2 girando"></i> Cargando...</div>
+<div *ngIf="error" class="estado-msg error">{{ error }}</div>
+<div *ngIf="ok" class="estado-msg">{{ ok }}</div>
+
+<div *ngIf="!cargando && entrega">
+  <div class="resumen-notas">
+    <span>Estado: <b>{{ entrega.estado }}</b></span>
+    <span *ngIf="entrega.fechaEntrega">Entregado: {{ entrega.fechaEntrega | date:'short' }}</span>
+  </div>
+
+  <div *ngIf="calificada" class="estado-msg">Esta actividad ya fue calificada; no puedes modificar la entrega.</div>
+
+  <!-- Archivos ya entregados -->
+  <div class="tabla-card" *ngIf="entrega.documentos.length">
+    <table class="tabla-crud">
+      <thead><tr><th>Archivo</th><th>Tamaño</th><th></th></tr></thead>
+      <tbody>
+        <tr *ngFor="let d of entrega.documentos">
+          <td><i class="ti ti-file"></i> {{ d.nombreOriginal }}</td>
+          <td>{{ formatoTamano(d.tamanoBytes) }}</td>
+          <td><a [href]="d.urlDescarga" target="_blank" rel="noopener">Descargar</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Formulario de entrega -->
+  <div class="form-card" *ngIf="!calificada">
+    <label>Comentario (opcional)</label>
+    <textarea [(ngModel)]="comentario" [ngModelOptions]="{standalone:true}" rows="3"
+              placeholder="Escribe un comentario para tu profesor..."></textarea>
+
+    <label>Archivos</label>
+    <input type="file" multiple (change)="onArchivos($event)" />
+
+    <ul *ngIf="archivos.length" class="lista-archivos">
+      <li *ngFor="let f of archivos; let i = index">
+        {{ f.name }} ({{ formatoTamano(f.size) }})
+        <button class="btn-sm" (click)="quitar(i)">Quitar</button>
+      </li>
+    </ul>
+
+    <div style="margin-top:1rem;">
+      <button class="btn-primary" (click)="enviar()" [disabled]="enviando">
+        {{ enviando ? 'Enviando...' : 'Enviar entrega' }}
+      </button>
+    </div>
+  </div>
+</div>
