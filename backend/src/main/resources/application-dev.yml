@@ -39,3 +39,6 @@ storage:
   bucket: optimscul
   path-style-access: true
   url-expiration-minutes: 15
+  upload:
+    max-archivos-por-entrega: 5
+    max-tamano-mb: 25
