@@ -60,6 +60,9 @@ import { MiHorarioComponent } from './features/estudiante/mi-horario/mi-horario/
 import { MiAsistenciaComponent } from './features/estudiante/mi-horario/mi-asistencia/mi-asistencia.component';
 import { HorarioHijoComponent } from './features/acudiente/horario/horario-hijo/horario-hijo.component';
 import { AsistenciaHijoComponent } from './features/acudiente/horario/asistencia-hijo/asistencia-hijo.component';
+import { MisActividadesComponent } from './features/estudiante/actividades/mis-actividades/mis-actividades.component';
+import { EntregaActividadComponent } from './features/estudiante/actividades/entrega-actividad/entrega-actividad.component';
+
 
 
 const routes: Routes = [
@@ -148,6 +151,9 @@ const routes: Routes = [
     { path: 'estudiante/notas', component: MisNotasComponent, canActivate: [roleGuard], data: { roles: ['ESTUDIANTE'] } },
     { path: 'estudiante/horario',    component: MiHorarioComponent,    canActivate: [roleGuard], data: { roles: ['ESTUDIANTE'] } },
     { path: 'estudiante/asistencia', component: MiAsistenciaComponent, canActivate: [roleGuard], data: { roles: ['ESTUDIANTE'] } },
+    { path: 'estudiante/actividades', component: MisActividadesComponent, canActivate: [roleGuard], data: { roles: ['ESTUDIANTE'] } },
+    { path: 'estudiante/actividades/:actividadId', component: EntregaActividadComponent, canActivate: [roleGuard], data: { roles: ['ESTUDIANTE'] } },
+
 
     { path: 'acudiente',      component: DashboardComponent,          canActivate: [roleGuard], data: { roles: ['ACUDIENTE'] } },
     { path: 'acudiente/notas', component: NotasHijoComponent, canActivate: [roleGuard], data: { roles: ['ACUDIENTE'] } },
