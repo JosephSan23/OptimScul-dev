@@ -58,6 +58,22 @@ export interface ConsolidadoVista {
   estudiantes: ConsolidadoFila[];
 }
 
+export interface ArchivoEvidencia {
+  id: string;
+  nombreOriginal: string;
+  mimeType: string;
+  tamanoBytes: number;
+  urlDescarga: string;
+}
+export interface EntregaDocente {
+  entregaId: string;
+  estudianteId: string;
+  estado: string;
+  comentarioEstudiante: string | null;
+  fechaEntrega: string | null;
+  documentos: ArchivoEvidencia[];
+}
+
 @Injectable({ providedIn: 'root' })
 export class ActividadService {
   private readonly API = `${environment.apiUrl}/docente`;
@@ -111,5 +127,9 @@ export class ActividadService {
 
   consolidado(cargaId: string, periodoId: string): Observable<ConsolidadoVista> {
     return this.http.get<ConsolidadoVista>(`${this.API}/clases/${cargaId}/consolidado?periodoId=${periodoId}`);
+  }
+
+  obtenerEntregas(actividadId: string): Observable<EntregaDocente[]> {
+    return this.http.get<EntregaDocente[]>(`${this.API}/actividades/${actividadId}/entregas`);
   }
 }

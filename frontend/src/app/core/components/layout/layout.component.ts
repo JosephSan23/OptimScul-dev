@@ -97,7 +97,7 @@ export class LayoutComponent {
     { label: 'Notas de mis hijos', icon: 'ti ti-report-analytics', ruta: '/dashboard/acudiente/notas', roles: ['ACUDIENTE'] },
     { label: 'Horario',    icon: 'ti ti-calendar-time', ruta: '/dashboard/acudiente/horario',    roles: ['ACUDIENTE'] },
     { label: 'Asistencia', icon: 'ti ti-checklist',      ruta: '/dashboard/acudiente/asistencia', roles: ['ACUDIENTE'] },
-
+    { label: 'Mis actividades', icon: 'ti ti-checkup-list', ruta: '/dashboard/estudiante/actividades', roles: ['ESTUDIANTE'] },
   ];
 
   private puedeVer(item: any): boolean {
