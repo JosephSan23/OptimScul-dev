@@ -2,6 +2,7 @@ package backend.academic.infrastructure.rest.controller.rolacademico;
 
 import backend.academic.application.usecase.actividad.entrega.ObtenerMiEntregaUseCase;
 import backend.academic.application.usecase.actividad.entrega.SubirEntregaUseCase;
+import backend.academic.application.usecase.actividad.estudiante.ListarMisActividadesUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +21,24 @@ public class EstudianteEntregaController {
 
     private final SubirEntregaUseCase subir;
     private final ObtenerMiEntregaUseCase obtener;
+    private final ListarMisActividadesUseCase listar;
 
-    public EstudianteEntregaController(SubirEntregaUseCase subir, ObtenerMiEntregaUseCase obtener) {
+    public EstudianteEntregaController(SubirEntregaUseCase subir, ObtenerMiEntregaUseCase obtener,
+            ListarMisActividadesUseCase listar) {
         this.subir = subir;
         this.obtener = obtener;
+        this.listar = listar;
+    }
+
+    @GetMapping
+    public ResponseEntity<?> misActividades(@RequestParam UUID anioId, @AuthenticationPrincipal UUID usuarioId) {
+        try {
+            return ResponseEntity.ok(listar.ejecutar(usuarioId, anioId));
+        } catch (SecurityException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Msg(e.getMessage()));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Msg(e.getMessage()));
+        }
     }
 
     @PostMapping(value = "/{actividadId}/entrega", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

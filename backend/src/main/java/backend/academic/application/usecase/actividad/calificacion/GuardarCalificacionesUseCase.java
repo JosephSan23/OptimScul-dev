@@ -3,18 +3,22 @@ package backend.academic.application.usecase.actividad.calificacion;
 import backend.academic.application.port.CalificacionActividadRepository;
 import backend.academic.application.port.CargaAcademica.CargaAcademicaRepository;
 import backend.academic.application.port.DocenteConsultaRepository;
+import backend.academic.application.port.EntregaActividadRepository;
 import backend.academic.application.port.EstudianteDeClase;
 import backend.academic.application.usecase.actividad.ObtenerActividadUseCase;
 import backend.academic.domain.model.ActividadAcademica;
 import backend.academic.domain.model.CalificacionActividad;
 import backend.academic.domain.model.CargaAcademica;
+import backend.academic.domain.model.EntregaActividad;
 import backend.academic.domain.model.EstadoActividad;
+import backend.academic.domain.model.EstadoEntregaActividad;
 import backend.academic.infrastructure.rest.dto.Calificacion.GuardarCalificacionesRequestDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -26,14 +30,17 @@ public class GuardarCalificacionesUseCase {
     private final CargaAcademicaRepository cargaRepo;
     private final DocenteConsultaRepository docenteConsulta;
     private final CalificacionActividadRepository calificacionRepo;
+    private final EntregaActividadRepository entregaRepo;   // NUEVO
 
     public GuardarCalificacionesUseCase(ObtenerActividadUseCase obtenerActividad, CargaAcademicaRepository cargaRepo,
             DocenteConsultaRepository docenteConsulta,
-            CalificacionActividadRepository calificacionRepo) {
+            CalificacionActividadRepository calificacionRepo,
+            EntregaActividadRepository entregaRepo) {          // NUEVO
         this.obtenerActividad = obtenerActividad;
         this.cargaRepo = cargaRepo;
         this.docenteConsulta = docenteConsulta;
         this.calificacionRepo = calificacionRepo;
+        this.entregaRepo = entregaRepo;                        // NUEVO
     }
 
     @Transactional
@@ -59,6 +66,10 @@ public class GuardarCalificacionesUseCase {
                     throw new RuntimeException("Las notas deben estar entre 0 y " + max + ".");
             }
 
+            // NUEVO: buscar la entrega de ese estudiante (si existe) para enlazarla
+            Optional<EntregaActividad> entregaOpt =
+                    entregaRepo.findByActividadIdAndEstudianteId(actividadId, n.getEstudianteId());
+
             CalificacionActividad c = calificacionRepo
                     .findByActividadIdAndEstudianteId(actividadId, n.getEstudianteId())
                     .orElseGet(() -> {
@@ -76,7 +87,18 @@ public class GuardarCalificacionesUseCase {
             c.setCalificadaPorUsuarioId(usuarioId);
             c.setFechaCalificacion(ahora);
             c.setUpdatedAt(ahora);
+            entregaOpt.ifPresent(e -> c.setEntregaActividadId(e.getId())); // NUEVO: vínculo nota → evidencia
             calificacionRepo.save(c);
+
+            // NUEVO: si se puso nota y hay entrega, marcarla como CALIFICADA
+            if (n.getNotaObtenida() != null && entregaOpt.isPresent()) {
+                EntregaActividad e = entregaOpt.get();
+                if (e.getEstado() != EstadoEntregaActividad.CALIFICADA) {
+                    e.setEstado(EstadoEntregaActividad.CALIFICADA);
+                    e.setUpdatedAt(ahora);
+                    entregaRepo.save(e);
+                }
+            }
         }
     }
 }

@@ -45,4 +45,9 @@ public class EntregaActividadRepositoryAdapter implements EntregaActividadReposi
     public Optional<EntregaActividad> findByActividadIdAndEstudianteId(UUID actividadId, UUID estudianteId) {
         return jpa.findByActividadIdAndEstudianteId(actividadId, estudianteId).map(mapper::toDomain);
     }
+
+    @Override
+    public List<EntregaActividad> findByActividadId(UUID actividadId) {
+        return jpa.findByActividadId(actividadId).stream().map(mapper::toDomain).toList();
+    }
 }
