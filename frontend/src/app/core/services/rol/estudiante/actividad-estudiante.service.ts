@@ -55,4 +55,8 @@ export class ActividadEstudianteService {
     // No seteamos Content-Type: el navegador arma el multipart; el interceptor añade el token.
     return this.http.post<MiEntrega>(`${this.API}/${actividadId}/entrega`, fd);
   }
+
+  eliminarArchivo(actividadId: string, documentoId: string) {
+    return this.http.delete<MiEntrega>(`${this.API}/${actividadId}/entrega/documentos/${documentoId}`);
+  }
 }
