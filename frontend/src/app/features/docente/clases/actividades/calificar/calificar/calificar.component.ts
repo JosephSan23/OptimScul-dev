@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
   ActividadService,
   NotaEstudiante,
+  EntregaDocente,
 } from '../../../../../../core/services/actividad.service';
 
 @Component({
@@ -23,6 +24,11 @@ export class CalificarComponent implements OnInit {
   error = '';
   exito = '';
 
+  // Evidencias por estudiante
+  entregas: Record<string, EntregaDocente> = {};
+  entregaSel: EntregaDocente | null = null;
+  nombreSel = '';
+
   constructor(
     private actividadService: ActividadService,
     private route: ActivatedRoute,
@@ -34,6 +40,7 @@ export class CalificarComponent implements OnInit {
     this.anio = this.route.snapshot.queryParamMap.get('anio') ?? '';
     this.cargaId = this.route.snapshot.queryParamMap.get('carga') ?? '';
     this.cargar();
+    this.cargarEntregas();
   }
 
   cargar(): void {
@@ -56,6 +63,39 @@ export class CalificarComponent implements OnInit {
         this.cargando = false;
       },
     });
+  }
+
+  cargarEntregas(): void {
+    this.actividadService.obtenerEntregas(this.actividadId).subscribe({
+      next: (lista) => {
+        const map: Record<string, EntregaDocente> = {};
+        lista.forEach((e) => (map[e.estudianteId] = e));
+        this.entregas = map;
+      },
+      error: () => {
+        // Silencioso: no tener evidencias no debe impedir calificar.
+      },
+    });
+  }
+
+  entregaDe(estudianteId: string): EntregaDocente | null {
+    return this.entregas[estudianteId] ?? null;
+  }
+
+  verEvidencia(n: NotaEstudiante): void {
+    const e = this.entregas[n.estudianteId];
+    if (e) { this.entregaSel = e; this.nombreSel = n.nombre; }
+  }
+
+  cerrarEvidencia(): void {
+    this.entregaSel = null;
+    this.nombreSel = '';
+  }
+
+  formatoTamano(bytes: number): string {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
   }
 
   get bloqueado(): boolean {
@@ -98,6 +138,7 @@ export class CalificarComponent implements OnInit {
         next: () => {
           this.guardando = false;
           this.exito = 'Calificaciones guardadas.';
+          this.cargarEntregas(); // refresca estados (entregas pasan a CALIFICADA)
         },
         error: (err) => {
           this.guardando = false;

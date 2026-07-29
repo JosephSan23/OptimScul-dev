@@ -22,7 +22,10 @@
   <div class="tabla-card" *ngIf="notas.length > 0">
     <table class="tabla-crud tabla-calificar">
       <thead>
-        <tr><th>#</th><th>Estudiante</th><th class="col-nota">Nota (0–{{ notaMaxima }})</th><th>Observación</th></tr>
+        <tr>
+          <th>#</th><th>Estudiante</th><th>Evidencia</th>
+          <th class="col-nota">Nota (0–{{ notaMaxima }})</th><th>Observación</th>
+        </tr>
       </thead>
       <tbody>
         <tr *ngFor="let n of notas; let i = index">
@@ -33,6 +36,12 @@
               <div><b>{{ n.nombre }}</b><small>{{ n.codigoEstudiante }}</small></div>
             </div>
           </td>
+          <td>
+            <button *ngIf="entregaDe(n.estudianteId) as e" type="button" class="btn-sm" (click)="verEvidencia(n)">
+              <i class="ti ti-paperclip"></i> Ver ({{ e.documentos.length }})
+            </button>
+            <span *ngIf="!entregaDe(n.estudianteId)" class="tag warn">Sin entrega</span>
+          </td>
           <td class="col-nota">
             <input type="number" step="0.01" min="0" [max]="notaMaxima"
                    [class.nota-invalida]="!notaValida(n)"
@@ -41,6 +50,34 @@
           <td>
             <input type="text" placeholder="Opcional" [(ngModel)]="n.observacion" [ngModelOptions]="{standalone:true}">
           </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Panel de evidencia del estudiante seleccionado -->
+  <div class="tabla-card" *ngIf="entregaSel" style="margin-top:1rem;">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <h3 style="margin:0;">Evidencia de {{ nombreSel }}</h3>
+      <button type="button" class="btn-sm" (click)="cerrarEvidencia()"><i class="ti ti-x"></i> Cerrar</button>
+    </div>
+    <p style="margin:.5rem 0;">
+      <b>Estado:</b> {{ entregaSel.estado }}
+      <span *ngIf="entregaSel.fechaEntrega"> — {{ entregaSel.fechaEntrega | date:'short' }}</span>
+    </p>
+    <p *ngIf="entregaSel.comentarioEstudiante" style="margin:.5rem 0;">
+      <b>Comentario:</b> {{ entregaSel.comentarioEstudiante }}
+    </p>
+    <table class="tabla-crud">
+      <thead><tr><th>Archivo</th><th>Tamaño</th><th></th></tr></thead>
+      <tbody>
+        <tr *ngFor="let d of entregaSel.documentos">
+          <td><i class="ti ti-file"></i> {{ d.nombreOriginal }}</td>
+          <td>{{ formatoTamano(d.tamanoBytes) }}</td>
+          <td><a [href]="d.urlDescarga" target="_blank" rel="noopener">Descargar</a></td>
+        </tr>
+        <tr *ngIf="entregaSel.documentos.length === 0">
+          <td colspan="3">Sin archivos (solo comentario).</td>
         </tr>
       </tbody>
     </table>
