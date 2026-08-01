@@ -1,0 +1,43 @@
+<div class="chat">
+  <aside class="lista">
+    <div class="lista-top">
+      <h3>Mensajes</h3>
+      <button (click)="toggleContactos()">＋ Nuevo</button>
+    </div>
+
+    <div class="contactos" *ngIf="mostrarContactos">
+      <div class="contacto" *ngFor="let c of contactos" (click)="iniciarCon(c)">
+        <span>{{ c.nombre }}</span>
+        <small>{{ c.rol }}</small>
+      </div>
+    </div>
+
+    <div class="conv" *ngFor="let c of conversaciones"
+         [class.activa]="c.conversacionId === activa?.conversacionId"
+         (click)="abrir(c)">
+      <div class="conv-nombre">
+        {{ c.interlocutorNombre }}
+        <span class="badge" *ngIf="c.noLeidos > 0">{{ c.noLeidos }}</span>
+      </div>
+      <div class="conv-ultimo">{{ c.ultimoMensaje || 'Sin mensajes' }}</div>
+    </div>
+  </aside>
+
+  <section class="hilo" *ngIf="activa; else vacio">
+    <header>{{ activa.interlocutorNombre }}</header>
+    <div class="mensajes">
+      <div class="msg" *ngFor="let m of mensajes" [class.mio]="esMio(m)">
+        <p>{{ m.contenido }}</p>
+        <small>{{ m.createdAt | date:'shortTime' }}</small>
+      </div>
+    </div>
+    <footer>
+      <input [(ngModel)]="borrador" (keyup.enter)="enviar()" placeholder="Escribe un mensaje…" />
+      <button (click)="enviar()">Enviar</button>
+    </footer>
+  </section>
+
+  <ng-template #vacio>
+    <section class="hilo vacio"><p>Selecciona una conversación</p></section>
+  </ng-template>
+</div>
