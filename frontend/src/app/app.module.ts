@@ -73,6 +73,7 @@ import { HorarioHijoComponent } from './features/acudiente/horario/horario-hijo/
 import { AsistenciaHijoComponent } from './features/acudiente/horario/asistencia-hijo/asistencia-hijo.component';
 import { MisActividadesComponent } from './features/estudiante/actividades/mis-actividades/mis-actividades.component';
 import { EntregaActividadComponent } from './features/estudiante/actividades/entrega-actividad/entrega-actividad.component';
+import { ChatComponent } from './features/chat/chat/chat.component';
 
 
 @NgModule({
@@ -144,6 +145,7 @@ import { EntregaActividadComponent } from './features/estudiante/actividades/ent
     AsistenciaHijoComponent,
     MisActividadesComponent,
     EntregaActividadComponent,
+    ChatComponent,
   ],
   imports: [
     BrowserModule,
