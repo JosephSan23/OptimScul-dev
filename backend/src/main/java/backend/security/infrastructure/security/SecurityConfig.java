@@ -42,7 +42,8 @@ public class SecurityConfig {
                     "/api/auth/login",
                     "/api/auth/registro",
                     "/api/contacto/**",
-                    "/api/colegios/publico/**"
+                    "/api/colegios/publico/**",
+                    "/ws/**"
                 ).permitAll()
                 // Todo lo demás requiere token
                 .anyRequest().authenticated()
