@@ -98,6 +98,8 @@ export class LayoutComponent {
     { label: 'Horario',    icon: 'ti ti-calendar-time', ruta: '/dashboard/acudiente/horario',    roles: ['ACUDIENTE'] },
     { label: 'Asistencia', icon: 'ti ti-checklist',      ruta: '/dashboard/acudiente/asistencia', roles: ['ACUDIENTE'] },
     { label: 'Mis actividades', icon: 'ti ti-checkup-list', ruta: '/dashboard/estudiante/actividades', roles: ['ESTUDIANTE'] },
+    { label: 'Mensajes', icon: 'ti ti-message-circle', ruta: '/dashboard/chat', roles: ['DOCENTE', 'ESTUDIANTE', 'ACUDIENTE'] },
+
   ];
 
   private puedeVer(item: any): boolean {
