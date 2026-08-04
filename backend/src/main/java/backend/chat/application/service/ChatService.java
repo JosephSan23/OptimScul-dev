@@ -3,8 +3,11 @@ package backend.chat.application.service;
 import backend.chat.application.port.ConversacionRepository;
 import backend.chat.application.port.DirectorioUsuarioPort;
 import backend.chat.application.port.MensajeRepository;
+import backend.notification.application.port.NotificacionPort;
 import backend.chat.domain.model.Conversacion;
 import backend.chat.domain.model.Mensaje;
+import backend.notification.domain.model.CanalNotificacion;
+import backend.notification.domain.model.TipoNotificacion;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,13 +24,16 @@ public class ChatService {
     private final ConversacionRepository conversacionRepository;
     private final MensajeRepository mensajeRepository;
     private final DirectorioUsuarioPort directorio;
+    private final NotificacionPort notificacionPort;
 
     public ChatService(ConversacionRepository conversacionRepository,
                        MensajeRepository mensajeRepository,
-                       DirectorioUsuarioPort directorio) {
+                       DirectorioUsuarioPort directorio,
+                       NotificacionPort notificacionPort) {
         this.conversacionRepository = conversacionRepository;
         this.mensajeRepository = mensajeRepository;
         this.directorio = directorio;
+        this.notificacionPort = notificacionPort;
     }
 
     // ---- Consultas ----
@@ -112,6 +118,16 @@ public class ChatService {
 
         c.setUpdatedAt(LocalDateTime.now());
         conversacionRepository.save(c);
+        UUID otro = c.interlocutorDe(usuarioActual);
+        String remitente = directorio.nombreCompleto(usuarioActual);
+        String resumen = contenido.length() > 120 ? contenido.substring(0, 117) + "…" : contenido;
+        notificacionPort.notificar(new NotificacionPort.NuevaNotificacion(
+        c.getInstitucionId(), TipoNotificacion.GENERAL,
+        "Nuevo mensaje de " + remitente, resumen,
+        "chat", c.getId(), (short) 1,
+        List.of(otro),
+        Set.of(CanalNotificacion.IN_APP),
+        usuarioActual));
         return guardado;
     }
 
