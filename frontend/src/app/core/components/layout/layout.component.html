@@ -52,9 +52,22 @@
       </div>
 
       <div class="header-right">
-        <div class="notifications">
+        <div class="notifications" (click)="toggleNotis(); $event.stopPropagation()">
           <i class="ti ti-bell"></i>
-          <span class="dot"></span>
+          <span class="dot" *ngIf="noLeidas > 0"></span>
+
+          <div class="notis-dropdown" [class.active]="panelNotisAbierto" (click)="$event.stopPropagation()">
+            <div class="notis-header">
+              <span>Notificaciones</span>
+              <a *ngIf="noLeidas > 0" (click)="marcarTodas()">Marcar todas</a>
+            </div>
+            <div class="notis-vacio" *ngIf="notificaciones.length === 0">Sin notificaciones</div>
+            <div class="noti" *ngFor="let n of notificaciones" [class.no-leida]="n.estado !== 'LEIDA'">
+              <strong>{{ n.titulo }}</strong>
+              <p>{{ n.mensaje }}</p>
+              <small>{{ n.createdAt | date:'short' }}</small>
+            </div>
+          </div>
         </div>
 
         <div class="user-info" (click)="toggleDropdown($event)">

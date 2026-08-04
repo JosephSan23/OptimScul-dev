@@ -366,37 +366,131 @@
   gap: 18px;
 }
 
+/* ===== Campanita de notificaciones ===== */
 .notifications {
-  position: relative;
+  position: relative;                 /* ancla para el dropdown */
   cursor: pointer;
-  color: var(--ink);
-  display: flex;
-  width: 40px;
-  height: 40px;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--r-control);
-  background: var(--cream);
-  border: 1px solid var(--line);
-  box-shadow: var(--clay-ico);
-  transition: var(--transition);
-  font-size: 19px;
 }
 
-.notifications:hover {
-  color: var(--orange-600);
-  border-color: var(--orange-500);
+.notifications > .ti-bell {
+  font-size: 20px;
+  color: var(--navy-900);
 }
 
-.notifications .dot {
+/* el puntito de "hay no leídas" */
+.notifications > .dot {
   position: absolute;
-  top: 8px;
-  right: 9px;
-  width: 8px;
-  height: 8px;
-  background-color: var(--orange-500);
+  top: -2px;
+  right: -2px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
+  background: var(--orange-500);
   border: 2px solid var(--paper);
+}
+
+/* ===== Panel desplegable ===== */
+.notis-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 340px;
+  max-height: 440px;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  box-shadow: var(--shadow-2);
+  overflow: hidden;
+  z-index: 1000;
+
+  /* oculto por defecto, con transición */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity .18s ease, transform .18s ease, visibility .18s;
+}
+
+.notis-dropdown.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* pico opcional apuntando a la campana */
+.notis-dropdown::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: 16px;
+  width: 12px;
+  height: 12px;
+  background: var(--paper);
+  border-left: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+  transform: rotate(45deg);
+}
+
+.notis-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--navy-900);
+}
+
+.notis-header a {
+  font-family: var(--font-body);
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--orange-500);
+  cursor: pointer;
+}
+.notis-header a:hover { color: var(--orange-600); }
+
+.notis-vacio {
+  padding: 32px 16px;
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: .85rem;
+}
+
+/* lista scrolleable */
+.notis-dropdown .noti {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line-soft);
+  cursor: pointer;
+  transition: background .15s;
+}
+.notis-dropdown .noti:last-child { border-bottom: none; }
+.notis-dropdown .noti:hover { background: var(--cream); }
+
+/* no leídas: resaltadas con una barrita naranja */
+.notis-dropdown .noti.no-leida {
+  background: var(--orange-50);
+  border-left: 3px solid var(--orange-500);
+  padding-left: 13px;
+}
+
+.notis-dropdown .noti strong {
+  display: block;
+  font-size: .88rem;
+  color: var(--navy-900);
+  margin-bottom: 2px;
+}
+.notis-dropdown .noti p {
+  margin: 0 0 4px;
+  font-size: .82rem;
+  color: var(--ink);
+  line-height: 1.4;
+}
+.notis-dropdown .noti small {
+  font-size: .7rem;
+  color: var(--ink-soft);
 }
 
 .user-info {

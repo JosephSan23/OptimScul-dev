@@ -9,6 +9,8 @@ import { MensajeChat } from './chat.service';
 export class ChatSocketService {
   private client?: any;                         // Client de @stomp/stompjs (cargado dinámicamente)
   private mensajes$ = new Subject<MensajeChat>();
+  private notificaciones$ = new Subject<any>();
+  get notificaciones(): Observable<any> { return this.notificaciones$.asObservable(); }
 
   constructor(
     private auth: AuthService,
@@ -36,6 +38,9 @@ export class ChatSocketService {
       onConnect: () => {
         this.client.subscribe('/user/queue/mensajes', (msg: any) => {
           this.mensajes$.next(JSON.parse(msg.body) as MensajeChat);
+        });
+        this.client.subscribe('/user/queue/notificaciones', (msg: any) => {
+          this.notificaciones$.next(JSON.parse(msg.body));
         });
       },
     });

@@ -1,5 +1,7 @@
 import { Component, HostListener } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
+import { NotificacionService } from '../../services/notificacion.service';
+import { ChatSocketService } from '../../services/chat-socket.service';
 
 @Component({
   selector: 'app-layout',
@@ -11,8 +13,32 @@ export class LayoutComponent {
   usuario = this.authService.getUsuarioActual();
   submenuAbierto: string | null = null;   // qué submenú está abierto (null = ninguno)
   dropdownAbierto = false;                 // si el menú de usuario está visible
+  noLeidas = 0;
+  notificaciones: any[] = [];
+  panelNotisAbierto = false;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private notis: NotificacionService, private socket: ChatSocketService) {}
+
+  ngOnInit(): void {
+    this.notis.contador().subscribe(r => this.noLeidas = r.noLeidas);
+    this.socket.conectar();
+    this.socket.notificaciones.subscribe(n => {
+      this.notificaciones.unshift(n);
+      this.noLeidas++;
+    });
+  }
+
+  toggleNotis(): void {
+    this.panelNotisAbierto = !this.panelNotisAbierto;
+    if (this.panelNotisAbierto) this.notis.bandeja().subscribe(l => this.notificaciones = l);
+  }
+
+  marcarTodas(): void {
+    this.notis.marcarTodas().subscribe(() => {
+      this.noLeidas = 0;
+      this.notificaciones.forEach(n => n.estado = 'LEIDA');
+    });
+  }
 
   get iniciales(): string {
     return (this.usuario?.username ?? '').substring(0, 2).toUpperCase();
@@ -65,6 +91,7 @@ export class LayoutComponent {
   @HostListener('document:click')
   cerrarDropdown(): void {
     this.dropdownAbierto = false;
+    this.panelNotisAbierto = false;
   }
 
   cerrarSesion(): void {
@@ -111,4 +138,6 @@ export class LayoutComponent {
   get menuVisible() {
     return this.menu.filter(i => this.puedeVer(i));
   }
+
+
 }
