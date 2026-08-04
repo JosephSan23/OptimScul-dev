@@ -21,6 +21,20 @@ spring:
     baseline-version: 1
     schemas: optimscul
     locations: classpath:db/migration
+  
+  mail:
+    host: smtp.tu-proveedor.com
+    port: 587
+    username: TU_USUARIO
+    password: TU_PASSWORD
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
+  notificaciones:
+  email:
+    habilitado: false
+    remitente: "OptimScul <no-reply@optimscul.com>"
 
 logging:
   level:

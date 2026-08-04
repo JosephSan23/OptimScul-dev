@@ -1,0 +1,1 @@
+CREATE INDEX ix_notif_dest_usuario ON optimscul.notificacion_destinatario (usuario_id, estado);
