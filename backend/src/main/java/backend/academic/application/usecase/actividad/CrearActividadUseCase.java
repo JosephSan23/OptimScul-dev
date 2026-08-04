@@ -5,6 +5,7 @@ import backend.academic.application.port.CargaAcademica.CargaAcademicaRepository
 import backend.academic.application.service.ContextoDocenteService;
 import backend.academic.domain.model.*;
 import backend.academic.infrastructure.rest.dto.ActividadAcademicaRequestDto;
+import backend.notification.application.service.NotificacionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,12 +20,13 @@ public class CrearActividadUseCase {
     private final PeriodoAcademicoRepository periodoRepo;
     private final ConfiguracionAcademicaRepository configRepo;
     private final ContextoDocenteService contexto;
+    private final NotificacionService notificacionService;
 
     public CrearActividadUseCase(ActividadAcademicaRepository actividadRepo, CargaAcademicaRepository cargaRepo,
                                  PeriodoAcademicoRepository periodoRepo, ConfiguracionAcademicaRepository configRepo,
-                                 ContextoDocenteService contexto) {
+                                 NotificacionService notificacionService, ContextoDocenteService contexto) {
         this.actividadRepo = actividadRepo; this.cargaRepo = cargaRepo; this.periodoRepo = periodoRepo;
-        this.configRepo = configRepo; this.contexto = contexto;
+        this.configRepo = configRepo; this.contexto = contexto; this.notificacionService = notificacionService;
     }
 
     @Transactional
@@ -70,6 +72,14 @@ public class CrearActividadUseCase {
         a.setUpdatedBy(usuarioId);
         a.setCreatedAt(ahora);
         a.setUpdatedAt(ahora);
-        return actividadRepo.save(a);
+        ActividadAcademica guardada = actividadRepo.save(a);
+        notificacionService.notificarEventoDeGrupo(
+        a.getInstitucionId(),
+        carga.getGrupoId(),
+        "Nueva actividad: " + a.getTitulo(),
+        "Tu profesor publicó una nueva actividad para tu curso.",
+        "academic", a.getId(), usuarioId);
+
+        return guardada;
     }
 }
