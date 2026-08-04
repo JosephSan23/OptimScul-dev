@@ -1,12 +1,19 @@
 package backend.notification.infrastructure.persistence.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import backend.notification.domain.model.TipoNotificacion;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "notificacion", schema = "optimscul")
 public class NotificacionEntity {
@@ -19,7 +26,8 @@ public class NotificacionEntity {
     private UUID institucionId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "tipo")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "tipo", columnDefinition = "tipo_notificacion_enum")
     private TipoNotificacion tipo;
 
     @Column(name = "titulo")
@@ -46,28 +54,4 @@ public class NotificacionEntity {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    public NotificacionEntity() {}
-
-    public UUID getId() { return id; }
-    public void setId(UUID id) { this.id = id; }
-    public UUID getInstitucionId() { return institucionId; }
-    public void setInstitucionId(UUID institucionId) { this.institucionId = institucionId; }
-    public TipoNotificacion getTipo() { return tipo; }
-    public void setTipo(TipoNotificacion tipo) { this.tipo = tipo; }
-    public String getTitulo() { return titulo; }
-    public void setTitulo(String titulo) { this.titulo = titulo; }
-    public String getMensaje() { return mensaje; }
-    public void setMensaje(String mensaje) { this.mensaje = mensaje; }
-    public String getModuloRelacionado() { return moduloRelacionado; }
-    public void setModuloRelacionado(String moduloRelacionado) { this.moduloRelacionado = moduloRelacionado; }
-    public UUID getEntidadRelacionadaId() { return entidadRelacionadaId; }
-    public void setEntidadRelacionadaId(UUID entidadRelacionadaId) { this.entidadRelacionadaId = entidadRelacionadaId; }
-    public Short getPrioridad() { return prioridad; }
-    public void setPrioridad(Short prioridad) { this.prioridad = prioridad; }
-    public LocalDateTime getProgramadaPara() { return programadaPara; }
-    public void setProgramadaPara(LocalDateTime programadaPara) { this.programadaPara = programadaPara; }
-    public UUID getCreatedBy() { return createdBy; }
-    public void setCreatedBy(UUID createdBy) { this.createdBy = createdBy; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }
