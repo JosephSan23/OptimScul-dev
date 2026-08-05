@@ -63,7 +63,7 @@ import { AsistenciaHijoComponent } from './features/acudiente/horario/asistencia
 import { MisActividadesComponent } from './features/estudiante/actividades/mis-actividades/mis-actividades.component';
 import { EntregaActividadComponent } from './features/estudiante/actividades/entrega-actividad/entrega-actividad.component';
 import { ChatComponent } from './features/chat/chat/chat.component';
-
+import { PerfilComponent } from './features/perfil/perfil/perfil.component';
 
 
 const routes: Routes = [
@@ -79,6 +79,7 @@ const routes: Routes = [
   component: LayoutComponent,
   canActivate: [authGuard],
   children: [
+    { path: 'perfil', component: PerfilComponent, canActivate: [authGuard] },
     { path: 'admin',          component: DashboardComponent,          canActivate: [roleGuard], data: { soloSuperAdmin: true } },
     { path: 'staff',       component: StaffListaComponent, canActivate: [roleGuard], data: { roles: ['ADMIN_INSTITUCION'] } },
     { path: 'staff/nuevo', component: StaffFormComponent,  canActivate: [roleGuard], data: { roles: ['ADMIN_INSTITUCION'] } },
