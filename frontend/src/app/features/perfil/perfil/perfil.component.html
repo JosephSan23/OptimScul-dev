@@ -1,0 +1,104 @@
+<div class="perfil" *ngIf="!cargando">
+  <div class="aviso-obligatorio" *ngIf="obligatorio">
+    Completa tu perfil para continuar. Faltan datos obligatorios.
+  </div>
+
+  <div class="tabs">
+    <button [class.activo]="tab === 'datos'" (click)="tab = 'datos'">
+      Mis datos
+    </button>
+    <button [class.activo]="tab === 'password'" (click)="tab = 'password'">
+      Contraseña
+    </button>
+    <button [class.activo]="tab === 'foto'" (click)="tab = 'foto'">Foto</button>
+  </div>
+
+  <p class="error" *ngIf="error">{{ error }}</p>
+  <p class="exito" *ngIf="exito">{{ exito }}</p>
+
+  <!-- DATOS -->
+  <form *ngIf="tab === 'datos'" (ngSubmit)="guardarDatos()" class="form">
+    <fieldset disabled class="bloque">
+      <legend>Identidad (la gestiona la institución)</legend>
+      <input [value]="p.tipoDocumento + ' ' + p.numeroDocumento" />
+      <input [value]="p.primerNombre + ' ' + p.primerApellido" />
+    </fieldset>
+
+    <label
+      >Segundo nombre <input [(ngModel)]="p.segundoNombre" name="sn"
+    /></label>
+    <label
+      >Segundo apellido <input [(ngModel)]="p.segundoApellido" name="sa"
+    /></label>
+    <label [class.falta]="falta('fechaNacimiento')"
+      >Fecha de nacimiento *
+      <input type="date" [(ngModel)]="p.fechaNacimiento" name="fn"
+    /></label>
+    <label [class.falta]="falta('sexo')"
+      >Sexo *
+      <select [(ngModel)]="p.sexo" name="sx">
+        <option value="">—</option>
+        <option *ngFor="let s of sexos" [value]="s">{{ s }}</option>
+      </select></label
+    >
+    <label
+      >Nacionalidad <input [(ngModel)]="p.nacionalidad" name="nac"
+    /></label>
+    <label [class.falta]="falta('telefono')"
+      >Teléfono * <input [(ngModel)]="p.telefono" name="tel"
+    /></label>
+    <label
+      >Teléfono alternativo
+      <input [(ngModel)]="p.telefonoAlternativo" name="tel2"
+    /></label>
+    <label>Correo <input [(ngModel)]="p.correo" name="cor" /></label>
+    <label [class.falta]="falta('direccion')"
+      >Dirección * <input [(ngModel)]="p.direccion" name="dir"
+    /></label>
+    <label>Barrio <input [(ngModel)]="p.barrio" name="bar" /></label>
+    <label [class.falta]="falta('ciudad')"
+      >Ciudad * <input [(ngModel)]="p.ciudad" name="ciu"
+    /></label>
+    <label
+      >Departamento <input [(ngModel)]="p.departamento" name="dep"
+    /></label>
+    <label>País <input [(ngModel)]="p.pais" name="pai" /></label>
+
+    <ng-container *ngIf="p.esDocente">
+      <label
+        >Especialidad <input [(ngModel)]="p.especialidad" name="esp"
+      /></label>
+      <label
+        >Título profesional <input [(ngModel)]="p.tituloProfesional" name="tit"
+      /></label>
+    </ng-container>
+
+    <button type="submit" [disabled]="guardando">Guardar datos</button>
+  </form>
+
+  <!-- CONTRASEÑA -->
+  <form *ngIf="tab === 'password'" (ngSubmit)="cambiarPassword()" class="form">
+    <label
+      >Contraseña actual
+      <input type="password" [(ngModel)]="pass.actual" name="pa"
+    /></label>
+    <label
+      >Nueva contraseña
+      <input type="password" [(ngModel)]="pass.nueva" name="pn"
+    /></label>
+    <label
+      >Confirmar <input type="password" [(ngModel)]="pass.confirmar" name="pc"
+    /></label>
+    <button type="submit" [disabled]="guardando">Cambiar contraseña</button>
+  </form>
+
+  <!-- FOTO -->
+  <div *ngIf="tab === 'foto'" class="form">
+    <img *ngIf="p.fotoUrl" [src]="p.fotoUrl" alt="Foto" class="avatar-foto" />
+    <input
+      type="file"
+      accept="image/png,image/jpeg,image/webp"
+      (change)="onFoto($event)"
+    />
+  </div>
+</div>
