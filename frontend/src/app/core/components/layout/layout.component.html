@@ -19,6 +19,13 @@
           </a>
         </li>
 
+       <li class="nav-item" routerLinkActive="active">
+        <a routerLink="/dashboard/perfil">
+          <i class="ti ti-user"></i>
+          <span class="link-name">Mi Perfil</span>
+        </a>
+      </li>
+
         <li class="nav-item" routerLinkActive="active" *ngFor="let item of menuVisible">
           <a [routerLink]="item.ruta">
             <i [class]="item.icon"></i>

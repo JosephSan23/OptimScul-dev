@@ -1,4 +1,5 @@
 import { Component, HostListener } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { NotificacionService } from '../../services/notificacion.service';
 import { ChatSocketService } from '../../services/chat-socket.service';
@@ -17,7 +18,7 @@ export class LayoutComponent {
   notificaciones: any[] = [];
   panelNotisAbierto = false;
 
-  constructor(private authService: AuthService, private notis: NotificacionService, private socket: ChatSocketService) {}
+  constructor(private authService: AuthService, private notis: NotificacionService, private socket: ChatSocketService, private router: Router) {}
 
   ngOnInit(): void {
     this.notis.contador().subscribe(r => this.noLeidas = r.noLeidas);
@@ -39,6 +40,8 @@ export class LayoutComponent {
       this.notificaciones.forEach(n => n.estado = 'LEIDA');
     });
   }
+
+  irAPerfil(): void { this.router.navigate(['/dashboard/perfil']); }  // inyecta Router si no está
 
   get iniciales(): string {
     return (this.usuario?.username ?? '').substring(0, 2).toUpperCase();
