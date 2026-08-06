@@ -1,0 +1,51 @@
+:host {
+  display: block;
+}
+
+.btn-volver {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-soft);
+  font-size: .85rem;
+  font-weight: 600;
+  text-decoration: none;
+  margin-bottom: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color .2s;
+
+  &:hover { color: var(--orange-600); }
+  i { font-size: .9rem; }
+}
+
+.btn-secundario {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--paper);
+  color: var(--navy-900);
+  border: 2px solid var(--line);
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: .9rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all .2s ease;
+
+  &:hover { border-color: var(--orange-500); color: var(--orange-600); transform: translateY(-1px); }
+  i { font-size: 1rem; }
+}
+
+/* fila de acciones superiores */
+:host {
+  --gap-acciones: 10px;
+}
+
+.btn-save, .btn-secundario, .btn-volver { margin-right: 10px; margin-bottom: 8px; }
+.btn-volver { display: inline-flex; }
+
+.tabla-crud .celda-mono { font-family: var(--font-display); font-weight: 700; color: var(--navy-900); font-size: .85rem; }

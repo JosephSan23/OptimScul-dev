@@ -1,0 +1,62 @@
+:host {
+  display: block;
+}
+
+.asignaturas-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 18px;
+}
+
+.asignatura-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 22px 22px 16px;
+  background:
+    radial-gradient(120% 80% at 100% 0%, var(--orange-50), transparent 55%),
+    var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  box-shadow: var(--clay-card);
+  transition: transform .22s cubic-bezier(.22,1,.36,1), box-shadow .22s ease, border-color .2s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-2);
+    border-color: var(--orange-100);
+  }
+
+  &.inactiva { opacity: .72; background: var(--cream); }
+}
+
+.asignatura-card.inactiva .asignatura-nombre h3 { color: var(--ink-soft); }
+.asignatura-info { display: flex; flex-direction: column; gap: 12px; flex: 1; }
+
+.asignatura-nombre {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  h3 { font-family: var(--font-display); font-size: 1.22rem; font-weight: 800; color: var(--navy-900); margin: 0; line-height: 1.15; }
+}
+
+.asignatura-codigo {
+  font-family: var(--font-display);
+  font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--orange-600); background: var(--orange-100);
+  padding: 3px 10px; border-radius: 8px;
+}
+
+.asignatura-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: auto; }
+
+.badge-area, .badge-intensidad, .badge-flag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: .72rem; font-weight: 700; padding: 5px 12px; border-radius: 999px; white-space: nowrap;
+  i { font-size: .82rem; }
+}
+.badge-area { color: var(--navy-700); background: var(--navy-100); }
+.badge-area.sin-area { color: var(--ink-soft); background: var(--line-soft); font-style: italic; }
+.badge-intensidad { color: var(--data-blue); background: var(--data-blue-soft); }
+.badge-flag { color: var(--orange-600); background: var(--orange-100); }
+
+.acciones { display: flex; gap: 8px; justify-content: flex-end; padding-top: 14px; border-top: 1px solid var(--line-soft); }
+
+@media (max-width: 480px) { .asignaturas-lista { grid-template-columns: 1fr; } }

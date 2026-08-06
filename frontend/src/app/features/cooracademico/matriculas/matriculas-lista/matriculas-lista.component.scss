@@ -1,0 +1,145 @@
+:host {
+  display: block;
+}
+
+/* ---------- barra de filtros ---------- */
+.selector-anio {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 14px 18px;
+  margin-bottom: 22px;
+}
+
+.campo-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 190px;
+
+  label {
+    font-size: .72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: var(--ink-soft);
+  }
+
+  select,
+  input {
+    padding: 10px 13px;
+    border: 1.5px solid var(--line);
+    border-radius: var(--r-control);
+    font-family: var(--font-body);
+    font-size: .9rem;
+    color: var(--ink);
+    background: var(--paper);
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+
+    &:focus {
+      border-color: var(--orange-500);
+      box-shadow: 0 0 0 3px rgba(244, 118, 42, .12);
+    }
+  }
+
+  select {
+    cursor: pointer;
+    appearance: none;
+    padding-right: 36px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235A6B82' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+  }
+
+  &.tema { flex: 1; min-width: 240px; }
+}
+
+.tabla-crud tbody tr.fila-apagada {
+  opacity: .55;
+  td b { color: var(--ink-soft); }
+}
+
+.tag.warn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .72rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--orange-100);
+  color: var(--orange-600);
+  white-space: nowrap;
+}
+
+/* estados propios de esta entidad */
+.badge-estado {
+  &.estado-activa,
+  &.estado-publicada    { background: var(--green-100);  color: var(--green-500); }
+  &.estado-finalizada,
+  &.estado-graduada,
+  &.estado-cerrada,
+  &.estado-trasladada   { background: var(--navy-100);   color: var(--navy-700); }
+  &.estado-retirada,
+  &.estado-inactiva,
+  &.estado-borrador     { background: var(--line-soft);  color: var(--ink-soft); }
+  &.estado-cancelada,
+  &.estado-anulada      { background: var(--red-100);    color: var(--red-500); }
+  &.estado-prematricula { background: var(--orange-100); color: var(--orange-600); }
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(14, 42, 71, .45);
+  backdrop-filter: blur(2px);
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  animation: fadeIn .18s ease;
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.modal-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--paper);
+  border-radius: var(--r-panel);
+  box-shadow: var(--shadow-2);
+  padding: 28px 26px;
+  animation: modalUp .22s cubic-bezier(.22,1,.36,1);
+
+  h3 { font-family: var(--font-display); font-size: 1.2rem; font-weight: 800; color: var(--navy-900); margin: 0 0 4px; }
+  p { color: var(--ink-soft); font-size: .9rem; margin: 0 0 18px; }
+
+  select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid var(--line);
+    border-radius: var(--r-control);
+    font-family: var(--font-body);
+    font-size: .92rem;
+    color: var(--ink);
+    background: var(--cream);
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    padding-right: 38px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235A6B82' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    &:focus { border-color: var(--orange-500); box-shadow: 0 0 0 3px rgba(244,118,42,.12); }
+  }
+}
+
+@keyframes modalUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 22px;
+}

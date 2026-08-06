@@ -1,0 +1,88 @@
+:host {
+  display: block;
+}
+
+.banner-cobertura {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: var(--r-card);
+  margin-bottom: 20px;
+  font-size: .9rem;
+  font-weight: 600;
+
+  i { font-size: 1.2rem; flex-shrink: 0; margin-top: 1px; }
+  b { display: block; margin-bottom: 4px; }
+  ul { margin: 0; padding-left: 18px; font-weight: 500; }
+
+  &.ok { background: var(--green-100); color: var(--green-500); }
+  &.advertencia { background: var(--orange-100); color: var(--orange-600); }
+}
+
+.escalas-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.escala-card {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  box-shadow: var(--clay-card);
+  transition: transform .2s ease, box-shadow .2s ease;
+
+  &:hover { transform: translateY(-4px); box-shadow: var(--shadow-2); }
+  &.inactiva { opacity: .7; .escala-orden { filter: grayscale(.5); } }
+}
+
+.escala-orden {
+  flex-shrink: 0;
+  width: 62px;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(160deg, var(--navy-700), var(--navy-900));
+  box-shadow: var(--clay-btn-inset);
+}
+
+.escala-info { flex: 1; min-width: 0; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; }
+
+.escala-nombre {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  h3 { font-family: var(--font-display); font-size: 1.1rem; font-weight: 800; color: var(--navy-900); margin: 0; }
+}
+
+.escala-abrev {
+  font-family: var(--font-display);
+  font-size: .7rem; font-weight: 700;
+  color: var(--orange-600); background: var(--orange-100);
+  padding: 2px 8px; border-radius: 6px;
+}
+
+.escala-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+.badge-rango {
+  font-family: var(--font-display);
+  font-size: .78rem; font-weight: 800; color: var(--navy-900);
+  background: var(--cream); border: 1px solid var(--line);
+  padding: 4px 11px; border-radius: 999px;
+}
+
+.badge-aprueba {
+  display: inline-flex; align-items: center;
+  font-size: .72rem; font-weight: 700; padding: 4px 11px; border-radius: 999px;
+  &.aprueba-si { background: var(--green-100); color: var(--green-500); }
+  &.aprueba-no { background: var(--red-100); color: var(--red-500); }
+}
+
+.escala-info .acciones { display: flex; gap: 8px; justify-content: flex-end; margin-top: auto; padding-top: 12px; border-top: 1px solid var(--line-soft); }
+
+@media (max-width: 480px) { .escalas-lista { grid-template-columns: 1fr; } }

@@ -1,0 +1,115 @@
+:host {
+  display: block;
+}
+
+/* ---------- barra de filtros ---------- */
+.notas-barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 14px 18px;
+  margin-bottom: 22px;
+}
+
+.campo-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 190px;
+
+  label {
+    font-size: .72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: var(--ink-soft);
+  }
+
+  select,
+  input {
+    padding: 10px 13px;
+    border: 1.5px solid var(--line);
+    border-radius: var(--r-control);
+    font-family: var(--font-body);
+    font-size: .9rem;
+    color: var(--ink);
+    background: var(--paper);
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+
+    &:focus {
+      border-color: var(--orange-500);
+      box-shadow: 0 0 0 3px rgba(244, 118, 42, .12);
+    }
+  }
+
+  select {
+    cursor: pointer;
+    appearance: none;
+    padding-right: 36px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235A6B82' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+  }
+
+  &.tema { flex: 1; min-width: 240px; }
+}
+
+.tabla-crud .col-num,
+.tabla-crud thead th.col-num { text-align: center; white-space: nowrap; }
+
+.tabla-crud .col-num b { font-family: var(--font-display); font-weight: 800; color: var(--navy-900); }
+
+.tag.warn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .72rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--orange-100);
+  color: var(--orange-600);
+  white-space: nowrap;
+}
+
+/* estados propios de esta entidad */
+.badge-estado {
+  &.estado-activa,
+  &.estado-publicada    { background: var(--green-100);  color: var(--green-500); }
+  &.estado-finalizada,
+  &.estado-graduada,
+  &.estado-cerrada,
+  &.estado-trasladada   { background: var(--navy-100);   color: var(--navy-700); }
+  &.estado-retirada,
+  &.estado-inactiva,
+  &.estado-borrador     { background: var(--line-soft);  color: var(--ink-soft); }
+  &.estado-cancelada,
+  &.estado-anulada      { background: var(--red-100);    color: var(--red-500); }
+  &.estado-prematricula { background: var(--orange-100); color: var(--orange-600); }
+}
+
+.btn-sm {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--paper);
+  color: var(--ink-soft);
+  border: 1px solid var(--line);
+  padding: 7px 13px;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: .8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .2s ease;
+
+  &:hover:not(:disabled) { border-color: var(--navy-900); color: var(--navy-900); }
+  &:disabled { opacity: .6; cursor: wait; }
+  i { font-size: .9rem; }
+}
+
+.badge-estado.estado-entregada, .badge-estado.entregada { background: var(--green-100); color: var(--green-500); }
+.badge-estado.pendiente, .badge-estado.estado-pendiente { background: var(--orange-100); color: var(--orange-600); }
+.badge-estado.calificada, .badge-estado.estado-calificada { background: var(--navy-100); color: var(--navy-700); }
+.badge-estado.tarde, .badge-estado.estado-tarde { background: var(--red-100); color: var(--red-500); }

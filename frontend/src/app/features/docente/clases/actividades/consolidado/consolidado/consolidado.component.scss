@@ -1,0 +1,72 @@
+:host {
+  display: block;
+}
+
+.btn-volver {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-soft);
+  font-size: .85rem;
+  font-weight: 600;
+  text-decoration: none;
+  margin-bottom: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color .2s;
+
+  &:hover { color: var(--orange-600); }
+  i { font-size: .9rem; }
+}
+
+.tabla-crud .col-num,
+.tabla-crud thead th.col-num { text-align: center; white-space: nowrap; }
+
+.tabla-crud .col-num b { font-family: var(--font-display); font-weight: 800; color: var(--navy-900); }
+
+.tag.warn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .72rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--orange-100);
+  color: var(--orange-600);
+  white-space: nowrap;
+}
+
+/* estados propios de esta entidad */
+.badge-estado {
+  &.estado-activa,
+  &.estado-publicada    { background: var(--green-100);  color: var(--green-500); }
+  &.estado-finalizada,
+  &.estado-graduada,
+  &.estado-cerrada,
+  &.estado-trasladada   { background: var(--navy-100);   color: var(--navy-700); }
+  &.estado-retirada,
+  &.estado-inactiva,
+  &.estado-borrador     { background: var(--line-soft);  color: var(--ink-soft); }
+  &.estado-cancelada,
+  &.estado-anulada      { background: var(--red-100);    color: var(--red-500); }
+  &.estado-prematricula { background: var(--orange-100); color: var(--orange-600); }
+}
+
+.banner-cobertura {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: var(--r-card);
+  margin-bottom: 20px;
+  font-size: .9rem;
+  font-weight: 600;
+  line-height: 1.5;
+
+  i { font-size: 1.2rem; flex-shrink: 0; margin-top: 1px; }
+
+  &.advertencia { background: var(--orange-100); color: var(--orange-600); }
+  &.ok { background: var(--green-100); color: var(--green-500); }
+}
