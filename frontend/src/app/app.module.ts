@@ -75,6 +75,7 @@ import { MisActividadesComponent } from './features/estudiante/actividades/mis-a
 import { EntregaActividadComponent } from './features/estudiante/actividades/entrega-actividad/entrega-actividad.component';
 import { ChatComponent } from './features/chat/chat/chat.component';
 import { PerfilComponent } from './features/perfil/perfil/perfil.component';
+import { CambiarPasswordModalComponent } from './features/cambiar-password-modal/cambiar-password-modal/cambiar-password-modal.component';
 
 
 @NgModule({
@@ -148,6 +149,7 @@ import { PerfilComponent } from './features/perfil/perfil/perfil.component';
     EntregaActividadComponent,
     ChatComponent,
     PerfilComponent,
+    CambiarPasswordModalComponent,
   ],
   imports: [
     BrowserModule,
