@@ -110,3 +110,9 @@
   </div>
 
 </div>
+
+<app-cambiar-password-modal
+  *ngIf="mostrarCambioPassword"
+  [obligatorio]="true"
+  (guardado)="mostrarCambioPassword = false">
+</app-cambiar-password-modal>

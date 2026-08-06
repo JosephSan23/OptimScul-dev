@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { NotificacionService } from '../../services/notificacion.service';
 import { ChatSocketService } from '../../services/chat-socket.service';
+import { PerfilService } from '../../services/perfil.service';
 
 @Component({
   selector: 'app-layout',
@@ -17,8 +18,9 @@ export class LayoutComponent {
   noLeidas = 0;
   notificaciones: any[] = [];
   panelNotisAbierto = false;
+  mostrarCambioPassword = false;
 
-  constructor(private authService: AuthService, private notis: NotificacionService, private socket: ChatSocketService, private router: Router) {}
+  constructor(private authService: AuthService, private notis: NotificacionService, private socket: ChatSocketService, private router: Router, private perfilService: PerfilService) {}
 
   ngOnInit(): void {
     this.notis.contador().subscribe(r => this.noLeidas = r.noLeidas);
@@ -27,6 +29,9 @@ export class LayoutComponent {
       this.notificaciones.unshift(n);
       this.noLeidas++;
     });
+    if (this.authService.getTipoContexto() === 'INSTITUCION') {
+    this.perfilService.perfil().subscribe(p => this.mostrarCambioPassword = p.requiereCambioPassword);
+  }
   }
 
   toggleNotis(): void {

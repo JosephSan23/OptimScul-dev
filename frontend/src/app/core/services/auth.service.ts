@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
+import { PerfilService } from './perfil.service';
 
 
 export interface LoginRequest {
@@ -64,11 +65,12 @@ export class AuthService {
     this.router.navigate([this.RUTA_POR_MODO[modo] ?? '/']);
   }
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private perfil: PerfilService) {}
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.API}/login`, credentials).pipe(
       tap(response => {
+        this.perfil.refrescar();
         localStorage.setItem(this.TOKEN_KEY, response.token);
         localStorage.setItem(this.USER_KEY, JSON.stringify({
           usuarioId:    response.usuarioId,
@@ -95,6 +97,7 @@ export class AuthService {
   }
 
   logout(): void {
+    this.perfil.refrescar();
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);
     localStorage.removeItem(this.MODO_KEY);
