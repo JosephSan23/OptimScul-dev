@@ -3,6 +3,7 @@ package backend.community.infrastructure.rest.controller;
 import backend.community.application.usecase.EstudianteCrud.CambiarEstadoEstudianteUseCase;
 import backend.community.application.usecase.EstudianteCrud.CrearEstudianteUseCase;
 import backend.community.application.usecase.EstudianteCrud.EditarEstudianteUseCase;
+import backend.community.application.usecase.EstudianteCrud.EnviarCredencialesEstudianteUseCase;
 import backend.community.application.usecase.EstudianteCrud.ListarEstudiantesUseCase;
 import backend.community.application.usecase.EstudianteCrud.ObtenerEstudianteUseCase;
 import backend.community.infrastructure.rest.dto.EditarEstudianteRequestDto;
@@ -24,15 +25,18 @@ public class EstudianteController {
     private final ObtenerEstudianteUseCase obtenerEstudiante;
     private final EditarEstudianteUseCase editarEstudiante;
     private final CambiarEstadoEstudianteUseCase cambiarEstado;
+    private final EnviarCredencialesEstudianteUseCase enviarCredenciales;
 
     public EstudianteController(ListarEstudiantesUseCase listar, CrearEstudianteUseCase crear,
             ObtenerEstudianteUseCase obtenerEstudiante, EditarEstudianteUseCase editarEstudiante,
-            CambiarEstadoEstudianteUseCase cambiarEstado) {
+            CambiarEstadoEstudianteUseCase cambiarEstado,
+            EnviarCredencialesEstudianteUseCase enviarCredenciales) {
         this.listar = listar;
         this.crear = crear;
         this.obtenerEstudiante = obtenerEstudiante;
         this.editarEstudiante = editarEstudiante;
         this.cambiarEstado = cambiarEstado;
+        this.enviarCredenciales = enviarCredenciales;
     }
 
     @GetMapping
@@ -107,6 +111,37 @@ public class EstudianteController {
         }
     }
 
+    @PostMapping("/{id}/enviar-credenciales")
+    public ResponseEntity<?> enviarCredenciales(@PathVariable UUID id, @AuthenticationPrincipal UUID coordId) {
+        try {
+            EnviarCredencialesEstudianteUseCase.Resultado r = enviarCredenciales.ejecutar(coordId, id);
+            String mensaje;
+            boolean enviado = false;
+            switch (r.estado()) {
+                case ENVIADO_ACUDIENTE -> {
+                    enviado = true;
+                    mensaje = "Credenciales enviadas al correo del acudiente (" + r.destino() + ").";
+                }
+                case ENVIADO_ESTUDIANTE -> {
+                    enviado = true;
+                    mensaje = "Credenciales enviadas al correo del estudiante (" + r.destino() + ").";
+                }
+                case SIN_CORREO -> mensaje = "El estudiante y su acudiente no tienen correo registrado. "
+                        + "Puedes entregar las credenciales por otro medio (por ejemplo, WhatsApp).";
+                default -> mensaje = "El envío de correos no está habilitado en el servidor. "
+                        + "Contacta al administrador o entrega las credenciales por otro medio.";
+            }
+            return ResponseEntity.ok(new CredencialesResponse(mensaje, enviado));
+        } catch (SecurityException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MensajeResponse(e.getMessage()));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MensajeResponse(e.getMessage()));
+        }
+    }
+
     record MensajeResponse(String mensaje) {
+    }
+
+    record CredencialesResponse(String mensaje, boolean enviado) {
     }
 }

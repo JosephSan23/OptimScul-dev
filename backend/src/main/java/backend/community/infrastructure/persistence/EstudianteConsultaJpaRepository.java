@@ -21,7 +21,18 @@ public interface EstudianteConsultaJpaRepository extends JpaRepository<Estudiant
                    p.primer_nombre     AS "primerNombre",
                    p.primer_apellido   AS "primerApellido",
                    p.numero_documento  AS "numeroDocumento",
-                   p.correo            AS "correo"
+                   p.correo            AS "correo",
+                   (
+                     (p.correo IS NOT NULL AND p.correo <> '')
+                     OR EXISTS (
+                        SELECT 1
+                        FROM optimscul.estudiante_acudiente ea
+                        JOIN optimscul.acudiente ac ON ac.id = ea.acudiente_id
+                        JOIN optimscul.persona   pa ON pa.id = ac.persona_id
+                        WHERE ea.estudiante_id = e.id
+                          AND pa.correo IS NOT NULL AND pa.correo <> ''
+                     )
+                   )                   AS "correoAlcanzable"
             FROM optimscul.estudiante e
             JOIN optimscul.persona p       ON p.id = e.persona_id
             LEFT JOIN optimscul.usuario u  ON u.persona_id = e.persona_id

@@ -14,4 +14,7 @@ public interface EstudianteResumen {
     String getPrimerApellido();
     String getNumeroDocumento();
     String getCorreo();
+
+    /** true si hay un correo alcanzable (del estudiante o de alguno de sus acudientes). */
+    Boolean getCorreoAlcanzable();
 }
