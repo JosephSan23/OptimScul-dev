@@ -14,6 +14,7 @@ export interface Estudiante {
   primerApellido: string;
   numeroDocumento: string;
   correo?: string;
+  correoAlcanzable?: boolean;
 }
 export interface EstudianteRequest {
   tipoDocumento: string;
@@ -60,6 +61,11 @@ export interface EditarEstudianteRequest {
   observaciones?: string;
 }
 
+export interface EnvioCredencialesResponse {
+  mensaje: string;
+  enviado: boolean;
+}
+
 @Injectable({ providedIn: 'root' })
 export class EstudianteService {
   private readonly API = `${environment.apiUrl}/community/estudiantes`;
@@ -92,6 +98,13 @@ export class EstudianteService {
   inactivar(id: string): Observable<{ mensaje: string }> {
     return this.http.patch<{ mensaje: string }>(
       `${this.API}/${id}/inactivar`,
+      {},
+    );
+  }
+
+  enviarCredenciales(id: string): Observable<EnvioCredencialesResponse> {
+    return this.http.post<EnvioCredencialesResponse>(
+      `${this.API}/${id}/enviar-credenciales`,
       {},
     );
   }
