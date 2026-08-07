@@ -7,6 +7,9 @@
   <i class="ti ti-loader-2 girando"></i> Cargando...
 </div>
 <div *ngIf="error" class="estado-msg error">{{ error }}</div>
+<div *ngIf="feedback" class="estado-msg" [class.error]="!feedbackOk">
+  {{ feedback }}
+</div>
 
 <app-tabla-paginada
   *ngIf="!cargando"
@@ -73,6 +76,25 @@
               >
                 <i class="ti ti-pencil"></i>
               </a>
+              <button
+                class="btn-accion"
+                [title]="
+                  e.correoAlcanzable
+                    ? 'Enviar credenciales por correo'
+                    : 'Sin correo registrado (del estudiante o su acudiente). Entrégalas por otro medio.'
+                "
+                [disabled]="!e.correoAlcanzable || enviandoId === e.estudianteId"
+                (click)="enviarCredenciales(e)"
+              >
+                <i
+                  class="ti"
+                  [ngClass]="
+                    enviandoId === e.estudianteId
+                      ? 'ti-loader-2 girando'
+                      : 'ti-mail-forward'
+                  "
+                ></i>
+              </button>
               <button
                 *ngIf="e.estado === 'ACTIVO'"
                 class="btn-accion peligro"

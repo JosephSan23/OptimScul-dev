@@ -59,4 +59,28 @@ export class EstudiantesListaComponent implements OnInit {
       },
     });
   }
+
+  // ── Envío de credenciales por correo ──
+  enviandoId: string | null = null;
+  feedback = '';
+  feedbackOk = false;
+
+  enviarCredenciales(e: Estudiante): void {
+    if (!e.correoAlcanzable) return;
+    this.enviandoId = e.estudianteId;
+    this.feedback = '';
+    this.estudianteService.enviarCredenciales(e.estudianteId).subscribe({
+      next: (r) => {
+        this.enviandoId = null;
+        this.feedback = r.mensaje;
+        this.feedbackOk = r.enviado;
+      },
+      error: (err) => {
+        this.enviandoId = null;
+        this.feedbackOk = false;
+        this.feedback =
+          err?.error?.mensaje || 'No se pudieron enviar las credenciales.';
+      },
+    });
+  }
 }
