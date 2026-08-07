@@ -52,4 +52,24 @@ public class EmailSender implements EmailPort {
             destinatarioRepository.actualizarEstado(destinatarioId, EstadoNotificacion.FALLIDA, e.getMessage());
         }
     }
+
+    @Override
+    public boolean enviarDirecto(String correo, String titulo, String mensaje) {
+        JavaMailSender mail = mailProvider.getIfAvailable();
+        if (!habilitado || mail == null || correo == null || correo.isBlank())
+            return false;
+        try {
+            SimpleMailMessage m = new SimpleMailMessage();
+            m.setFrom(remitente);
+            m.setTo(correo.trim());
+            m.setSubject(titulo);
+            m.setText(mensaje);
+            mail.send(m);
+            return true;
+        } catch (Exception e) {
+            org.slf4j.LoggerFactory.getLogger(EmailSender.class)
+                    .error("No se pudieron enviar las credenciales a {}: {}", correo, e.getMessage());
+            return false;
+        }
+    }
 }
