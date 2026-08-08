@@ -2,9 +2,9 @@ package backend.community.application.port;
 
 /**
  * Datos necesarios para enviar las credenciales de acceso de un estudiante.
- * Incluye los del propio estudiante y los del acudiente elegido como destino
- * (el acudiente con correo; en su defecto, el principal). Los campos del
- * acudiente son null cuando el estudiante aún no tiene acudientes vinculados.
+ * Incluye los del propio estudiante y los del acudiente principal (destino).
+ * Los campos del acudiente son null cuando el estudiante no tiene principal.
+ * Los flags "pendiente" indican que esa cuenta aún no ha iniciado sesión.
  */
 public record DatosCredencialEstudiante(
         String estudianteNombre,
@@ -12,5 +12,7 @@ public record DatosCredencialEstudiante(
         String estudianteCorreo,
         String acudienteNombre,
         String acudienteUsername,
-        String acudienteCorreo) {
+        String acudienteCorreo,
+        boolean estudiantePendiente,
+        boolean acudientePendiente) {
 }

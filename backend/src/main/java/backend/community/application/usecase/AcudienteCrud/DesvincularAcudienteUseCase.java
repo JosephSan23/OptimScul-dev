@@ -31,6 +31,15 @@ public class DesvincularAcudienteUseCase {
                 .orElseThrow(() -> new RuntimeException("El acudiente no existe."));
         if (!inst.equals(a.getInstitucionId()))
             throw new SecurityException("Acudiente de otra institución.");
+
+        // No se puede desvincular al principal si el estudiante tiene otros acudientes:
+        // primero hay que asignar otro como principal. Si es el único, sí se permite.
+        if (Boolean.TRUE.equals(v.getEsPrincipal())
+                && vinculoRepository.findByEstudianteId(v.getEstudianteId()).size() > 1) {
+            throw new RuntimeException(
+                    "No puedes desvincular al acudiente principal. Marca antes a otro acudiente como principal.");
+        }
+
         vinculoRepository.deleteById(vinculoId);
         // La cuenta y el registro del acudiente quedan (puede estar vinculado a otros
         // estudiantes).

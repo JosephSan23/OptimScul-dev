@@ -19,15 +19,19 @@ public class CredencialesEstudianteRepositoryAdapter implements CredencialesEstu
     @Override
     @SuppressWarnings("unchecked")
     public Optional<DatosCredencialEstudiante> obtener(UUID estudianteId) {
-        // Elige como destino el acudiente que TENGA correo; si ninguno tiene,
-        // cae al acudiente principal. Así "todo junto" llega a un buzón real.
+        // El destino de las credenciales es SIEMPRE el acudiente principal
+        // (es el único con cuenta). Si el principal no tiene correo, el caso de
+        // uso cae al correo del propio estudiante. Los flags "pendiente" indican
+        // que la cuenta aún no ha iniciado sesión (ultimo_login IS NULL).
         List<Object[]> filas = em.createNativeQuery("""
                 SELECT p.primer_nombre  || ' ' || p.primer_apellido  AS est_nombre,
                        u.username                                     AS est_user,
                        p.correo                                       AS est_correo,
                        pa.primer_nombre || ' ' || pa.primer_apellido  AS ac_nombre,
                        ua.username                                    AS ac_user,
-                       pa.correo                                      AS ac_correo
+                       pa.correo                                      AS ac_correo,
+                       (u.ultimo_login IS NULL)                       AS est_pendiente,
+                       (ua.ultimo_login IS NULL)                      AS ac_pendiente
                 FROM optimscul.estudiante e
                 JOIN optimscul.persona p ON p.id = e.persona_id
                 JOIN optimscul.usuario u ON u.persona_id = e.persona_id
@@ -35,10 +39,7 @@ public class CredencialesEstudianteRepositoryAdapter implements CredencialesEstu
                     SELECT ac.persona_id
                     FROM optimscul.estudiante_acudiente ea
                     JOIN optimscul.acudiente ac ON ac.id = ea.acudiente_id
-                    JOIN optimscul.persona pp ON pp.id = ac.persona_id
-                    WHERE ea.estudiante_id = e.id
-                    ORDER BY (pp.correo IS NOT NULL AND pp.correo <> '') DESC,
-                             ea.es_principal DESC NULLS LAST
+                    WHERE ea.estudiante_id = e.id AND ea.es_principal = true
                     LIMIT 1
                 ) best ON true
                 LEFT JOIN optimscul.persona pa ON pa.id = best.persona_id
@@ -54,6 +55,7 @@ public class CredencialesEstudianteRepositoryAdapter implements CredencialesEstu
         Object[] r = filas.get(0);
         return Optional.of(new DatosCredencialEstudiante(
                 (String) r[0], (String) r[1], (String) r[2],
-                (String) r[3], (String) r[4], (String) r[5]));
+                (String) r[3], (String) r[4], (String) r[5],
+                Boolean.TRUE.equals(r[6]), Boolean.TRUE.equals(r[7])));
     }
 }

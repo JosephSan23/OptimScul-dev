@@ -30,7 +30,8 @@ public class EnviarCredencialesEstudianteUseCase {
     public enum Estado {
         ENVIADO_ACUDIENTE,   // llegó al correo del acudiente (con credenciales del estudiante y del acudiente)
         ENVIADO_ESTUDIANTE,  // no hay acudiente con correo; llegó al correo propio del estudiante
-        SIN_CORREO,          // ni el estudiante ni su acudiente tienen correo → entregar por otro medio
+        SIN_CORREO,          // ni el principal ni el estudiante tienen correo → entregar por otro medio
+        YA_ACTIVADO,         // la cuenta destino ya inició sesión → no se reenvía (usar recuperar contraseña)
         CORREO_DESHABILITADO // el servidor de correo no está habilitado o falló el envío
     }
 
@@ -53,17 +54,25 @@ public class EnviarCredencialesEstudianteUseCase {
         String correoAcudiente = tieneAcudiente ? limpiar(d.acudienteCorreo()) : null;
         String correoEstudiante = limpiar(d.estudianteCorreo());
 
-        // "Todo junto al acudiente": el destino preferente es el acudiente.
+        // Destino preferente: el acudiente principal. Si no tiene correo, el estudiante.
         String destino;
         Estado ok;
+        boolean pendiente;
         if (correoAcudiente != null) {
             destino = correoAcudiente;
             ok = Estado.ENVIADO_ACUDIENTE;
+            pendiente = d.acudientePendiente();
         } else if (correoEstudiante != null) {
             destino = correoEstudiante;
             ok = Estado.ENVIADO_ESTUDIANTE;
+            pendiente = d.estudiantePendiente();
         } else {
             return new Resultado(Estado.SIN_CORREO, null);
+        }
+
+        // Solo se envían credenciales a cuentas que aún no han iniciado sesión.
+        if (!pendiente) {
+            return new Resultado(Estado.YA_ACTIVADO, null);
         }
 
         String titulo = "Credenciales de acceso · OptimScul";

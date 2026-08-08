@@ -39,9 +39,12 @@ public class AcudienteController {
             @AuthenticationPrincipal UUID coordId) {
         try {
             CrearVincularAcudienteUseCase.Resultado r = crearVincular.ejecutar(coordId, estudianteId, req);
-            String msg = r.reutilizado()
-                    ? "Acudiente existente vinculado al estudiante."
-                    : "Acudiente creado y vinculado. Usuario: " + r.username() + " · Contraseña: su documento.";
+            String msg = switch (r.tipo()) {
+                case CUENTA_CREADA -> "Acudiente principal creado y vinculado. Usuario: " + r.username()
+                        + " · Contraseña: su número de documento.";
+                case CUENTA_REUTILIZADA -> "Acudiente vinculado. Usa las credenciales que ya tenía.";
+                case SOLO_CONTACTO -> "Acudiente de contacto agregado y vinculado (sin cuenta de acceso).";
+            };
             return ResponseEntity.status(HttpStatus.CREATED).body(new MensajeResponse(msg));
         } catch (SecurityException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MensajeResponse(e.getMessage()));

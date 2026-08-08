@@ -128,6 +128,8 @@ public class EstudianteController {
                 }
                 case SIN_CORREO -> mensaje = "El estudiante y su acudiente no tienen correo registrado. "
                         + "Puedes entregar las credenciales por otro medio (por ejemplo, WhatsApp).";
+                case YA_ACTIVADO -> mensaje = "La cuenta ya fue activada; no es necesario reenviar las credenciales. "
+                        + "Si la contraseña se olvidó, usa la opción de recuperar contraseña.";
                 default -> mensaje = "El envío de correos no está habilitado en el servidor. "
                         + "Contacta al administrador o entrega las credenciales por otro medio.";
             }

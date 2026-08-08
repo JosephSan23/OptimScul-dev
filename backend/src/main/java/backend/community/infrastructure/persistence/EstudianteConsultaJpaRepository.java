@@ -30,6 +30,7 @@ public interface EstudianteConsultaJpaRepository extends JpaRepository<Estudiant
                         JOIN optimscul.acudiente ac ON ac.id = ea.acudiente_id
                         JOIN optimscul.persona   pa ON pa.id = ac.persona_id
                         WHERE ea.estudiante_id = e.id
+                          AND ea.es_principal = true
                           AND pa.correo IS NOT NULL AND pa.correo <> ''
                      )
                    )                   AS "correoAlcanzable"

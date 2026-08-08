@@ -1,6 +1,7 @@
 package backend.community.application.usecase.AcudienteCrud;
 
 import backend.community.infrastructure.rest.dto.EditarAcudienteRequestDto;
+import backend.onboarding.application.AltaUsuarioInstitucionService;
 import backend.people.application.port.AcudienteRepository;
 import backend.people.application.port.EstudianteAcudienteRepository;
 import backend.people.application.port.InstitucionRepository;
@@ -27,13 +28,15 @@ public class EditarAcudienteUseCase {
     private final InstitucionRepository institucionRepository;
     private final UsernameGenerator usernameGenerator;
     private final PasswordEncoder passwordEncoder;
+    private final AltaUsuarioInstitucionService altaUsuario;
     private final AutorizacionService auth;
 
     public EditarAcudienteUseCase(EstudianteAcudienteRepository vinculoRepository,
             AcudienteRepository acudienteRepository,
             PersonaRepository personaRepository, UsuarioRepository usuarioRepository,
             InstitucionRepository institucionRepository, UsernameGenerator usernameGenerator,
-            PasswordEncoder passwordEncoder, AutorizacionService auth) {
+            PasswordEncoder passwordEncoder, AltaUsuarioInstitucionService altaUsuario,
+            AutorizacionService auth) {
         this.vinculoRepository = vinculoRepository;
         this.acudienteRepository = acudienteRepository;
         this.personaRepository = personaRepository;
@@ -41,6 +44,7 @@ public class EditarAcudienteUseCase {
         this.institucionRepository = institucionRepository;
         this.usernameGenerator = usernameGenerator;
         this.passwordEncoder = passwordEncoder;
+        this.altaUsuario = altaUsuario;
         this.auth = auth;
     }
 
@@ -61,6 +65,17 @@ public class EditarAcudienteUseCase {
             throw new RuntimeException("Ya existe otra persona con ese documento.");
         }
 
+        boolean eraPrincipal = Boolean.TRUE.equals(v.getEsPrincipal());
+        boolean esPrincipal = dto.getEsPrincipal() != null && dto.getEsPrincipal();
+        // Siempre debe existir un principal: no se puede quitarle el rol al único principal.
+        if (eraPrincipal && !esPrincipal) {
+            boolean otroPrincipal = vinculoRepository.findByEstudianteId(v.getEstudianteId()).stream()
+                    .anyMatch(o -> !o.getId().equals(v.getId()) && Boolean.TRUE.equals(o.getEsPrincipal()));
+            if (!otroPrincipal) {
+                throw new RuntimeException(
+                        "Debe haber un acudiente principal. Marca a otro acudiente como principal antes de quitarle el rol a este.");
+            }
+        }
         LocalDateTime ahora = LocalDateTime.now();
 
         // Persona
@@ -85,14 +100,35 @@ public class EditarAcudienteUseCase {
 
         // Vínculo (parentesco/permisos de ESTE estudiante)
         v.setParentesco(dto.getParentesco());
-        v.setEsPrincipal(dto.getEsPrincipal() != null && dto.getEsPrincipal());
+        v.setEsPrincipal(esPrincipal);
         v.setAutorizadoRecogida(dto.getAutorizadoRecogida() != null && dto.getAutorizadoRecogida());
-        v.setAutorizadoInfoAcademica(dto.getAutorizadoInfoAcademica() != null && dto.getAutorizadoInfoAcademica());
+        // El acceso a la información académica va ligado a ser principal.
+        v.setAutorizadoInfoAcademica(esPrincipal);
         v.setUpdatedAt(ahora);
         vinculoRepository.save(v);
 
-        // Cuenta (regen si no ha entrado + acceso ligado al estado)
-        usuarioRepository.findByPersonaId(p.getId()).ifPresent(usuario -> {
+        // Un solo principal por estudiante: si este queda principal, los demás pasan a contacto.
+        if (esPrincipal) {
+            for (EstudianteAcudiente otro : vinculoRepository.findByEstudianteId(v.getEstudianteId())) {
+                if (!otro.getId().equals(v.getId()) && Boolean.TRUE.equals(otro.getEsPrincipal())) {
+                    otro.setEsPrincipal(false);
+                    otro.setUpdatedAt(ahora);
+                    vinculoRepository.save(otro);
+                }
+            }
+        }
+
+        // Cuenta de acceso
+        var usuarioOpt = usuarioRepository.findByPersonaId(p.getId());
+        if (usuarioOpt.isEmpty()) {
+            // No tenía cuenta: si lo promueven a principal, se le habilita ahora.
+            if (esPrincipal) {
+                altaUsuario.provisionar(inst, "ACUDIENTE", dto.getTipoDocumento(), dto.getNumeroDocumento(),
+                        dto.getPrimerNombre(), dto.getPrimerApellido(), dto.getCorreo());
+            }
+        } else {
+            // Ya tenía cuenta: regenerar datos si aún no ha entrado y ajustar acceso según estado.
+            var usuario = usuarioOpt.get();
             if (usuario.getUltimoLogin() == null) {
                 Institucion institucion = institucionRepository.findById(inst)
                         .orElseThrow(() -> new RuntimeException("La institución no existe."));
@@ -108,6 +144,6 @@ public class EditarAcudienteUseCase {
             usuario.setEstado(a.getEstado() == EstadoAcudiente.ACTIVO ? EstadoUsuario.ACTIVO : EstadoUsuario.INACTIVO);
             usuario.setUpdatedAt(ahora);
             usuarioRepository.save(usuario);
-        });
+        }
     }
 }
