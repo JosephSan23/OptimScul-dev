@@ -88,12 +88,13 @@
       <!-- permisos como tarjetas de interruptor -->
       <div class="permisos-lista campo-full">
         <label class="permiso-row">
-          <input type="checkbox" [(ngModel)]="form.esPrincipal" [ngModelOptions]="{ standalone: true }" />
+          <input type="checkbox" [(ngModel)]="form.esPrincipal" [disabled]="bloquearPrincipal" [ngModelOptions]="{ standalone: true }" />
           <span class="permiso-check"><i class="ti ti-check"></i></span>
           <span class="permiso-ico"><i class="ti ti-star"></i></span>
           <span class="permiso-text">
             <b>Acudiente principal</b>
-            <small>Es el contacto principal del estudiante.</small>
+            <small>Es el contacto principal y el único con acceso al aplicativo (recibe cuenta e información académica).</small>
+            <small class="nota-bloqueo" *ngIf="notaPrincipal"><i class="ti ti-info-circle"></i> {{ notaPrincipal }}</small>
           </span>
         </label>
 
@@ -104,16 +105,6 @@
           <span class="permiso-text">
             <b>Autorizado a recoger</b>
             <small>Puede retirar al estudiante de la institución.</small>
-          </span>
-        </label>
-
-        <label class="permiso-row">
-          <input type="checkbox" [(ngModel)]="form.autorizadoInfoAcademica" [ngModelOptions]="{ standalone: true }" />
-          <span class="permiso-check"><i class="ti ti-check"></i></span>
-          <span class="permiso-ico"><i class="ti ti-file-text"></i></span>
-          <span class="permiso-text">
-            <b>Ver información académica</b>
-            <small>Accede a notas, asistencia y reportes.</small>
           </span>
         </label>
       </div>

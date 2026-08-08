@@ -4,6 +4,22 @@ import {
   EstudianteService,
   EditarEstudianteRequest,
 } from '../../../core/services/estudiante.service';
+import {
+  validarEsquema,
+  hayErrores,
+  validarCampo,
+  Esquema,
+  ErroresForm,
+} from '../../../core/validation/form-validator';
+import {
+  requerido,
+  documento,
+  soloLetras,
+  longitudMin,
+  correo,
+  telefonoCo,
+  fechaNoFutura,
+} from '../../../core/validation/validators';
 
 @Component({
   selector: 'app-estudiante-form',
@@ -30,6 +46,32 @@ export class EstudianteFormComponent implements OnInit {
     estado: 'ACTIVO',
     observaciones: '',
   };
+
+  // ── Validación reutilizable ──────────────────────────────
+  // Un solo lugar donde viven las reglas de este formulario.
+  // Los validadores de formato ignoran el valor vacío, así que
+  // los campos opcionales solo se validan cuando traen contenido.
+  esquema: Esquema = {
+    tipoDocumento: [requerido('Selecciona el tipo de documento')],
+    numeroDocumento: [requerido('Ingresa el número de documento'), documento()],
+    primerNombre: [
+      requerido('Ingresa el primer nombre'),
+      soloLetras(),
+      longitudMin(2),
+    ],
+    segundoNombre: [soloLetras()],
+    primerApellido: [
+      requerido('Ingresa el primer apellido'),
+      soloLetras(),
+      longitudMin(2),
+    ],
+    segundoApellido: [soloLetras()],
+    correo: [correo()],
+    telefono: [telefonoCo()],
+    fechaNacimiento: [fechaNoFutura('La fecha de nacimiento no puede ser futura')],
+  };
+  errores: ErroresForm = {};
+
   tiposDocumento = [
     { valor: 'RC', etiqueta: 'Registro Civil' },
     { valor: 'TI', etiqueta: 'Tarjeta de Identidad' },
@@ -53,6 +95,13 @@ export class EstudianteFormComponent implements OnInit {
     this.estudianteId = this.route.snapshot.paramMap.get('id');
     this.modoEdicion = !!this.estudianteId;
     if (this.modoEdicion) this.cargar();
+  }
+
+  // Revalida un campo al salir de él (feedback inmediato sin ser molesto).
+  validar(campo: string): void {
+    const msg = validarCampo(campo, this.form, this.esquema);
+    if (msg) this.errores[campo] = msg;
+    else delete this.errores[campo];
   }
 
   cargar(): void {
@@ -88,15 +137,14 @@ export class EstudianteFormComponent implements OnInit {
   guardar(): void {
     this.error = '';
     this.exito = '';
-    if (
-      !this.form.tipoDocumento ||
-      !this.form.numeroDocumento.trim() ||
-      !this.form.primerNombre.trim() ||
-      !this.form.primerApellido.trim()
-    ) {
-      this.error = 'Tipo/número de documento y nombres son obligatorios.';
+
+    // Validación centralizada: una sola línea reemplaza el if manual.
+    this.errores = validarEsquema(this.form, this.esquema);
+    if (hayErrores(this.errores)) {
+      this.error = 'Revisa los campos marcados en rojo.';
       return;
     }
+
     this.guardando = true;
     if (this.modoEdicion) {
       this.estudianteService
@@ -123,6 +171,7 @@ export class EstudianteFormComponent implements OnInit {
           next: (res) => {
             this.guardando = false;
             this.exito = res.mensaje;
+            this.errores = {};
             this.form = {
               tipoDocumento: '',
               numeroDocumento: '',

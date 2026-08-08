@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   AcudienteService,
+  AcudienteDeEstudiante,
   EditarAcudienteRequest,
 } from '../../../../core/services/acudiente.service';
 
@@ -14,6 +15,9 @@ export class AcudienteFormComponent implements OnInit {
   modoEdicion = false;
   estudianteId = '';
   vinculoId: string | null = null;
+  // Bloqueo del check "principal" (primer acudiente, o único principal en edición)
+  bloquearPrincipal = false;
+  notaPrincipal = '';
   form: any = {
     tipoDocumento: '',
     numeroDocumento: '',
@@ -29,7 +33,6 @@ export class AcudienteFormComponent implements OnInit {
     parentesco: '',
     esPrincipal: false,
     autorizadoRecogida: false,
-    autorizadoInfoAcademica: false,
   };
   tiposDocumento = [
     { valor: 'CC', etiqueta: 'Cédula de Ciudadanía' },
@@ -67,6 +70,36 @@ export class AcudienteFormComponent implements OnInit {
     this.vinculoId = this.route.snapshot.paramMap.get('vinculoId');
     this.modoEdicion = !!this.vinculoId;
     if (this.modoEdicion) this.cargar();
+    this.cargarContexto();
+  }
+
+  // Trae los acudientes actuales del estudiante para decidir el bloqueo del "principal".
+  cargarContexto(): void {
+    if (!this.estudianteId) return;
+    this.acudienteService.listarPorEstudiante(this.estudianteId).subscribe({
+      next: (lista: AcudienteDeEstudiante[]) => {
+        if (this.modoEdicion) {
+          const propio = lista.find((a) => a.vinculoId === this.vinculoId);
+          const otroPrincipal = lista.some(
+            (a) => a.vinculoId !== this.vinculoId && a.esPrincipal,
+          );
+          if (propio?.esPrincipal && !otroPrincipal) {
+            this.bloquearPrincipal = true;
+            this.form.esPrincipal = true;
+            this.notaPrincipal =
+              'Es el único principal. Marca a otro acudiente como principal para poder cambiarlo.';
+          }
+        } else if (lista.length === 0) {
+          this.bloquearPrincipal = true;
+          this.form.esPrincipal = true;
+          this.notaPrincipal =
+            'El primer acudiente del estudiante queda como principal.';
+        }
+      },
+      error: () => {
+        // Si falla, el backend igual aplica la regla; el formulario sigue usable.
+      },
+    });
   }
 
   cargar(): void {
@@ -88,8 +121,9 @@ export class AcudienteFormComponent implements OnInit {
           parentesco: d.parentesco ?? '',
           esPrincipal: !!d.esPrincipal,
           autorizadoRecogida: !!d.autorizadoRecogida,
-          autorizadoInfoAcademica: !!d.autorizadoInfoAcademica,
         };
+        // Si el contexto ya determinó que es el único principal, mantenerlo marcado.
+        if (this.bloquearPrincipal) this.form.esPrincipal = true;
         this.cargando = false;
       },
       error: () => {
@@ -136,7 +170,6 @@ export class AcudienteFormComponent implements OnInit {
           parentesco: this.form.parentesco,
           esPrincipal: this.form.esPrincipal,
           autorizadoRecogida: this.form.autorizadoRecogida,
-          autorizadoInfoAcademica: this.form.autorizadoInfoAcademica,
         })
         .subscribe({
           next: (res) => {

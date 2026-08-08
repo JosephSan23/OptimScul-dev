@@ -8,10 +8,19 @@
       <p>Acudientes vinculados a este estudiante</p>
     </div>
     <a class="btn-save"
+       *ngIf="acudientes.length < 3"
        [routerLink]="['/dashboard/estudiantes', estudianteId, 'acudientes', 'nuevo']">
       <i class="ti ti-plus"></i> Nuevo acudiente
     </a>
+    <button class="btn-save" *ngIf="acudientes.length >= 3" disabled
+            title="Un estudiante puede tener máximo 3 acudientes.">
+      <i class="ti ti-plus"></i> Nuevo acudiente
+    </button>
   </div>
+</div>
+
+<div *ngIf="acudientes.length >= 3" class="estado-msg">
+  Este estudiante ya tiene el máximo de 3 acudientes.
 </div>
 
 <div *ngIf="cargando" class="estado-msg"><i class="ti ti-loader-2 girando"></i> Cargando...</div>

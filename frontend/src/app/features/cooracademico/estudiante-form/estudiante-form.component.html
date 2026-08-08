@@ -28,43 +28,68 @@
         <div class="campo">
           <label>Tipo de documento <span class="req">*</span></label>
           <select
+            [class.is-invalid]="errores['tipoDocumento']"
             [(ngModel)]="form.tipoDocumento"
             [ngModelOptions]="{ standalone: true }"
+            (change)="validar('tipoDocumento')"
           >
             <option value="">Selecciona...</option>
             <option *ngFor="let t of tiposDocumento" [value]="t.valor">
               {{ t.etiqueta }}
             </option>
           </select>
+          <small class="campo-error" *ngIf="errores['tipoDocumento']">
+            <i class="ti ti-alert-circle"></i> {{ errores['tipoDocumento'] }}
+          </small>
         </div>
         <div class="campo">
           <label>Número de documento <span class="req">*</span></label>
           <input
+            [class.is-invalid]="errores['numeroDocumento']"
             [(ngModel)]="form.numeroDocumento"
             [ngModelOptions]="{ standalone: true }"
+            (blur)="validar('numeroDocumento')"
           />
+          <small class="campo-error" *ngIf="errores['numeroDocumento']">
+            <i class="ti ti-alert-circle"></i> {{ errores['numeroDocumento'] }}
+          </small>
         </div>
         <div class="campo">
           <label>Primer nombre <span class="req">*</span></label>
           <input
+            [class.is-invalid]="errores['primerNombre']"
             [(ngModel)]="form.primerNombre"
             [ngModelOptions]="{ standalone: true }"
+            (blur)="validar('primerNombre')"
           />
+          <small class="campo-error" *ngIf="errores['primerNombre']">
+            <i class="ti ti-alert-circle"></i> {{ errores['primerNombre'] }}
+          </small>
         </div>
         <div class="campo">
           <label>Primer apellido <span class="req">*</span></label>
           <input
+            [class.is-invalid]="errores['primerApellido']"
             [(ngModel)]="form.primerApellido"
             [ngModelOptions]="{ standalone: true }"
+            (blur)="validar('primerApellido')"
           />
+          <small class="campo-error" *ngIf="errores['primerApellido']">
+            <i class="ti ti-alert-circle"></i> {{ errores['primerApellido'] }}
+          </small>
         </div>
         <div class="campo campo-full">
           <label>Correo</label>
           <input
             placeholder="Opcional"
+            [class.is-invalid]="errores['correo']"
             [(ngModel)]="form.correo"
             [ngModelOptions]="{ standalone: true }"
+            (blur)="validar('correo')"
           />
+          <small class="campo-error" *ngIf="errores['correo']">
+            <i class="ti ti-alert-circle"></i> {{ errores['correo'] }}
+          </small>
         </div>
         <p class="form-hint campo-full">
           <i class="ti ti-wand"></i>
@@ -90,21 +115,31 @@
         <div class="campo">
           <label>Tipo de documento <span class="req">*</span></label>
           <select
+            [class.is-invalid]="errores['tipoDocumento']"
             [(ngModel)]="form.tipoDocumento"
             [ngModelOptions]="{ standalone: true }"
+            (change)="validar('tipoDocumento')"
           >
             <option value="">Selecciona...</option>
             <option *ngFor="let t of tiposDocumento" [value]="t.valor">
               {{ t.etiqueta }}
             </option>
           </select>
+          <small class="campo-error" *ngIf="errores['tipoDocumento']">
+            <i class="ti ti-alert-circle"></i> {{ errores['tipoDocumento'] }}
+          </small>
         </div>
         <div class="campo">
           <label>Número de documento <span class="req">*</span></label>
           <input
+            [class.is-invalid]="errores['numeroDocumento']"
             [(ngModel)]="form.numeroDocumento"
             [ngModelOptions]="{ standalone: true }"
+            (blur)="validar('numeroDocumento')"
           />
+          <small class="campo-error" *ngIf="errores['numeroDocumento']">
+            <i class="ti ti-alert-circle"></i> {{ errores['numeroDocumento'] }}
+          </small>
         </div>
       </div>
     </section>
@@ -118,40 +153,65 @@
         <div class="campo">
           <label>Primer nombre <span class="req">*</span></label>
           <input
+            [class.is-invalid]="errores['primerNombre']"
             [(ngModel)]="form.primerNombre"
             [ngModelOptions]="{ standalone: true }"
+            (blur)="validar('primerNombre')"
           />
+          <small class="campo-error" *ngIf="errores['primerNombre']">
+            <i class="ti ti-alert-circle"></i> {{ errores['primerNombre'] }}
+          </small>
         </div>
         <div class="campo">
           <label>Segundo nombre</label>
           <input
             placeholder="Opcional"
+            [class.is-invalid]="errores['segundoNombre']"
             [(ngModel)]="form.segundoNombre"
             [ngModelOptions]="{ standalone: true }"
+            (blur)="validar('segundoNombre')"
           />
+          <small class="campo-error" *ngIf="errores['segundoNombre']">
+            <i class="ti ti-alert-circle"></i> {{ errores['segundoNombre'] }}
+          </small>
         </div>
         <div class="campo">
           <label>Primer apellido <span class="req">*</span></label>
           <input
+            [class.is-invalid]="errores['primerApellido']"
             [(ngModel)]="form.primerApellido"
             [ngModelOptions]="{ standalone: true }"
+            (blur)="validar('primerApellido')"
           />
+          <small class="campo-error" *ngIf="errores['primerApellido']">
+            <i class="ti ti-alert-circle"></i> {{ errores['primerApellido'] }}
+          </small>
         </div>
         <div class="campo">
           <label>Segundo apellido</label>
           <input
             placeholder="Opcional"
+            [class.is-invalid]="errores['segundoApellido']"
             [(ngModel)]="form.segundoApellido"
             [ngModelOptions]="{ standalone: true }"
+            (blur)="validar('segundoApellido')"
           />
+          <small class="campo-error" *ngIf="errores['segundoApellido']">
+            <i class="ti ti-alert-circle"></i> {{ errores['segundoApellido'] }}
+          </small>
         </div>
         <div class="campo">
           <label>Fecha de nacimiento</label>
           <input
             type="date"
+            [class.is-invalid]="errores['fechaNacimiento']"
             [(ngModel)]="form.fechaNacimiento"
             [ngModelOptions]="{ standalone: true }"
+            (blur)="validar('fechaNacimiento')"
           />
+          <small class="campo-error" *ngIf="errores['fechaNacimiento']">
+            <i class="ti ti-alert-circle"></i> {{ errores['fechaNacimiento'] }}
+          </small>
         </div>
       </div>
     </section>
@@ -166,17 +226,27 @@
           <label>Correo</label>
           <input
             placeholder="Opcional"
+            [class.is-invalid]="errores['correo']"
             [(ngModel)]="form.correo"
             [ngModelOptions]="{ standalone: true }"
+            (blur)="validar('correo')"
           />
+          <small class="campo-error" *ngIf="errores['correo']">
+            <i class="ti ti-alert-circle"></i> {{ errores['correo'] }}
+          </small>
         </div>
         <div class="campo">
           <label>Teléfono</label>
           <input
             placeholder="Opcional"
+            [class.is-invalid]="errores['telefono']"
             [(ngModel)]="form.telefono"
             [ngModelOptions]="{ standalone: true }"
+            (blur)="validar('telefono')"
           />
+          <small class="campo-error" *ngIf="errores['telefono']">
+            <i class="ti ti-alert-circle"></i> {{ errores['telefono'] }}
+          </small>
         </div>
         <div class="campo">
           <label>Dirección</label>
