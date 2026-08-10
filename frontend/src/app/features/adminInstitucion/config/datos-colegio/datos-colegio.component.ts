@@ -3,6 +3,14 @@ import {
   InstitucionConfigService,
   InstitucionConfigRequest,
 } from '../../../../core/services/institucion-config.service';
+import {
+  validarEsquema,
+  hayErrores,
+  validarCampo,
+  Esquema,
+  ErroresForm,
+} from '../../../../core/validation/form-validator';
+import { requerido, correo, telefonoCo } from '../../../../core/validation/validators';
 
 @Component({
   selector: 'app-datos-colegio',
@@ -31,6 +39,13 @@ export class DatosColegioComponent implements OnInit {
     moneda: '',
   };
 
+  esquema: Esquema = {
+    nombre: [requerido('El nombre es obligatorio')],
+    correoContacto: [correo()],
+    telefonoContacto: [telefonoCo()],
+  };
+  errores: ErroresForm = {};
+
   cargando = false;
   guardando = false;
   error = '';
@@ -40,6 +55,12 @@ export class DatosColegioComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargar();
+  }
+
+  validar(campo: string): void {
+    const msg = validarCampo(campo, this.form, this.esquema);
+    if (msg) this.errores[campo] = msg;
+    else delete this.errores[campo];
   }
 
   cargar(): void {
@@ -81,8 +102,9 @@ export class DatosColegioComponent implements OnInit {
   guardar(): void {
     this.error = '';
     this.exito = '';
-    if (!this.form.nombre?.trim()) {
-      this.error = 'El nombre es obligatorio.';
+    this.errores = validarEsquema(this.form, this.esquema);
+    if (hayErrores(this.errores)) {
+      this.error = 'Revisa los campos marcados en rojo.';
       return;
     }
     this.guardando = true;

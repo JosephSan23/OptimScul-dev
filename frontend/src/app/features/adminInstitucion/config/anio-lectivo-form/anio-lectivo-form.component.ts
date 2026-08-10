@@ -1,6 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AnioLectivoService } from '../../../../core/services/anio-lectivo.service';
+import {
+  validarEsquema,
+  hayErrores,
+  validarCampo,
+  Esquema,
+  ErroresForm,
+} from '../../../../core/validation/form-validator';
+import {
+  requerido,
+  longitudMin,
+  fechaNoAnteriorA,
+} from '../../../../core/validation/validators';
 
 @Component({
   selector: 'app-anio-lectivo-form',
@@ -25,6 +37,18 @@ export class AnioLectivoFormComponent implements OnInit {
     fechaFin: '',
     estado: 'PLANEACION',
   };
+
+  esquema: Esquema = {
+    anio: [requerido('El año es obligatorio')],
+    nombre: [requerido('Ingresa el nombre'), longitudMin(2)],
+    fechaInicio: [requerido('Selecciona la fecha de inicio')],
+    fechaFin: [
+      requerido('Selecciona la fecha de fin'),
+      fechaNoAnteriorA('fechaInicio', 'La fecha de fin no puede ser anterior a la de inicio'),
+    ],
+  };
+  errores: ErroresForm = {};
+
   estados = ['PLANEACION', 'ACTIVO', 'CERRADO', 'CANCELADO'];
   cargando = false;
   guardando = false;
@@ -40,6 +64,12 @@ export class AnioLectivoFormComponent implements OnInit {
     this.anioId = this.route.snapshot.paramMap.get('id');
     this.modoEdicion = !!this.anioId;
     if (this.modoEdicion) this.cargar();
+  }
+
+  validar(campo: string): void {
+    const msg = validarCampo(campo, this.form, this.esquema);
+    if (msg) this.errores[campo] = msg;
+    else delete this.errores[campo];
   }
 
   cargar(): void {
@@ -65,13 +95,9 @@ export class AnioLectivoFormComponent implements OnInit {
 
   guardar(): void {
     this.error = '';
-    if (
-      !this.form.anio ||
-      !this.form.nombre.trim() ||
-      !this.form.fechaInicio ||
-      !this.form.fechaFin
-    ) {
-      this.error = 'Año, nombre y fechas son obligatorios.';
+    this.errores = validarEsquema(this.form, this.esquema);
+    if (hayErrores(this.errores)) {
+      this.error = 'Revisa los campos marcados en rojo.';
       return;
     }
     if (this.fechasInvertidas) {

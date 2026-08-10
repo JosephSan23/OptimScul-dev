@@ -33,7 +33,10 @@
     <div class="section-fields">
       <div class="campo">
         <label>Nombre <span class="req">*</span></label>
-        <input [(ngModel)]="form.nombre" [ngModelOptions]="{ standalone: true }" />
+        <input [class.is-invalid]="errores['nombre']"
+               [(ngModel)]="form.nombre" [ngModelOptions]="{ standalone: true }"
+               (blur)="validar('nombre')" />
+        <small class="campo-error" *ngIf="errores['nombre']"><i class="ti ti-alert-circle"></i> {{ errores['nombre'] }}</small>
       </div>
       <div class="campo">
         <label>Nombre corto</label>
@@ -67,11 +70,19 @@
     <div class="section-fields">
       <div class="campo">
         <label>Correo de contacto</label>
-        <input placeholder="Opcional" [(ngModel)]="form.correoContacto" [ngModelOptions]="{ standalone: true }" />
+        <input placeholder="Opcional"
+               [class.is-invalid]="errores['correoContacto']"
+               [(ngModel)]="form.correoContacto" [ngModelOptions]="{ standalone: true }"
+               (blur)="validar('correoContacto')" />
+        <small class="campo-error" *ngIf="errores['correoContacto']"><i class="ti ti-alert-circle"></i> {{ errores['correoContacto'] }}</small>
       </div>
       <div class="campo">
         <label>Teléfono de contacto</label>
-        <input placeholder="Opcional" [(ngModel)]="form.telefonoContacto" [ngModelOptions]="{ standalone: true }" />
+        <input placeholder="Opcional"
+               [class.is-invalid]="errores['telefonoContacto']"
+               [(ngModel)]="form.telefonoContacto" [ngModelOptions]="{ standalone: true }"
+               (blur)="validar('telefonoContacto')" />
+        <small class="campo-error" *ngIf="errores['telefonoContacto']"><i class="ti ti-alert-circle"></i> {{ errores['telefonoContacto'] }}</small>
       </div>
       <div class="campo campo-full">
         <label>Sitio web</label>

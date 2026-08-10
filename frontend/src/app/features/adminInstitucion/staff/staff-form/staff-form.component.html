@@ -30,21 +30,33 @@
       <div class="section-fields">
         <div class="campo">
           <label>Rol *</label>
-          <select [(ngModel)]="form.rolCodigo" [ngModelOptions]="{standalone: true}">
+          <select [(ngModel)]="form.rolCodigo" [ngModelOptions]="{standalone: true}"
+                  [class.is-invalid]="errores['rolCodigo']" (change)="validar('rolCodigo')">
             <option value="">Selecciona...</option>
             <option *ngFor="let r of roles" [value]="r.valor">{{ r.etiqueta }}</option>
           </select>
+          <small class="campo-error" *ngIf="errores['rolCodigo']">
+            <i class="ti ti-alert-circle"></i> {{ errores['rolCodigo'] }}
+          </small>
         </div>
         <div class="campo">
           <label>Tipo de documento *</label>
-          <select [(ngModel)]="form.tipoDocumento" [ngModelOptions]="{standalone: true}">
+          <select [(ngModel)]="form.tipoDocumento" [ngModelOptions]="{standalone: true}"
+                  [class.is-invalid]="errores['tipoDocumento']" (change)="onTipoDocumentoChange()">
             <option value="">Selecciona...</option>
             <option *ngFor="let t of tiposDocumento" [value]="t.valor">{{ t.etiqueta }}</option>
           </select>
+          <small class="campo-error" *ngIf="errores['tipoDocumento']">
+            <i class="ti ti-alert-circle"></i> {{ errores['tipoDocumento'] }}
+          </small>
         </div>
         <div class="campo">
           <label>Número de documento *</label>
-          <input [(ngModel)]="form.numeroDocumento" [ngModelOptions]="{standalone: true}">
+          <input [(ngModel)]="form.numeroDocumento" [ngModelOptions]="{standalone: true}"
+                 [class.is-invalid]="errores['numeroDocumento']" (blur)="validar('numeroDocumento')">
+          <small class="campo-error" *ngIf="errores['numeroDocumento']">
+            <i class="ti ti-alert-circle"></i> {{ errores['numeroDocumento'] }}
+          </small>
         </div>
       </div>
     </section>
@@ -58,23 +70,43 @@
       <div class="section-fields">
         <div class="campo">
           <label>Primer nombre *</label>
-          <input [(ngModel)]="form.primerNombre" [ngModelOptions]="{standalone: true}">
+          <input [(ngModel)]="form.primerNombre" [ngModelOptions]="{standalone: true}"
+                 [class.is-invalid]="errores['primerNombre']" (blur)="validar('primerNombre')">
+          <small class="campo-error" *ngIf="errores['primerNombre']">
+            <i class="ti ti-alert-circle"></i> {{ errores['primerNombre'] }}
+          </small>
         </div>
         <div class="campo" *ngIf="modoEdicion">
           <label>Segundo nombre</label>
-          <input placeholder="Opcional" [(ngModel)]="form.segundoNombre" [ngModelOptions]="{standalone: true}">
+          <input placeholder="Opcional" [(ngModel)]="form.segundoNombre" [ngModelOptions]="{standalone: true}"
+                 [class.is-invalid]="errores['segundoNombre']" (blur)="validar('segundoNombre')">
+          <small class="campo-error" *ngIf="errores['segundoNombre']">
+            <i class="ti ti-alert-circle"></i> {{ errores['segundoNombre'] }}
+          </small>
         </div>
         <div class="campo">
           <label>Primer apellido *</label>
-          <input [(ngModel)]="form.primerApellido" [ngModelOptions]="{standalone: true}">
+          <input [(ngModel)]="form.primerApellido" [ngModelOptions]="{standalone: true}"
+                 [class.is-invalid]="errores['primerApellido']" (blur)="validar('primerApellido')">
+          <small class="campo-error" *ngIf="errores['primerApellido']">
+            <i class="ti ti-alert-circle"></i> {{ errores['primerApellido'] }}
+          </small>
         </div>
         <div class="campo" *ngIf="modoEdicion">
           <label>Segundo apellido</label>
-          <input placeholder="Opcional" [(ngModel)]="form.segundoApellido" [ngModelOptions]="{standalone: true}">
+          <input placeholder="Opcional" [(ngModel)]="form.segundoApellido" [ngModelOptions]="{standalone: true}"
+                 [class.is-invalid]="errores['segundoApellido']" (blur)="validar('segundoApellido')">
+          <small class="campo-error" *ngIf="errores['segundoApellido']">
+            <i class="ti ti-alert-circle"></i> {{ errores['segundoApellido'] }}
+          </small>
         </div>
         <div class="campo" *ngIf="modoEdicion">
           <label>Fecha de nacimiento</label>
-          <input type="date" [(ngModel)]="form.fechaNacimiento" [ngModelOptions]="{standalone: true}">
+          <input type="date" [(ngModel)]="form.fechaNacimiento" [ngModelOptions]="{standalone: true}"
+                 [class.is-invalid]="errores['fechaNacimiento']" (blur)="validar('fechaNacimiento')">
+          <small class="campo-error" *ngIf="errores['fechaNacimiento']">
+            <i class="ti ti-alert-circle"></i> {{ errores['fechaNacimiento'] }}
+          </small>
         </div>
         <div class="campo" *ngIf="modoEdicion">
           <label>Sexo</label>
@@ -95,11 +127,29 @@
       <div class="section-fields">
         <div class="campo">
           <label>Correo personal *</label>
-          <input [(ngModel)]="form.correo" [ngModelOptions]="{standalone: true}" placeholder="persona@correo.com">
+          <input [(ngModel)]="form.correo" [ngModelOptions]="{standalone: true}" placeholder="persona@correo.com"
+                 [class.is-invalid]="errores['correo']" (blur)="validar('correo')">
+          <small class="campo-error" *ngIf="errores['correo']">
+            <i class="ti ti-alert-circle"></i> {{ errores['correo'] }}
+          </small>
         </div>
         <ng-container *ngIf="modoEdicion">
-          <div class="campo"><label>Teléfono</label><input placeholder="Opcional" [(ngModel)]="form.telefono" [ngModelOptions]="{standalone: true}"></div>
-          <div class="campo"><label>Teléfono alternativo</label><input placeholder="Opcional" [(ngModel)]="form.telefonoAlternativo" [ngModelOptions]="{standalone: true}"></div>
+          <div class="campo">
+            <label>Teléfono</label>
+            <input placeholder="Opcional" [(ngModel)]="form.telefono" [ngModelOptions]="{standalone: true}"
+                   [class.is-invalid]="errores['telefono']" (blur)="validar('telefono')">
+            <small class="campo-error" *ngIf="errores['telefono']">
+              <i class="ti ti-alert-circle"></i> {{ errores['telefono'] }}
+            </small>
+          </div>
+          <div class="campo">
+            <label>Teléfono alternativo</label>
+            <input placeholder="Opcional" [(ngModel)]="form.telefonoAlternativo" [ngModelOptions]="{standalone: true}"
+                   [class.is-invalid]="errores['telefonoAlternativo']" (blur)="validar('telefonoAlternativo')">
+            <small class="campo-error" *ngIf="errores['telefonoAlternativo']">
+              <i class="ti ti-alert-circle"></i> {{ errores['telefonoAlternativo'] }}
+            </small>
+          </div>
           <div class="campo"><label>Nacionalidad</label><input placeholder="Opcional" [(ngModel)]="form.nacionalidad" [ngModelOptions]="{standalone: true}"></div>
           <div class="campo"><label>Dirección</label><input placeholder="Opcional" [(ngModel)]="form.direccion" [ngModelOptions]="{standalone: true}"></div>
           <div class="campo"><label>Barrio</label><input placeholder="Opcional" [(ngModel)]="form.barrio" [ngModelOptions]="{standalone: true}"></div>

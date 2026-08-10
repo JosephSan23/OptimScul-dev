@@ -1,6 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JornadaService } from '../../../../core/services/jornada.service';
+import {
+  validarEsquema,
+  hayErrores,
+  validarCampo,
+  Esquema,
+  ErroresForm,
+} from '../../../../core/validation/form-validator';
+import { requerido, longitudMin } from '../../../../core/validation/validators';
 
 @Component({
   selector: 'app-jornada-form',
@@ -10,6 +18,15 @@ import { JornadaService } from '../../../../core/services/jornada.service';
 export class JornadaFormComponent implements OnInit {
   modoEdicion = false; jornadaId: string | null = null;
   form = { codigo: '', nombre: '', descripcion: '', horaInicio: '', horaFin: '' };
+
+  // Nota: las horas son opcionales y esta jornada admite cruzar la medianoche,
+  // por eso NO se valida que la hora de fin sea posterior a la de inicio.
+  esquema: Esquema = {
+    codigo: [requerido('El código es obligatorio')],
+    nombre: [requerido('El nombre es obligatorio'), longitudMin(2)],
+  };
+  errores: ErroresForm = {};
+
   cargando = false; guardando = false; error = '';
 
   constructor(private jornadaService: JornadaService, private route: ActivatedRoute, private router: Router) {}
@@ -18,6 +35,12 @@ export class JornadaFormComponent implements OnInit {
     this.jornadaId = this.route.snapshot.paramMap.get('id');
     this.modoEdicion = !!this.jornadaId;
     if (this.modoEdicion) this.cargar();
+  }
+
+  validar(campo: string): void {
+    const msg = validarCampo(campo, this.form, this.esquema);
+    if (msg) this.errores[campo] = msg;
+    else delete this.errores[campo];
   }
 
   cargar(): void {
@@ -34,7 +57,8 @@ export class JornadaFormComponent implements OnInit {
 
   guardar(): void {
     this.error = '';
-    if (!this.form.codigo.trim() || !this.form.nombre.trim()) { this.error = 'Código y nombre son obligatorios.'; return; }
+    this.errores = validarEsquema(this.form, this.esquema);
+    if (hayErrores(this.errores)) { this.error = 'Revisa los campos marcados en rojo.'; return; }
     this.guardando = true;
     const p = this.modoEdicion ? this.jornadaService.editar(this.jornadaId!, this.form) : this.jornadaService.crear(this.form);
     p.subscribe({

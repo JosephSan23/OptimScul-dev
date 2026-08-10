@@ -10,9 +10,17 @@
 
     <div class="form-grid">
       <div class="campo"><label>Código <span class="req">*</span></label>
-        <input placeholder="Ej: JOR-M" [(ngModel)]="form.codigo" [ngModelOptions]="{standalone:true}"></div>
+        <input placeholder="Ej: JOR-M"
+               [class.is-invalid]="errores['codigo']"
+               [(ngModel)]="form.codigo" [ngModelOptions]="{standalone:true}"
+               (blur)="validar('codigo')">
+        <small class="campo-error" *ngIf="errores['codigo']"><i class="ti ti-alert-circle"></i> {{ errores['codigo'] }}</small></div>
       <div class="campo"><label>Nombre <span class="req">*</span></label>
-        <input placeholder="Mañana, Tarde..." [(ngModel)]="form.nombre" [ngModelOptions]="{standalone:true}"></div>
+        <input placeholder="Mañana, Tarde..."
+               [class.is-invalid]="errores['nombre']"
+               [(ngModel)]="form.nombre" [ngModelOptions]="{standalone:true}"
+               (blur)="validar('nombre')">
+        <small class="campo-error" *ngIf="errores['nombre']"><i class="ti ti-alert-circle"></i> {{ errores['nombre'] }}</small></div>
       <div class="campo"><label>Hora inicio</label>
         <input type="time" [(ngModel)]="form.horaInicio" [ngModelOptions]="{standalone:true}"></div>
       <div class="campo"><label>Hora fin</label>

@@ -1,6 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PeriodoService } from '../../../../core/services/periodo.service';
+import {
+  validarEsquema,
+  hayErrores,
+  validarCampo,
+  Esquema,
+  ErroresForm,
+} from '../../../../core/validation/form-validator';
+import {
+  requerido,
+  longitudMin,
+  rangoNumerico,
+  fechaNoAnteriorA,
+} from '../../../../core/validation/validators';
 
 @Component({
   selector: 'app-periodo-form',
@@ -15,6 +28,19 @@ export class PeriodoFormComponent implements OnInit {
   form: { numero: number | null; nombre: string; descripcion: string; fechaInicio: string; fechaFin: string; peso: number | null; estado: string } = {
     numero: null, nombre: '', descripcion: '', fechaInicio: '', fechaFin: '', peso: null, estado: 'PLANEADO'
   };
+
+  esquema: Esquema = {
+    numero: [requerido('El número es obligatorio')],
+    nombre: [requerido('Ingresa el nombre'), longitudMin(2)],
+    fechaInicio: [requerido('Selecciona la fecha de inicio')],
+    fechaFin: [
+      requerido('Selecciona la fecha de fin'),
+      fechaNoAnteriorA('fechaInicio', 'La fecha de fin no puede ser anterior a la de inicio'),
+    ],
+    peso: [rangoNumerico(0, 100, 'El peso debe estar entre 0 y 100')],
+  };
+  errores: ErroresForm = {};
+
   estados = ['PLANEADO', 'ACTIVO', 'CERRADO', 'ANULADO'];
   cargando = false; guardando = false; error = '';
 
@@ -28,6 +54,12 @@ export class PeriodoFormComponent implements OnInit {
     } else {
       this.anioId = this.route.snapshot.paramMap.get('anioId') || '';
     }
+  }
+
+  validar(campo: string): void {
+    const msg = validarCampo(campo, this.form, this.esquema);
+    if (msg) this.errores[campo] = msg;
+    else delete this.errores[campo];
   }
 
   cargar(): void {
@@ -47,8 +79,10 @@ export class PeriodoFormComponent implements OnInit {
 
   guardar(): void {
     this.error = '';
-    if (!this.form.numero || !this.form.nombre.trim() || !this.form.fechaInicio || !this.form.fechaFin) {
-      this.error = 'Número, nombre y fechas son obligatorios.'; return;
+    this.errores = validarEsquema(this.form, this.esquema);
+    if (hayErrores(this.errores)) {
+      this.error = 'Revisa los campos marcados en rojo.';
+      return;
     }
     this.guardando = true;
     const p = this.modoEdicion

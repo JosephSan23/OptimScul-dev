@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StaffService, EditarStaffRequest } from '../../../../core/services/staff.service';
+import { validarEsquema, hayErrores, validarCampo, Esquema, ErroresForm } from '../../../../core/validation/form-validator';
+import { requerido, documentoPorTipo, soloLetras, longitudMin, correo, telefonoCo, fechaNacimiento } from '../../../../core/validation/validators';
 
 @Component({
   selector: 'app-staff-form',
@@ -22,6 +24,21 @@ export class StaffFormComponent implements OnInit {
     fechaNacimiento: '', sexo: '', nacionalidad: '',
     direccion: '', barrio: '', ciudad: '', departamento: '', pais: '', observaciones: ''
   };
+
+  esquema: Esquema = {
+    rolCodigo: [requerido('Selecciona el rol')],
+    tipoDocumento: [requerido('Selecciona el tipo de documento')],
+    numeroDocumento: [requerido('Ingresa el número de documento'), documentoPorTipo()],
+    primerNombre: [requerido('Ingresa el primer nombre'), soloLetras(), longitudMin(2)],
+    primerApellido: [requerido('Ingresa el primer apellido'), soloLetras(), longitudMin(2)],
+    segundoNombre: [soloLetras()],
+    segundoApellido: [soloLetras()],
+    correo: [requerido('Ingresa el correo'), correo()],
+    telefono: [telefonoCo()],
+    telefonoAlternativo: [telefonoCo()],
+    fechaNacimiento: [fechaNacimiento()]
+  };
+  errores: ErroresForm = {};
 
   tiposDocumento = [
     { valor: 'CC', etiqueta: 'Cédula de Ciudadanía' },
@@ -53,6 +70,17 @@ export class StaffFormComponent implements OnInit {
     if (this.modoEdicion) this.cargar();
   }
 
+  validar(campo: string): void {
+    const msg = validarCampo(campo, this.form, this.esquema);
+    if (msg) this.errores[campo] = msg;
+    else delete this.errores[campo];
+  }
+
+  onTipoDocumentoChange(): void {
+    this.validar('tipoDocumento');
+    if (this.form.numeroDocumento) this.validar('numeroDocumento');
+  }
+
   cargar(): void {
     this.cargando = true;
     this.staffService.obtener(this.usuarioId!).subscribe({
@@ -75,9 +103,9 @@ export class StaffFormComponent implements OnInit {
 
   guardar(): void {
     this.error = '';
-    if (!this.form.rolCodigo || !this.form.tipoDocumento || !this.form.numeroDocumento.trim() ||
-        !this.form.primerNombre.trim() || !this.form.primerApellido.trim() || !this.form.correo.trim()) {
-      this.error = 'Completa los campos obligatorios.';
+    this.errores = validarEsquema(this.form, this.esquema);
+    if (hayErrores(this.errores)) {
+      this.error = 'Revisa los campos marcados en rojo.';
       return;
     }
     this.guardando = true;

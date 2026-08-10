@@ -12,20 +12,34 @@
       <div class="campo">
         <label>Año <span class="req">*</span></label>
         <input type="number" placeholder="2026"
-               [(ngModel)]="form.anio" [ngModelOptions]="{ standalone: true }" />
+               [class.is-invalid]="errores['anio']"
+               [(ngModel)]="form.anio" [ngModelOptions]="{ standalone: true }"
+               (blur)="validar('anio')" />
+        <small class="campo-error" *ngIf="errores['anio']"><i class="ti ti-alert-circle"></i> {{ errores['anio'] }}</small>
       </div>
       <div class="campo">
         <label>Nombre <span class="req">*</span></label>
         <input placeholder="Año escolar 2026"
-               [(ngModel)]="form.nombre" [ngModelOptions]="{ standalone: true }" />
+               [class.is-invalid]="errores['nombre']"
+               [(ngModel)]="form.nombre" [ngModelOptions]="{ standalone: true }"
+               (blur)="validar('nombre')" />
+        <small class="campo-error" *ngIf="errores['nombre']"><i class="ti ti-alert-circle"></i> {{ errores['nombre'] }}</small>
       </div>
       <div class="campo">
         <label>Fecha inicio <span class="req">*</span></label>
-        <input type="date" [(ngModel)]="form.fechaInicio" [ngModelOptions]="{ standalone: true }" />
+        <input type="date"
+               [class.is-invalid]="errores['fechaInicio']"
+               [(ngModel)]="form.fechaInicio" [ngModelOptions]="{ standalone: true }"
+               (blur)="validar('fechaInicio'); validar('fechaFin')" />
+        <small class="campo-error" *ngIf="errores['fechaInicio']"><i class="ti ti-alert-circle"></i> {{ errores['fechaInicio'] }}</small>
       </div>
       <div class="campo">
         <label>Fecha fin <span class="req">*</span></label>
-        <input type="date" [(ngModel)]="form.fechaFin" [ngModelOptions]="{ standalone: true }" />
+        <input type="date"
+               [class.is-invalid]="errores['fechaFin']"
+               [(ngModel)]="form.fechaFin" [ngModelOptions]="{ standalone: true }"
+               (blur)="validar('fechaFin')" />
+        <small class="campo-error" *ngIf="errores['fechaFin']"><i class="ti ti-alert-circle"></i> {{ errores['fechaFin'] }}</small>
       </div>
       <div class="campo">
         <label>Estado</label>

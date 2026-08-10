@@ -21,9 +21,17 @@
     <p class="seccion-label">Identificación</p>
     <div class="form-grid">
       <div class="campo"><label>Código <span class="req">*</span></label>
-        <input placeholder="Ej: SJ-002" [(ngModel)]="form.codigo" [ngModelOptions]="{standalone:true}"></div>
+        <input placeholder="Ej: SJ-002"
+               [class.is-invalid]="errores['codigo']"
+               [(ngModel)]="form.codigo" [ngModelOptions]="{standalone:true}"
+               (blur)="validar('codigo')">
+        <small class="campo-error" *ngIf="errores['codigo']"><i class="ti ti-alert-circle"></i> {{ errores['codigo'] }}</small></div>
       <div class="campo"><label>Nombre <span class="req">*</span></label>
-        <input placeholder="Ej: Sede Norte" [(ngModel)]="form.nombre" [ngModelOptions]="{standalone:true}"></div>
+        <input placeholder="Ej: Sede Norte"
+               [class.is-invalid]="errores['nombre']"
+               [(ngModel)]="form.nombre" [ngModelOptions]="{standalone:true}"
+               (blur)="validar('nombre')">
+        <small class="campo-error" *ngIf="errores['nombre']"><i class="ti ti-alert-circle"></i> {{ errores['nombre'] }}</small></div>
       <div class="campo campo-full"><label>Descripción</label>
         <input placeholder="Opcional" [(ngModel)]="form.descripcion" [ngModelOptions]="{standalone:true}"></div>
     </div>
@@ -43,9 +51,17 @@
     <p class="seccion-label">Contacto</p>
     <div class="form-grid">
       <div class="campo"><label>Teléfono</label>
-        <input placeholder="Opcional" [(ngModel)]="form.telefono" [ngModelOptions]="{standalone:true}"></div>
+        <input placeholder="Opcional"
+               [class.is-invalid]="errores['telefono']"
+               [(ngModel)]="form.telefono" [ngModelOptions]="{standalone:true}"
+               (blur)="validar('telefono')">
+        <small class="campo-error" *ngIf="errores['telefono']"><i class="ti ti-alert-circle"></i> {{ errores['telefono'] }}</small></div>
       <div class="campo"><label>Correo</label>
-        <input placeholder="Opcional" [(ngModel)]="form.correo" [ngModelOptions]="{standalone:true}"></div>
+        <input placeholder="Opcional"
+               [class.is-invalid]="errores['correo']"
+               [(ngModel)]="form.correo" [ngModelOptions]="{standalone:true}"
+               (blur)="validar('correo')">
+        <small class="campo-error" *ngIf="errores['correo']"><i class="ti ti-alert-circle"></i> {{ errores['correo'] }}</small></div>
     </div>
 
     <!-- sede principal como interruptor -->

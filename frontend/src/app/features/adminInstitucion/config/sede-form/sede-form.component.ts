@@ -1,5 +1,18 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { SedeService } from '../../../../core/services/sede.service';
+import {
+  validarEsquema,
+  hayErrores,
+  validarCampo,
+  Esquema,
+  ErroresForm,
+} from '../../../../core/validation/form-validator';
+import {
+  requerido,
+  longitudMin,
+  correo,
+  telefonoCo,
+} from '../../../../core/validation/validators';
 
 /*
   Antes este componente era una PÁGINA con ruta propia
@@ -27,6 +40,14 @@ export class SedeFormComponent implements OnChanges {
     correo: '', ciudad: '', departamento: '', pais: '', principal: false
   };
 
+  esquema: Esquema = {
+    codigo: [requerido('El código es obligatorio')],
+    nombre: [requerido('El nombre es obligatorio'), longitudMin(2)],
+    correo: [correo()],
+    telefono: [telefonoCo()],
+  };
+  errores: ErroresForm = {};
+
   cargando = false;
   guardando = false;
   error = '';
@@ -36,6 +57,7 @@ export class SedeFormComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if ('sedeId' in changes) {
       this.error = '';
+      this.errores = {};
       this.guardando = false;
       this.modoEdicion = !!this.sedeId;
       if (this.modoEdicion) this.cargar();
@@ -43,11 +65,18 @@ export class SedeFormComponent implements OnChanges {
     }
   }
 
+  validar(campo: string): void {
+    const msg = validarCampo(campo, this.form, this.esquema);
+    if (msg) this.errores[campo] = msg;
+    else delete this.errores[campo];
+  }
+
   private reiniciar(): void {
     this.form = {
       codigo: '', nombre: '', descripcion: '', direccion: '', telefono: '',
       correo: '', ciudad: '', departamento: '', pais: '', principal: false
     };
+    this.errores = {};
   }
 
   private cargar(): void {
@@ -68,10 +97,8 @@ export class SedeFormComponent implements OnChanges {
 
   guardar(): void {
     this.error = '';
-    if (!this.form.codigo.trim() || !this.form.nombre.trim()) {
-      this.error = 'Código y nombre son obligatorios.';
-      return;
-    }
+    this.errores = validarEsquema(this.form, this.esquema);
+    if (hayErrores(this.errores)) { this.error = 'Revisa los campos marcados en rojo.'; return; }
     this.guardando = true;
     const p = this.modoEdicion
       ? this.sedeService.editar(this.sedeId!, this.form)

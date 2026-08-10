@@ -2,6 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EscalaService } from '../../../../core/services/escala.service';
 import { ConfigAcademicaService } from '../../../../core/services/config-academica.service';
+import {
+  validarEsquema,
+  hayErrores,
+  validarCampo,
+  Esquema,
+  ErroresForm,
+} from '../../../../core/validation/form-validator';
+import {
+  requerido,
+  rangoNumerico,
+} from '../../../../core/validation/validators';
 
 
 @Component({
@@ -27,6 +38,29 @@ export class EscalaFormComponent implements OnInit {
   rangoMax = 5;
   rangoCargado = false;
 
+  esquema: Esquema = {
+    nombre: [requerido('El nombre es obligatorio')],
+    notaMinima: [
+      requerido('La nota mínima es obligatoria'),
+      rangoNumerico(0, 100, 'La nota mínima debe ser un número entre 0 y 100'),
+    ],
+    notaMaxima: [
+      requerido('La nota máxima es obligatoria'),
+      rangoNumerico(0, 100, 'La nota máxima debe ser un número entre 0 y 100'),
+      (valor, todos) => {
+        if (valor == null || todos?.['notaMinima'] == null) return null;
+        return Number(valor) > Number(todos['notaMinima'])
+          ? null
+          : 'La nota máxima debe ser mayor que la mínima.';
+      },
+    ],
+    orden: [
+      requerido('El orden es obligatorio'),
+      rangoNumerico(1, 50, 'El orden debe ser un número entre 1 y 50'),
+    ],
+  };
+  errores: ErroresForm = {};
+
   constructor(
     private escalaService: EscalaService,
     private route: ActivatedRoute,
@@ -42,6 +76,12 @@ export class EscalaFormComponent implements OnInit {
       next: (c) => { this.rangoMin = c.notaMinima; this.rangoMax = c.notaMaxima; this.rangoCargado = true; },
       error: () => {}
     });
+  }
+
+  validar(campo: string): void {
+    const msg = validarCampo(campo, this.form, this.esquema);
+    if (msg) this.errores[campo] = msg;
+    else delete this.errores[campo];
   }
 
   cargar(): void {
@@ -67,17 +107,9 @@ export class EscalaFormComponent implements OnInit {
 
   guardar(): void {
     this.error = '';
-    if (
-      !this.form.nombre.trim() ||
-      this.form.notaMinima == null ||
-      this.form.notaMaxima == null ||
-      this.form.orden == null
-    ) {
-      this.error = 'Nombre, rango y orden son obligatorios.';
-      return;
-    }
-    if (this.form.notaMinima >= this.form.notaMaxima) {
-      this.error = 'La nota mínima no puede ser mayor que la máxima.';
+    this.errores = validarEsquema(this.form, this.esquema);
+    if (hayErrores(this.errores)) {
+      this.error = 'Revisa los campos marcados en rojo.';
       return;
     }
     if (this.rangoCargado && (this.form.notaMinima! < this.rangoMin || this.form.notaMaxima! > this.rangoMax)) {
