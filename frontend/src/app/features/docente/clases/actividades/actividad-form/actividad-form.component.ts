@@ -1,6 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ActividadService } from '../../../../../core/services/actividad.service';
+import {
+  validarEsquema,
+  hayErrores,
+  validarCampo,
+  Esquema,
+  ErroresForm,
+} from '../../../../../core/validation/form-validator';
+import {
+  requerido,
+  longitudMin,
+  rangoNumerico,
+  fechaNoAnteriorA,
+} from '../../../../../core/validation/validators';
 
 @Component({
   selector: 'app-actividad-form',
@@ -24,6 +37,17 @@ export class ActividadFormComponent implements OnInit {
     porcentaje: null as number | null, notaMaxima: null as number | null,
     permiteEntregaTardia: false
   };
+
+  esquema: Esquema = {
+    titulo: [requerido('Ingresa el título'), longitudMin(3)],
+    periodoAcademicoId: [requerido('Falta el periodo académico')],
+    porcentaje: [rangoNumerico(0, 100, 'El peso debe estar entre 0 y 100')],
+    notaMaxima: [rangoNumerico(0, 100, 'La nota máxima debe estar entre 0 y 100')],
+    // La fecha de cierre no puede ir antes de la de entrega.
+    fechaCierre: [fechaNoAnteriorA('fechaEntrega', 'La fecha de cierre no puede ser anterior a la de entrega')],
+  };
+  errores: ErroresForm = {};
+
   cargando = false; guardando = false; error = '';
 
   constructor(private actividadService: ActividadService, private route: ActivatedRoute, private router: Router) {}
@@ -35,6 +59,12 @@ export class ActividadFormComponent implements OnInit {
     this.modoEdicion = !!this.actividadId;
     if (this.modoEdicion) this.cargar();
     else this.form.periodoAcademicoId = this.route.snapshot.queryParamMap.get('periodo') ?? '';
+  }
+
+  validar(campo: string): void {
+    const msg = validarCampo(campo, this.form, this.esquema);
+    if (msg) this.errores[campo] = msg;
+    else delete this.errores[campo];
   }
 
   cargar(): void {
@@ -56,7 +86,8 @@ export class ActividadFormComponent implements OnInit {
 
   guardar(): void {
     this.error = '';
-    if (!this.form.titulo.trim() || !this.form.periodoAcademicoId) { this.error = 'Título y periodo son obligatorios.'; return; }
+    this.errores = validarEsquema(this.form, this.esquema);
+    if (hayErrores(this.errores)) { this.error = 'Revisa los campos marcados en rojo.'; return; }
     this.guardando = true;
     const body = {
       periodoAcademicoId: this.form.periodoAcademicoId,
