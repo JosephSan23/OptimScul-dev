@@ -1,18 +1,33 @@
 package backend.onboarding.infrastructure.rest.dto;
 
+import backend.shared.validation.ConDocumento;
+import backend.shared.validation.DocumentoValido;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import java.util.UUID;
 
-public class EditarAdministradorRequestDto {
+@DocumentoValido
+public class EditarAdministradorRequestDto implements ConDocumento {
 
-    @NotBlank private String tipoDocumento;
-    @NotBlank private String numeroDocumento;
-    @NotBlank private String primerNombre;
-    @NotBlank private String primerApellido;
-    @NotBlank @Email private String correo;
-    @NotNull  private UUID institucionId;
+    @NotBlank(message = "Selecciona el tipo de documento")
+    private String tipoDocumento;
+    @NotBlank(message = "Ingresa el número de documento")
+    private String numeroDocumento;
+    @NotBlank(message = "Ingresa el primer nombre")
+    @Pattern(regexp = "^$|^[A-Za-zÁÉÍÓÚáéíóúÑñÜü' -]{2,}$",
+             message = "Primer nombre inválido (mínimo 2 letras, solo texto)")
+    private String primerNombre;
+    @NotBlank(message = "Ingresa el primer apellido")
+    @Pattern(regexp = "^$|^[A-Za-zÁÉÍÓÚáéíóúÑñÜü' -]{2,}$",
+             message = "Primer apellido inválido (mínimo 2 letras, solo texto)")
+    private String primerApellido;
+    @NotBlank(message = "Ingresa el correo")
+    @Email(message = "Escribe un correo válido (ej: nombre@dominio.com)")
+    private String correo;
+    @NotNull(message = "Selecciona una institución")
+    private UUID institucionId;
 
     public String getTipoDocumento() { return tipoDocumento; }
     public void setTipoDocumento(String tipoDocumento) { this.tipoDocumento = tipoDocumento; }

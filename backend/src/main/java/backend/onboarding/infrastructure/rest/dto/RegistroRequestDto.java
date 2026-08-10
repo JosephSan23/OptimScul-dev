@@ -1,26 +1,37 @@
 package backend.onboarding.infrastructure.rest.dto;
 
+import backend.shared.validation.ConDocumento;
+import backend.shared.validation.DocumentoValido;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
-public class RegistroRequestDto {
+@DocumentoValido
+public class RegistroRequestDto implements ConDocumento {
 
-    @NotBlank
+    @NotBlank(message = "Selecciona el tipo de documento")
     private String tipoDocumento;
 
-    @NotBlank
+    @NotBlank(message = "Ingresa el número de documento")
     private String numeroDocumento;
 
-    @NotBlank
+    @NotBlank(message = "Ingresa el primer nombre")
+    @Pattern(regexp = "^$|^[A-Za-zÁÉÍÓÚáéíóúÑñÜü' -]{2,}$",
+             message = "Primer nombre inválido (mínimo 2 letras, solo texto)")
     private String primerNombre;
 
-    @NotBlank
+    @NotBlank(message = "Ingresa el primer apellido")
+    @Pattern(regexp = "^$|^[A-Za-zÁÉÍÓÚáéíóúÑñÜü' -]{2,}$",
+             message = "Primer apellido inválido (mínimo 2 letras, solo texto)")
     private String primerApellido;
 
-    @NotBlank @Email
+    @NotBlank(message = "Ingresa el correo")
+    @Email(message = "Escribe un correo válido (ej: nombre@dominio.com)")
     private String correo;
 
-    @NotBlank
+    @NotBlank(message = "Ingresa la contraseña")
+    @Size(min = 8, message = "La contraseña debe tener al menos 8 caracteres")
     private String password;
 
     public String getTipoDocumento() { return tipoDocumento; }
