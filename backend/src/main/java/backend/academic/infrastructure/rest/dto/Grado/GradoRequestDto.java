@@ -3,16 +3,18 @@ package backend.academic.infrastructure.rest.dto.Grado;
 import backend.academic.domain.model.NivelAcademico;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public class GradoRequestDto {
 
-    @NotBlank
+    @NotBlank(message = "El código es obligatorio")
     private String codigo;
-    @NotBlank
+    @NotBlank(message = "El nombre es obligatorio")
     private String nombre;
-    @NotNull
+    @NotNull(message = "Selecciona el nivel académico")
     private NivelAcademico nivel;
-    @NotNull
+    @NotNull(message = "El orden es obligatorio")
+    @Positive(message = "El orden debe ser un número positivo")
     private Short orden;
 
     public GradoRequestDto() {
