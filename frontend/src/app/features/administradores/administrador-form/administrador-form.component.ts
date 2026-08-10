@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { AdministradorService, Administrador, AdministradorRequest } from '../../../core/services/administrador.service';
 import { InstitucionService, Institucion } from '../../../core/services/institucion.service';
+import { validarEsquema, hayErrores, validarCampo, Esquema, ErroresForm } from '../../../core/validation/form-validator';
+import { requerido, documentoPorTipo, soloLetras, longitudMin, correo } from '../../../core/validation/validators';
 
 @Component({
   selector: 'app-administrador-form',
@@ -18,6 +20,16 @@ export class AdministradorFormComponent implements OnInit, OnChanges {
     tipoDocumento: '', numeroDocumento: '', primerNombre: '',
     primerApellido: '', correo: '', institucionId: ''
   };
+
+  esquema: Esquema = {
+    tipoDocumento: [requerido('Selecciona el tipo de documento')],
+    numeroDocumento: [requerido('Ingresa el número de documento'), documentoPorTipo()],
+    primerNombre: [requerido('Ingresa el primer nombre'), soloLetras(), longitudMin(2)],
+    primerApellido: [requerido('Ingresa el primer apellido'), soloLetras(), longitudMin(2)],
+    correo: [requerido('Ingresa el correo'), correo()],
+    institucionId: [requerido('Selecciona una institución')]
+  };
+  errores: ErroresForm = {};
 
   tiposDocumento = [
     { valor: 'CC', etiqueta: 'Cédula de Ciudadanía' },
@@ -53,19 +65,30 @@ export class AdministradorFormComponent implements OnInit, OnChanges {
       };
       this.error = '';
       this.exito = '';
+      this.errores = {};
     }
   }
 
   get esEdicion(): boolean { return this.administrador !== null; }
 
+  validar(campo: string): void {
+    const msg = validarCampo(campo, this.form, this.esquema);
+    if (msg) this.errores[campo] = msg;
+    else delete this.errores[campo];
+  }
+
+  onTipoDocumentoChange(): void {
+    this.validar('tipoDocumento');
+    if (this.form.numeroDocumento) this.validar('numeroDocumento');
+  }
+
   guardar(): void {
     this.error = '';
     this.exito = '';
 
-    if (!this.form.tipoDocumento || !this.form.numeroDocumento.trim() ||
-        !this.form.primerNombre.trim() || !this.form.primerApellido.trim() ||
-        !this.form.correo.trim() || !this.form.institucionId) {
-      this.error = 'Completa todos los campos.';
+    this.errores = validarEsquema(this.form, this.esquema);
+    if (hayErrores(this.errores)) {
+      this.error = 'Revisa los campos marcados en rojo.';
       return;
     }
 
@@ -81,6 +104,7 @@ export class AdministradorFormComponent implements OnInit, OnChanges {
         if (!this.esEdicion) {
           this.form = { tipoDocumento: '', numeroDocumento: '', primerNombre: '',
                         primerApellido: '', correo: '', institucionId: '' };
+          this.errores = {};
         }
         this.guardado.emit();
       },
