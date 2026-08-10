@@ -27,15 +27,23 @@
         <div class="campo-row">
           <div class="campo campo-tipo">
             <label>Tipo doc.</label>
-            <select [(ngModel)]="form.tipoDocumento" [ngModelOptions]="{standalone: true}">
+            <select [(ngModel)]="form.tipoDocumento" [ngModelOptions]="{standalone: true}"
+                    [class.is-invalid]="errores['tipoDocumento']" (change)="onTipoDocumentoChange()">
               <option value="">Selec.</option>
               <option *ngFor="let t of tiposDocumento" [value]="t.valor">{{ t.valor }}</option>
             </select>
+            <small class="campo-error" *ngIf="errores['tipoDocumento']">
+              <i class="ti ti-alert-circle"></i> {{ errores['tipoDocumento'] }}
+            </small>
           </div>
           <div class="campo">
             <label>Número de documento</label>
             <input type="text" placeholder="1234567890"
-                   [(ngModel)]="form.numeroDocumento" [ngModelOptions]="{standalone: true}">
+                   [(ngModel)]="form.numeroDocumento" [ngModelOptions]="{standalone: true}"
+                   [class.is-invalid]="errores['numeroDocumento']" (blur)="validar('numeroDocumento')">
+            <small class="campo-error" *ngIf="errores['numeroDocumento']">
+              <i class="ti ti-alert-circle"></i> {{ errores['numeroDocumento'] }}
+            </small>
           </div>
         </div>
 
@@ -44,12 +52,20 @@
           <div class="campo">
             <label>Primer nombre</label>
             <input type="text" placeholder="María"
-                   [(ngModel)]="form.primerNombre" [ngModelOptions]="{standalone: true}">
+                   [(ngModel)]="form.primerNombre" [ngModelOptions]="{standalone: true}"
+                   [class.is-invalid]="errores['primerNombre']" (blur)="validar('primerNombre')">
+            <small class="campo-error" *ngIf="errores['primerNombre']">
+              <i class="ti ti-alert-circle"></i> {{ errores['primerNombre'] }}
+            </small>
           </div>
           <div class="campo">
             <label>Primer apellido</label>
             <input type="text" placeholder="Gómez"
-                   [(ngModel)]="form.primerApellido" [ngModelOptions]="{standalone: true}">
+                   [(ngModel)]="form.primerApellido" [ngModelOptions]="{standalone: true}"
+                   [class.is-invalid]="errores['primerApellido']" (blur)="validar('primerApellido')">
+            <small class="campo-error" *ngIf="errores['primerApellido']">
+              <i class="ti ti-alert-circle"></i> {{ errores['primerApellido'] }}
+            </small>
           </div>
         </div>
 
@@ -57,7 +73,11 @@
         <div class="campo">
           <label>Correo electrónico</label>
           <input type="email" placeholder="maria@correo.com"
-                 [(ngModel)]="form.correo" [ngModelOptions]="{standalone: true}">
+                 [(ngModel)]="form.correo" [ngModelOptions]="{standalone: true}"
+                 [class.is-invalid]="errores['correo']" (blur)="validar('correo')">
+          <small class="campo-error" *ngIf="errores['correo']">
+            <i class="ti ti-alert-circle"></i> {{ errores['correo'] }}
+          </small>
         </div>
 
         <!-- Contraseña + confirmar -->
@@ -65,12 +85,20 @@
           <div class="campo">
             <label>Contraseña</label>
             <input type="password" placeholder="Mín. 8"
-                   [(ngModel)]="form.password" [ngModelOptions]="{standalone: true}">
+                   [(ngModel)]="form.password" [ngModelOptions]="{standalone: true}"
+                   [class.is-invalid]="errores['password']" (blur)="validar('password')">
+            <small class="campo-error" *ngIf="errores['password']">
+              <i class="ti ti-alert-circle"></i> {{ errores['password'] }}
+            </small>
           </div>
           <div class="campo">
             <label>Confirmar</label>
             <input type="password" placeholder="Repite"
-                   [(ngModel)]="form.confirmarPassword" [ngModelOptions]="{standalone: true}">
+                   [(ngModel)]="form.confirmarPassword" [ngModelOptions]="{standalone: true}"
+                   [class.is-invalid]="errores['confirmarPassword']" (blur)="validar('confirmarPassword')">
+            <small class="campo-error" *ngIf="errores['confirmarPassword']">
+              <i class="ti ti-alert-circle"></i> {{ errores['confirmarPassword'] }}
+            </small>
           </div>
         </div>
 

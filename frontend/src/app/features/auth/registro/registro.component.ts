@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { RegistroService } from '../../../core/services/registro.service';
+import { validarEsquema, hayErrores, validarCampo, Esquema, ErroresForm } from '../../../core/validation/form-validator';
+import { requerido, documentoPorTipo, soloLetras, longitudMin, correo, coincideCon } from '../../../core/validation/validators';
 
 @Component({
   selector: 'app-registro',
@@ -19,6 +21,17 @@ export class RegistroComponent {
     confirmarPassword: ''
   };
 
+  esquema: Esquema = {
+    tipoDocumento: [requerido('Selecciona el tipo de documento')],
+    numeroDocumento: [requerido('Ingresa el número de documento'), documentoPorTipo()],
+    primerNombre: [requerido('Ingresa el primer nombre'), soloLetras(), longitudMin(2)],
+    primerApellido: [requerido('Ingresa el primer apellido'), soloLetras(), longitudMin(2)],
+    correo: [requerido('Ingresa el correo'), correo()],
+    password: [requerido('Ingresa la contraseña'), longitudMin(8, 'La contraseña debe tener al menos 8 caracteres')],
+    confirmarPassword: [requerido('Confirma la contraseña'), coincideCon('password', 'Las contraseñas no coinciden')]
+  };
+  errores: ErroresForm = {};
+
   tiposDocumento = [
     { valor: 'CC', etiqueta: 'Cédula de Ciudadanía' },
     { valor: 'CE', etiqueta: 'Cédula de Extranjería' },
@@ -30,21 +43,23 @@ export class RegistroComponent {
 
   constructor(private router: Router, private registroService: RegistroService) {}
 
+  validar(campo: string): void {
+    const msg = validarCampo(campo, this.form, this.esquema);
+    if (msg) this.errores[campo] = msg;
+    else delete this.errores[campo];
+  }
+
+  onTipoDocumentoChange(): void {
+    this.validar('tipoDocumento');
+    if (this.form.numeroDocumento) this.validar('numeroDocumento');
+  }
+
   registrar(): void {
     this.error = '';
 
-    if (!this.form.tipoDocumento || !this.form.numeroDocumento.trim() ||
-        !this.form.primerNombre.trim() || !this.form.primerApellido.trim() ||
-        !this.form.correo.trim() || !this.form.password) {
-      this.error = 'Completa todos los campos obligatorios.';
-      return;
-    }
-    if (this.form.password.length < 8) {
-      this.error = 'La contraseña debe tener al menos 8 caracteres.';
-      return;
-    }
-    if (this.form.password !== this.form.confirmarPassword) {
-      this.error = 'Las contraseñas no coinciden.';
+    this.errores = validarEsquema(this.form, this.esquema);
+    if (hayErrores(this.errores)) {
+      this.error = 'Revisa los campos marcados en rojo.';
       return;
     }
 
