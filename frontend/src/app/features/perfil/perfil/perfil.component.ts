@@ -1,6 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PerfilService, Perfil } from '../../../core/services/perfil.service';
+import {
+  validarEsquema,
+  hayErrores,
+  validarCampo,
+  Esquema,
+  ErroresForm,
+} from '../../../core/validation/form-validator';
+import {
+  requerido,
+  soloLetras,
+  correo,
+  telefonoCo,
+  fechaNacimiento,
+  longitudMin,
+  coincideCon,
+} from '../../../core/validation/validators';
 
 @Component({
   selector: 'app-perfil',
@@ -16,6 +32,28 @@ export class PerfilComponent implements OnInit {
   sexos = ['MASCULINO', 'FEMENINO', 'OTRO'];
 
   pass = { actual: '', nueva: '', confirmar: '' };
+
+  // Validación de la pestaña "datos" (sobre el objeto p).
+  esquemaDatos: Esquema = {
+    segundoNombre: [soloLetras()],
+    segundoApellido: [soloLetras()],
+    fechaNacimiento: [requerido('La fecha de nacimiento es obligatoria'), fechaNacimiento()],
+    sexo: [requerido('Selecciona el sexo')],
+    telefono: [requerido('El teléfono es obligatorio'), telefonoCo()],
+    telefonoAlternativo: [telefonoCo()],
+    correo: [correo()],
+    direccion: [requerido('La dirección es obligatoria')],
+    ciudad: [requerido('La ciudad es obligatoria')],
+  };
+  erroresDatos: ErroresForm = {};
+
+  // Validación de la pestaña "contraseña".
+  esquemaPass: Esquema = {
+    actual: [requerido('Ingresa tu contraseña actual')],
+    nueva: [requerido('Ingresa la nueva contraseña'), longitudMin(8, 'La contraseña debe tener al menos 8 caracteres')],
+    confirmar: [requerido('Confirma la contraseña'), coincideCon('nueva', 'Las contraseñas no coinciden')],
+  };
+  erroresPass: ErroresForm = {};
 
   constructor(private perfilSvc: PerfilService, private router: Router) {}
 
@@ -34,8 +72,26 @@ export class PerfilComponent implements OnInit {
   get obligatorio(): boolean { return this.p?.requiereCambioPassword || !this.p?.perfilCompleto; }
   falta(campo: string): boolean { return this.p?.camposFaltantes?.includes(campo); }
 
+  validarDato(campo: string): void {
+    const msg = validarCampo(campo, this.p, this.esquemaDatos);
+    if (msg) this.erroresDatos[campo] = msg;
+    else delete this.erroresDatos[campo];
+  }
+
+  validarPass(campo: string): void {
+    const msg = validarCampo(campo, this.pass, this.esquemaPass);
+    if (msg) this.erroresPass[campo] = msg;
+    else delete this.erroresPass[campo];
+  }
+
   guardarDatos(): void {
-    this.error = ''; this.exito = ''; this.guardando = true;
+    this.error = ''; this.exito = '';
+    this.erroresDatos = validarEsquema(this.p, this.esquemaDatos);
+    if (hayErrores(this.erroresDatos)) {
+      this.error = 'Revisa los campos marcados en rojo.';
+      return;
+    }
+    this.guardando = true;
     this.perfilSvc.actualizar(this.p).subscribe({
       next: (p) => {
         this.p = { ...p }; this.guardando = false; this.exito = 'Datos guardados.';
@@ -48,12 +104,17 @@ export class PerfilComponent implements OnInit {
 
   cambiarPassword(): void {
     this.error = ''; this.exito = '';
-    if (this.pass.nueva !== this.pass.confirmar) { this.error = 'Las contraseñas no coinciden.'; return; }
+    this.erroresPass = validarEsquema(this.pass, this.esquemaPass);
+    if (hayErrores(this.erroresPass)) {
+      this.error = 'Revisa los campos marcados en rojo.';
+      return;
+    }
     this.guardando = true;
     this.perfilSvc.cambiarPassword(this.pass.actual, this.pass.nueva).subscribe({
       next: () => {
         this.guardando = false; this.exito = 'Contraseña actualizada.';
         this.pass = { actual: '', nueva: '', confirmar: '' };
+        this.erroresPass = {};
         this.p.requiereCambioPassword = false;
         this.perfilSvc.refrescar();
         this.tab = 'datos';   // pasa a completar datos

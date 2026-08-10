@@ -1,21 +1,27 @@
 package backend.onboarding.infrastructure.rest.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 public class SolicitudInstitucionRequestDto {
 
-    @NotBlank
+    @NotBlank(message = "El nombre del colegio es obligatorio")
     private String nombreColegio;
 
+    @Pattern(regexp = "^[0-9-]*$", message = "El NIT solo debe contener números")
     private String nit;
     private String ciudad;
     private String direccion;
+    @Pattern(regexp = "^([0-9]{7}|[0-9]{10})?$",
+             message = "Teléfono inválido (7 dígitos fijo o 10 dígitos celular)")
     private String telefono;
 
-    @NotBlank
+    @NotBlank(message = "El nombre de contacto es obligatorio")
     private String nombreContacto;
 
-    @NotBlank
+    @NotBlank(message = "El correo es obligatorio")
+    @Email(message = "Escribe un correo válido (ej: nombre@dominio.com)")
     private String correo;
 
     private String mensaje;

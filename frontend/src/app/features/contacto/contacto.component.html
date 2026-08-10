@@ -443,7 +443,7 @@
 
         <p class="error-msg" *ngIf="mostrarError">
           <i class="fas fa-exclamation-circle"></i>
-          Por favor completa todos los campos obligatorios antes de continuar.
+          {{ mensajeError || 'Por favor completa todos los campos obligatorios antes de continuar.' }}
         </p>
 
         <div class="stepper-nav-btns">

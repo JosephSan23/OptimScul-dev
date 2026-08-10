@@ -1,6 +1,13 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { SolicitudService } from '../../core/services/solicitud.service';
+import {
+  correo,
+  telefonoCo,
+  soloDigitos,
+  documentoPorTipo,
+  fechaNacimiento as validarFechaNac,
+} from '../../core/validation/validators';
 
 @Component({
   selector: 'app-contacto',
@@ -12,6 +19,7 @@ export class ContactoComponent {
 
   pasoActual = 1;
   mostrarError = false;
+  mensajeError = '';
 
   // Estado del envío al backend
   enviando = false;
@@ -86,7 +94,12 @@ export class ContactoComponent {
     }
   }
 
+  /** Paso válido = obligatorios completos Y formatos correctos. */
   validarPasoActual(): boolean {
+    return this.requeridosCompletos() && this.problemaFormato() === null;
+  }
+
+  private requeridosCompletos(): boolean {
     if (this.tipoUsuario === 'institucion') {
       if (this.pasoActual === 1) {
         return !!(
@@ -136,12 +149,47 @@ export class ContactoComponent {
     return true;
   }
 
+  /** Devuelve el primer problema de FORMATO del paso actual, o null si todo va bien. */
+  private problemaFormato(): string | null {
+    const fi = this.formInstitucion, fa = this.formAcudiente;
+    if (this.tipoUsuario === 'institucion') {
+      if (this.pasoActual === 1) {
+        return soloDigitos('El NIT solo debe contener números')(fi.nit)
+            ?? telefonoCo()(fi.telefono);
+      }
+      if (this.pasoActual === 2) {
+        return correo()(fi.correo);
+      }
+    }
+    if (this.tipoUsuario === 'padre') {
+      if (this.pasoActual === 1) {
+        return documentoPorTipo()(fa.numeroDocumento, fa)
+            ?? telefonoCo()(fa.telefono)
+            ?? telefonoCo('Teléfono alternativo inválido (7 dígitos fijo o 10 dígitos celular)')(fa.telefonoAlternativo)
+            ?? correo()(fa.correo);
+      }
+      if (this.pasoActual === 2) {
+        return documentoPorTipo('tipoDocumentoEstudiante')(fa.numeroDocumentoEstudiante, fa)
+            ?? validarFechaNac()(fa.fechaNacimiento);
+      }
+    }
+    return null;
+  }
+
   intentarSiguiente(): void {
-    if (!this.validarPasoActual()) {
+    if (!this.requeridosCompletos()) {
+      this.mensajeError = 'Por favor completa todos los campos obligatorios antes de continuar.';
+      this.mostrarError = true;
+      return;
+    }
+    const fmt = this.problemaFormato();
+    if (fmt) {
+      this.mensajeError = fmt;
       this.mostrarError = true;
       return;
     }
     this.mostrarError = false;
+    this.mensajeError = '';
     this.siguiente();
   }
 
@@ -165,6 +213,20 @@ export class ContactoComponent {
 
   enviar(): void {
     if (this.tipoUsuario === 'institucion') {
+      // Última validación antes de enviar (obligatorios + formato del paso final).
+      if (!this.requeridosCompletos()) {
+        this.mensajeError = 'Por favor completa todos los campos obligatorios antes de continuar.';
+        this.mostrarError = true;
+        return;
+      }
+      const fmt = this.problemaFormato();
+      if (fmt) {
+        this.mensajeError = fmt;
+        this.mostrarError = true;
+        return;
+      }
+      this.mostrarError = false;
+      this.mensajeError = '';
       this.enviando = true;
       this.errorEnvio = '';
 

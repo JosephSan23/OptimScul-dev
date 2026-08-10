@@ -25,40 +25,57 @@
     </fieldset>
 
     <label
-      >Segundo nombre <input [(ngModel)]="p.segundoNombre" name="sn"
-    /></label>
+      >Segundo nombre
+      <input [class.is-invalid]="erroresDatos['segundoNombre']" [(ngModel)]="p.segundoNombre" name="sn" (blur)="validarDato('segundoNombre')" />
+      <small class="campo-error" *ngIf="erroresDatos['segundoNombre']"><i class="ti ti-alert-circle"></i> {{ erroresDatos['segundoNombre'] }}</small>
+    </label>
     <label
-      >Segundo apellido <input [(ngModel)]="p.segundoApellido" name="sa"
-    /></label>
+      >Segundo apellido
+      <input [class.is-invalid]="erroresDatos['segundoApellido']" [(ngModel)]="p.segundoApellido" name="sa" (blur)="validarDato('segundoApellido')" />
+      <small class="campo-error" *ngIf="erroresDatos['segundoApellido']"><i class="ti ti-alert-circle"></i> {{ erroresDatos['segundoApellido'] }}</small>
+    </label>
     <label [class.falta]="falta('fechaNacimiento')"
       >Fecha de nacimiento *
-      <input type="date" [(ngModel)]="p.fechaNacimiento" name="fn"
-    /></label>
+      <input type="date" [class.is-invalid]="erroresDatos['fechaNacimiento']" [(ngModel)]="p.fechaNacimiento" name="fn" (blur)="validarDato('fechaNacimiento')" />
+      <small class="campo-error" *ngIf="erroresDatos['fechaNacimiento']"><i class="ti ti-alert-circle"></i> {{ erroresDatos['fechaNacimiento'] }}</small>
+    </label>
     <label [class.falta]="falta('sexo')"
       >Sexo *
-      <select [(ngModel)]="p.sexo" name="sx">
+      <select [class.is-invalid]="erroresDatos['sexo']" [(ngModel)]="p.sexo" name="sx" (change)="validarDato('sexo')">
         <option value="">—</option>
         <option *ngFor="let s of sexos" [value]="s">{{ s }}</option>
-      </select></label
-    >
+      </select>
+      <small class="campo-error" *ngIf="erroresDatos['sexo']"><i class="ti ti-alert-circle"></i> {{ erroresDatos['sexo'] }}</small>
+    </label>
     <label
       >Nacionalidad <input [(ngModel)]="p.nacionalidad" name="nac"
     /></label>
     <label [class.falta]="falta('telefono')"
-      >Teléfono * <input [(ngModel)]="p.telefono" name="tel"
-    /></label>
+      >Teléfono *
+      <input [class.is-invalid]="erroresDatos['telefono']" [(ngModel)]="p.telefono" name="tel" (blur)="validarDato('telefono')" />
+      <small class="campo-error" *ngIf="erroresDatos['telefono']"><i class="ti ti-alert-circle"></i> {{ erroresDatos['telefono'] }}</small>
+    </label>
     <label
       >Teléfono alternativo
-      <input [(ngModel)]="p.telefonoAlternativo" name="tel2"
-    /></label>
-    <label>Correo <input [(ngModel)]="p.correo" name="cor" /></label>
+      <input [class.is-invalid]="erroresDatos['telefonoAlternativo']" [(ngModel)]="p.telefonoAlternativo" name="tel2" (blur)="validarDato('telefonoAlternativo')" />
+      <small class="campo-error" *ngIf="erroresDatos['telefonoAlternativo']"><i class="ti ti-alert-circle"></i> {{ erroresDatos['telefonoAlternativo'] }}</small>
+    </label>
+    <label
+      >Correo
+      <input [class.is-invalid]="erroresDatos['correo']" [(ngModel)]="p.correo" name="cor" (blur)="validarDato('correo')" />
+      <small class="campo-error" *ngIf="erroresDatos['correo']"><i class="ti ti-alert-circle"></i> {{ erroresDatos['correo'] }}</small>
+    </label>
     <label [class.falta]="falta('direccion')"
-      >Dirección * <input [(ngModel)]="p.direccion" name="dir"
-    /></label>
+      >Dirección *
+      <input [class.is-invalid]="erroresDatos['direccion']" [(ngModel)]="p.direccion" name="dir" (blur)="validarDato('direccion')" />
+      <small class="campo-error" *ngIf="erroresDatos['direccion']"><i class="ti ti-alert-circle"></i> {{ erroresDatos['direccion'] }}</small>
+    </label>
     <label>Barrio <input [(ngModel)]="p.barrio" name="bar" /></label>
     <label [class.falta]="falta('ciudad')"
-      >Ciudad * <input [(ngModel)]="p.ciudad" name="ciu"
-    /></label>
+      >Ciudad *
+      <input [class.is-invalid]="erroresDatos['ciudad']" [(ngModel)]="p.ciudad" name="ciu" (blur)="validarDato('ciudad')" />
+      <small class="campo-error" *ngIf="erroresDatos['ciudad']"><i class="ti ti-alert-circle"></i> {{ erroresDatos['ciudad'] }}</small>
+    </label>
     <label
       >Departamento <input [(ngModel)]="p.departamento" name="dep"
     /></label>
@@ -80,15 +97,19 @@
   <form *ngIf="tab === 'password'" (ngSubmit)="cambiarPassword()" class="form">
     <label
       >Contraseña actual
-      <input type="password" [(ngModel)]="pass.actual" name="pa"
-    /></label>
+      <input type="password" [class.is-invalid]="erroresPass['actual']" [(ngModel)]="pass.actual" name="pa" (blur)="validarPass('actual')" />
+      <small class="campo-error" *ngIf="erroresPass['actual']"><i class="ti ti-alert-circle"></i> {{ erroresPass['actual'] }}</small>
+    </label>
     <label
       >Nueva contraseña
-      <input type="password" [(ngModel)]="pass.nueva" name="pn"
-    /></label>
+      <input type="password" [class.is-invalid]="erroresPass['nueva']" [(ngModel)]="pass.nueva" name="pn" (blur)="validarPass('nueva')" />
+      <small class="campo-error" *ngIf="erroresPass['nueva']"><i class="ti ti-alert-circle"></i> {{ erroresPass['nueva'] }}</small>
+    </label>
     <label
-      >Confirmar <input type="password" [(ngModel)]="pass.confirmar" name="pc"
-    /></label>
+      >Confirmar
+      <input type="password" [class.is-invalid]="erroresPass['confirmar']" [(ngModel)]="pass.confirmar" name="pc" (blur)="validarPass('confirmar')" />
+      <small class="campo-error" *ngIf="erroresPass['confirmar']"><i class="ti ti-alert-circle"></i> {{ erroresPass['confirmar'] }}</small>
+    </label>
     <button type="submit" [disabled]="guardando">Cambiar contraseña</button>
   </form>
 
