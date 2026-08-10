@@ -10,6 +10,14 @@ import {
   EstudianteService,
   Estudiante,
 } from '../../../../core/services/estudiante.service';
+import {
+  validarEsquema,
+  hayErrores,
+  validarCampo,
+  Esquema,
+  ErroresForm,
+} from '../../../../core/validation/form-validator';
+import { requerido, fechaNoFutura } from '../../../../core/validation/validators';
 
 @Component({
   selector: 'app-matricula-form',
@@ -27,6 +35,15 @@ export class MatriculaFormComponent implements OnInit {
     fechaMatricula: '',
     observaciones: '',
   };
+
+  esquema: Esquema = {
+    estudianteId: [requerido('Selecciona el estudiante')],
+    anioLectivoId: [requerido('Selecciona el año lectivo')],
+    tipo: [requerido('Selecciona el tipo')],
+    fechaMatricula: [fechaNoFutura('La fecha de matrícula no puede ser futura')],
+  };
+  errores: ErroresForm = {};
+
   anios: AnioLectivo[] = [];
   estudiantes: Estudiante[] = [];
   grupos: Grupo[] = [];
@@ -61,8 +78,15 @@ export class MatriculaFormComponent implements OnInit {
     });
   }
 
+  validar(campo: string): void {
+    const msg = validarCampo(campo, this.form, this.esquema);
+    if (msg) this.errores[campo] = msg;
+    else delete this.errores[campo];
+  }
+
   cambioAnio(): void {
     this.form.grupoId = '';
+    this.validar('anioLectivoId');
     this.cargarGrupos();
   }
 
@@ -79,12 +103,9 @@ export class MatriculaFormComponent implements OnInit {
 
   guardar(): void {
     this.error = '';
-    if (
-      !this.form.estudianteId ||
-      !this.form.anioLectivoId ||
-      !this.form.tipo
-    ) {
-      this.error = 'Estudiante, año y tipo son obligatorios.';
+    this.errores = validarEsquema(this.form, this.esquema);
+    if (hayErrores(this.errores)) {
+      this.error = 'Revisa los campos marcados en rojo.';
       return;
     }
     this.guardando = true;

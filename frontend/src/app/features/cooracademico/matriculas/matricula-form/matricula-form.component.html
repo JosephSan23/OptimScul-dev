@@ -9,8 +9,10 @@
       <div class="campo campo-full">
         <label>Estudiante <span class="req">*</span></label>
         <select
+          [class.is-invalid]="errores['estudianteId']"
           [(ngModel)]="form.estudianteId"
           [ngModelOptions]="{ standalone: true }"
+          (change)="validar('estudianteId')"
         >
           <option value="" disabled>Selecciona el estudiante</option>
           <option *ngFor="let e of estudiantes" [value]="e.estudianteId">
@@ -18,11 +20,13 @@
             {{ e.numeroDocumento }}
           </option>
         </select>
+        <small class="campo-error" *ngIf="errores['estudianteId']"><i class="ti ti-alert-circle"></i> {{ errores['estudianteId'] }}</small>
       </div>
 
       <div class="campo">
         <label>Año lectivo <span class="req">*</span></label>
         <select
+          [class.is-invalid]="errores['anioLectivoId']"
           [(ngModel)]="form.anioLectivoId"
           [ngModelOptions]="{ standalone: true }"
           (change)="cambioAnio()"
@@ -32,15 +36,19 @@
             {{ a.nombre || a.anio }}{{ a.esActual ? " (actual)" : "" }}
           </option>
         </select>
+        <small class="campo-error" *ngIf="errores['anioLectivoId']"><i class="ti ti-alert-circle"></i> {{ errores['anioLectivoId'] }}</small>
       </div>
 
       <div class="campo">
         <label>Tipo <span class="req">*</span></label>
-        <select [(ngModel)]="form.tipo" [ngModelOptions]="{ standalone: true }">
+        <select [class.is-invalid]="errores['tipo']"
+                [(ngModel)]="form.tipo" [ngModelOptions]="{ standalone: true }"
+                (change)="validar('tipo')">
           <option *ngFor="let t of TIPOS" [value]="t">
             {{ t | titlecase }}
           </option>
         </select>
+        <small class="campo-error" *ngIf="errores['tipo']"><i class="ti ti-alert-circle"></i> {{ errores['tipo'] }}</small>
       </div>
 
       <div class="campo">
@@ -60,9 +68,12 @@
         <label>Fecha de matrícula</label>
         <input
           type="date"
+          [class.is-invalid]="errores['fechaMatricula']"
           [(ngModel)]="form.fechaMatricula"
           [ngModelOptions]="{ standalone: true }"
+          (blur)="validar('fechaMatricula')"
         />
+        <small class="campo-error" *ngIf="errores['fechaMatricula']"><i class="ti ti-alert-circle"></i> {{ errores['fechaMatricula'] }}</small>
       </div>
 
       <div class="campo campo-full">

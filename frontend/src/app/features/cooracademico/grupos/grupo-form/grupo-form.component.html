@@ -16,7 +16,10 @@
           placeholder="Ej: 6A-2026"
           [(ngModel)]="form.codigo"
           [ngModelOptions]="{ standalone: true }"
+          [class.is-invalid]="errores['codigo']"
+          (blur)="validar('codigo')"
         />
+        <small class="campo-error" *ngIf="errores['codigo']"><i class="ti ti-alert-circle"></i> {{ errores['codigo'] }}</small>
       </div>
       <div class="campo">
         <label>Nombre <span class="req">*</span></label>
@@ -24,7 +27,10 @@
           placeholder="Sexto A"
           [(ngModel)]="form.nombre"
           [ngModelOptions]="{ standalone: true }"
+          [class.is-invalid]="errores['nombre']"
+          (blur)="validar('nombre')"
         />
+        <small class="campo-error" *ngIf="errores['nombre']"><i class="ti ti-alert-circle"></i> {{ errores['nombre'] }}</small>
       </div>
 
       <div class="campo">
@@ -32,12 +38,15 @@
         <select
           [(ngModel)]="form.anioLectivoId"
           [ngModelOptions]="{ standalone: true }"
+          [class.is-invalid]="errores['anioLectivoId']"
+          (change)="validar('anioLectivoId')"
         >
           <option value="" disabled>Selecciona el año</option>
           <option *ngFor="let a of anios" [value]="a.id">
             {{ a.nombre || a.anio }}{{ a.esActual ? " (actual)" : "" }}
           </option>
         </select>
+        <small class="campo-error" *ngIf="errores['anioLectivoId']"><i class="ti ti-alert-circle"></i> {{ errores['anioLectivoId'] }}</small>
       </div>
 
       <div class="campo">
@@ -48,7 +57,10 @@
           placeholder="Opcional"
           [(ngModel)]="form.cupoMaximo"
           [ngModelOptions]="{ standalone: true }"
+          [class.is-invalid]="errores['cupoMaximo']"
+          (blur)="validar('cupoMaximo')"
         />
+        <small class="campo-error" *ngIf="errores['cupoMaximo']"><i class="ti ti-alert-circle"></i> {{ errores['cupoMaximo'] }}</small>
       </div>
 
       <div class="campo">

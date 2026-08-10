@@ -16,7 +16,10 @@
           placeholder="Ej: MAT-01"
           [(ngModel)]="form.codigo"
           [ngModelOptions]="{ standalone: true }"
+          [class.is-invalid]="errores['codigo']"
+          (blur)="validar('codigo')"
         />
+        <small class="campo-error" *ngIf="errores['codigo']"><i class="ti ti-alert-circle"></i> {{ errores['codigo'] }}</small>
       </div>
       <div class="campo">
         <label>Nombre <span class="req">*</span></label>
@@ -24,7 +27,10 @@
           placeholder="Matemáticas, Biología..."
           [(ngModel)]="form.nombre"
           [ngModelOptions]="{ standalone: true }"
+          [class.is-invalid]="errores['nombre']"
+          (blur)="validar('nombre')"
         />
+        <small class="campo-error" *ngIf="errores['nombre']"><i class="ti ti-alert-circle"></i> {{ errores['nombre'] }}</small>
       </div>
 
       <div class="campo">
@@ -46,7 +52,10 @@
           placeholder="Horas por semana (opcional)"
           [(ngModel)]="form.intensidadHorariaSemanal"
           [ngModelOptions]="{ standalone: true }"
+          [class.is-invalid]="errores['intensidadHorariaSemanal']"
+          (blur)="validar('intensidadHorariaSemanal')"
         />
+        <small class="campo-error" *ngIf="errores['intensidadHorariaSemanal']"><i class="ti ti-alert-circle"></i> {{ errores['intensidadHorariaSemanal'] }}</small>
       </div>
 
       <div class="campo campo-full">

@@ -13,12 +13,12 @@ import {
 } from '../../../core/validation/form-validator';
 import {
   requerido,
-  documento,
+  documentoPorTipo,
   soloLetras,
   longitudMin,
   correo,
   telefonoCo,
-  fechaNoFutura,
+  fechaNacimiento,
 } from '../../../core/validation/validators';
 
 @Component({
@@ -53,7 +53,9 @@ export class EstudianteFormComponent implements OnInit {
   // los campos opcionales solo se validan cuando traen contenido.
   esquema: Esquema = {
     tipoDocumento: [requerido('Selecciona el tipo de documento')],
-    numeroDocumento: [requerido('Ingresa el número de documento'), documento()],
+    // El número se valida SEGÚN el tipo elegido (RC/TI/CC numéricos con
+    // rangos reales; CE/Pasaporte alfanuméricos). Ver REGLAS_DOCUMENTO.
+    numeroDocumento: [requerido('Ingresa el número de documento'), documentoPorTipo()],
     primerNombre: [
       requerido('Ingresa el primer nombre'),
       soloLetras(),
@@ -68,7 +70,8 @@ export class EstudianteFormComponent implements OnInit {
     segundoApellido: [soloLetras()],
     correo: [correo()],
     telefono: [telefonoCo()],
-    fechaNacimiento: [fechaNoFutura('La fecha de nacimiento no puede ser futura')],
+    // No futura y con edad máxima de 100 años.
+    fechaNacimiento: [fechaNacimiento()],
   };
   errores: ErroresForm = {};
 
@@ -102,6 +105,13 @@ export class EstudianteFormComponent implements OnInit {
     const msg = validarCampo(campo, this.form, this.esquema);
     if (msg) this.errores[campo] = msg;
     else delete this.errores[campo];
+  }
+
+  // Al cambiar el tipo de documento, el formato válido del número cambia,
+  // así que revalidamos el número si ya tenía contenido.
+  onTipoDocumentoChange(): void {
+    this.validar('tipoDocumento');
+    if (this.form.numeroDocumento) this.validar('numeroDocumento');
   }
 
   cargar(): void {

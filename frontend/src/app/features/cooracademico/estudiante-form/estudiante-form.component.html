@@ -31,7 +31,7 @@
             [class.is-invalid]="errores['tipoDocumento']"
             [(ngModel)]="form.tipoDocumento"
             [ngModelOptions]="{ standalone: true }"
-            (change)="validar('tipoDocumento')"
+            (change)="onTipoDocumentoChange()"
           >
             <option value="">Selecciona...</option>
             <option *ngFor="let t of tiposDocumento" [value]="t.valor">
@@ -118,7 +118,7 @@
             [class.is-invalid]="errores['tipoDocumento']"
             [(ngModel)]="form.tipoDocumento"
             [ngModelOptions]="{ standalone: true }"
-            (change)="validar('tipoDocumento')"
+            (change)="onTipoDocumentoChange()"
           >
             <option value="">Selecciona...</option>
             <option *ngFor="let t of tiposDocumento" [value]="t.valor">

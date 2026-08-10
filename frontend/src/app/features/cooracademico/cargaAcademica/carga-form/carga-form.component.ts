@@ -14,6 +14,18 @@ import {
   ProfesorService,
   ProfesorResumen,
 } from '../../../../core/services/profesor.service';
+import {
+  validarEsquema,
+  hayErrores,
+  validarCampo,
+  Esquema,
+  ErroresForm,
+} from '../../../../core/validation/form-validator';
+import {
+  requerido,
+  rangoNumerico,
+  fechaNoAnteriorA,
+} from '../../../../core/validation/validators';
 
 @Component({
   selector: 'app-carga-form',
@@ -34,6 +46,16 @@ export class CargaFormComponent implements OnInit {
     fechaFin: '',
     observaciones: '',
   };
+
+  esquema: Esquema = {
+    anioLectivoId: [requerido('Selecciona el año')],
+    grupoId: [requerido('Selecciona el grupo')],
+    asignaturaId: [requerido('Selecciona la asignatura')],
+    profesorId: [requerido('Selecciona el profesor')],
+    intensidadHorariaSemanal: [rangoNumerico(1, 40, 'La intensidad debe estar entre 1 y 40 horas')],
+    fechaFin: [fechaNoAnteriorA('fechaInicio', 'La fecha de fin no puede ser anterior a la de inicio')],
+  };
+  errores: ErroresForm = {};
 
   anios: AnioLectivo[] = [];
   grupos: Grupo[] = [];
@@ -90,8 +112,15 @@ export class CargaFormComponent implements OnInit {
     if (this.modoEdicion) this.cargar();
   }
 
+  validar(campo: string): void {
+    const msg = validarCampo(campo, this.form, this.esquema);
+    if (msg) this.errores[campo] = msg;
+    else delete this.errores[campo];
+  }
+
   cambioAnio(): void {
     this.form.grupoId = '';
+    this.validar('anioLectivoId');
     this.cargarGrupos();
   }
 
@@ -137,13 +166,9 @@ export class CargaFormComponent implements OnInit {
 
   guardar(): void {
     this.error = '';
-    if (
-      !this.form.anioLectivoId ||
-      !this.form.grupoId ||
-      !this.form.asignaturaId ||
-      !this.form.profesorId
-    ) {
-      this.error = 'Año, grupo, asignatura y profesor son obligatorios.';
+    this.errores = validarEsquema(this.form, this.esquema);
+    if (hayErrores(this.errores)) {
+      this.error = 'Revisa los campos marcados en rojo.';
       return;
     }
     this.guardando = true;

@@ -21,28 +21,34 @@
           >Asignación (asignatura — profesor) <span class="req">*</span></label
         >
         <select
+          [class.is-invalid]="errores['cargaAcademicaId']"
           [(ngModel)]="form.cargaAcademicaId"
           [ngModelOptions]="{ standalone: true }"
           [disabled]="modoEdicion"
+          (change)="validar('cargaAcademicaId')"
         >
           <option value="" disabled>Selecciona la asignación</option>
           <option *ngFor="let c of cargasDelGrupo" [value]="c.id">
             {{ c.asignaturaNombre }} — {{ c.profesorNombre }}
           </option>
         </select>
+        <small class="campo-error" *ngIf="errores['cargaAcademicaId']"><i class="ti ti-alert-circle"></i> {{ errores['cargaAcademicaId'] }}</small>
       </div>
 
       <div class="campo">
         <label>Día <span class="req">*</span></label>
         <select
+          [class.is-invalid]="errores['diaSemana']"
           [(ngModel)]="form.diaSemana"
           [ngModelOptions]="{ standalone: true }"
+          (change)="validar('diaSemana')"
         >
           <option value="" disabled>Selecciona el día</option>
           <option *ngFor="let d of DIAS" [value]="d.valor">
             {{ d.nombre }}
           </option>
         </select>
+        <small class="campo-error" *ngIf="errores['diaSemana']"><i class="ti ti-alert-circle"></i> {{ errores['diaSemana'] }}</small>
       </div>
 
       <div class="campo">
@@ -58,18 +64,24 @@
         <label>Hora inicio <span class="req">*</span></label>
         <input
           type="time"
+          [class.is-invalid]="errores['horaInicio']"
           [(ngModel)]="form.horaInicio"
           [ngModelOptions]="{ standalone: true }"
+          (blur)="validar('horaInicio'); validar('horaFin')"
         />
+        <small class="campo-error" *ngIf="errores['horaInicio']"><i class="ti ti-alert-circle"></i> {{ errores['horaInicio'] }}</small>
       </div>
 
       <div class="campo">
         <label>Hora fin <span class="req">*</span></label>
         <input
           type="time"
+          [class.is-invalid]="errores['horaFin']"
           [(ngModel)]="form.horaFin"
           [ngModelOptions]="{ standalone: true }"
+          (blur)="validar('horaFin')"
         />
+        <small class="campo-error" *ngIf="errores['horaFin']"><i class="ti ti-alert-circle"></i> {{ errores['horaFin'] }}</small>
       </div>
 
       <div class="campo campo-full">

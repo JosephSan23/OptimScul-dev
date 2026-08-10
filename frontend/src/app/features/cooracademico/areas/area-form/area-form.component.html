@@ -16,7 +16,10 @@
           placeholder="Ej: MAT"
           [(ngModel)]="form.codigo"
           [ngModelOptions]="{ standalone: true }"
+          [class.is-invalid]="errores['codigo']"
+          (blur)="validar('codigo')"
         />
+        <small class="campo-error" *ngIf="errores['codigo']"><i class="ti ti-alert-circle"></i> {{ errores['codigo'] }}</small>
       </div>
       <div class="campo">
         <label>Nombre <span class="req">*</span></label>
@@ -24,7 +27,10 @@
           placeholder="Matemáticas, Humanidades..."
           [(ngModel)]="form.nombre"
           [ngModelOptions]="{ standalone: true }"
+          [class.is-invalid]="errores['nombre']"
+          (blur)="validar('nombre')"
         />
+        <small class="campo-error" *ngIf="errores['nombre']"><i class="ti ti-alert-circle"></i> {{ errores['nombre'] }}</small>
       </div>
       <div class="campo campo-full">
         <label>Descripción</label>

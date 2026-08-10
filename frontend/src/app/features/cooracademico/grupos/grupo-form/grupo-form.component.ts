@@ -10,6 +10,18 @@ import {
   JornadaService,
   Jornada,
 } from '../../../../core/services/jornada.service';
+import {
+  validarEsquema,
+  hayErrores,
+  validarCampo,
+  Esquema,
+  ErroresForm,
+} from '../../../../core/validation/form-validator';
+import {
+  requerido,
+  longitudMin,
+  rangoNumerico,
+} from '../../../../core/validation/validators';
 
 @Component({
   selector: 'app-grupo-form',
@@ -39,6 +51,16 @@ export class GrupoFormComponent implements OnInit {
   guardando = false;
   error = '';
 
+  esquema: Esquema = {
+    codigo: [requerido('El código es obligatorio')],
+    nombre: [requerido('El nombre es obligatorio'), longitudMin(2)],
+    anioLectivoId: [requerido('Selecciona el año lectivo')],
+    cupoMaximo: [
+      rangoNumerico(1, 100, 'El cupo debe ser un número entre 1 y 100'),
+    ],
+  };
+  errores: ErroresForm = {};
+
   constructor(
     private grupoService: GrupoService,
     private anioService: AnioLectivoService,
@@ -54,6 +76,12 @@ export class GrupoFormComponent implements OnInit {
     this.modoEdicion = !!this.grupoId;
     this.cargarCatalogos();
     if (this.modoEdicion) this.cargar();
+  }
+
+  validar(campo: string): void {
+    const msg = validarCampo(campo, this.form, this.esquema);
+    if (msg) this.errores[campo] = msg;
+    else delete this.errores[campo];
   }
 
   cargarCatalogos(): void {
@@ -103,12 +131,9 @@ export class GrupoFormComponent implements OnInit {
 
   guardar(): void {
     this.error = '';
-    if (
-      !this.form.codigo.trim() ||
-      !this.form.nombre.trim() ||
-      !this.form.anioLectivoId
-    ) {
-      this.error = 'Código, nombre y año lectivo son obligatorios.';
+    this.errores = validarEsquema(this.form, this.esquema);
+    if (hayErrores(this.errores)) {
+      this.error = 'Revisa los campos marcados en rojo.';
       return;
     }
     this.guardando = true;

@@ -3,6 +3,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HorarioService } from '../../../../core/services/horario.service';
 import { CargaService, CargaResumen } from '../../../../core/services/carga.service';
 import { SedeService, Sede } from '../../../../core/services/sede.service';
+import {
+  validarEsquema,
+  hayErrores,
+  validarCampo,
+  Esquema,
+  ErroresForm,
+} from '../../../../core/validation/form-validator';
+import { requerido, fechaNoAnteriorA } from '../../../../core/validation/validators';
 
 @Component({
   selector: 'app-horario-form',
@@ -22,6 +30,17 @@ export class HorarioFormComponent implements OnInit {
   anioId = ''; grupoId = '';
 
   form = { cargaAcademicaId: '', sedeId: '', diaSemana: '', horaInicio: '', horaFin: '', aula: '' };
+
+  esquema: Esquema = {
+    cargaAcademicaId: [requerido('Selecciona la asignación')],
+    diaSemana: [requerido('Selecciona el día')],
+    horaInicio: [requerido('Indica la hora de inicio')],
+    horaFin: [
+      requerido('Indica la hora de fin'),
+      fechaNoAnteriorA('horaInicio', 'La hora de fin debe ser posterior a la de inicio'),
+    ],
+  };
+  errores: ErroresForm = {};
 
   cargasDelGrupo: CargaResumen[] = [];
   sedes: Sede[] = [];
@@ -47,6 +66,12 @@ export class HorarioFormComponent implements OnInit {
     if (this.modoEdicion) this.cargar();
     else if (this.anioId && this.grupoId) this.cargarCargas();
     else this.error = 'Falta el contexto de año y grupo. Vuelve al horario y entra desde "Nueva franja".';
+  }
+
+  validar(campo: string): void {
+    const msg = validarCampo(campo, this.form, this.esquema);
+    if (msg) this.errores[campo] = msg;
+    else delete this.errores[campo];
   }
 
   cargarCargas(): void {
@@ -86,10 +111,10 @@ export class HorarioFormComponent implements OnInit {
 
   guardar(): void {
     this.error = '';
-    if (!this.form.cargaAcademicaId || !this.form.diaSemana || !this.form.horaInicio || !this.form.horaFin) {
-      this.error = 'Asignación, día y horas son obligatorios.'; return;
-    }
+    this.errores = validarEsquema(this.form, this.esquema);
+    if (hayErrores(this.errores)) { this.error = 'Revisa los campos marcados en rojo.'; return; }
     if (this.form.horaInicio >= this.form.horaFin) {
+      this.errores['horaFin'] = 'La hora de fin debe ser posterior a la de inicio.';
       this.error = 'La hora de inicio debe ser anterior a la hora de fin.'; return;
     }
     this.guardando = true;

@@ -5,6 +5,8 @@ import {
   AcudienteDeEstudiante,
   EditarAcudienteRequest,
 } from '../../../../core/services/acudiente.service';
+import { validarEsquema, hayErrores, validarCampo, Esquema, ErroresForm } from '../../../../core/validation/form-validator';
+import { requerido, documentoPorTipo, soloLetras, longitudMin, correo, telefonoCo } from '../../../../core/validation/validators';
 
 @Component({
   selector: 'app-acudiente-form',
@@ -34,6 +36,20 @@ export class AcudienteFormComponent implements OnInit {
     esPrincipal: false,
     autorizadoRecogida: false,
   };
+
+  esquema: Esquema = {
+    tipoDocumento: [requerido('Selecciona el tipo de documento')],
+    numeroDocumento: [requerido('Ingresa el número de documento'), documentoPorTipo()],
+    primerNombre: [requerido('Ingresa el primer nombre'), soloLetras(), longitudMin(2)],
+    primerApellido: [requerido('Ingresa el primer apellido'), soloLetras(), longitudMin(2)],
+    segundoNombre: [soloLetras()],
+    segundoApellido: [soloLetras()],
+    correo: [correo()],
+    telefono: [telefonoCo()],
+    parentesco: [requerido('Selecciona el parentesco')],
+  };
+  errores: ErroresForm = {};
+
   tiposDocumento = [
     { valor: 'CC', etiqueta: 'Cédula de Ciudadanía' },
     { valor: 'CE', etiqueta: 'Cédula de Extranjería' },
@@ -71,6 +87,17 @@ export class AcudienteFormComponent implements OnInit {
     this.modoEdicion = !!this.vinculoId;
     if (this.modoEdicion) this.cargar();
     this.cargarContexto();
+  }
+
+  validar(campo: string): void {
+    const msg = validarCampo(campo, this.form, this.esquema);
+    if (msg) this.errores[campo] = msg;
+    else delete this.errores[campo];
+  }
+
+  onTipoDocumentoChange(): void {
+    this.validar('tipoDocumento');
+    if (this.form.numeroDocumento) this.validar('numeroDocumento');
   }
 
   // Trae los acudientes actuales del estudiante para decidir el bloqueo del "principal".
@@ -136,14 +163,9 @@ export class AcudienteFormComponent implements OnInit {
   guardar(): void {
     this.error = '';
     this.exito = '';
-    if (
-      !this.form.tipoDocumento ||
-      !this.form.numeroDocumento.trim() ||
-      !this.form.primerNombre.trim() ||
-      !this.form.primerApellido.trim() ||
-      !this.form.parentesco
-    ) {
-      this.error = 'Documento, nombres y parentesco son obligatorios.';
+    this.errores = validarEsquema(this.form, this.esquema);
+    if (hayErrores(this.errores)) {
+      this.error = 'Revisa los campos marcados en rojo.';
       return;
     }
     this.guardando = true;

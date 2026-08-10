@@ -2,6 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AsignaturaService } from '../../../../core/services/asignatura.service';
 import { AreaService, Area } from '../../../../core/services/area.service';
+import {
+  validarEsquema,
+  hayErrores,
+  validarCampo,
+  Esquema,
+  ErroresForm,
+} from '../../../../core/validation/form-validator';
+import {
+  requerido,
+  longitudMin,
+  rangoNumerico,
+} from '../../../../core/validation/validators';
 
 @Component({
   selector: 'app-asignatura-form',
@@ -26,6 +38,15 @@ export class AsignaturaFormComponent implements OnInit {
   guardando = false;
   error = '';
 
+  esquema: Esquema = {
+    codigo: [requerido('El código es obligatorio')],
+    nombre: [requerido('El nombre es obligatorio'), longitudMin(2)],
+    intensidadHorariaSemanal: [
+      rangoNumerico(1, 40, 'La intensidad debe ser un número entre 1 y 40 horas'),
+    ],
+  };
+  errores: ErroresForm = {};
+
   constructor(
     private asignaturaService: AsignaturaService,
     private areaService: AreaService,
@@ -43,6 +64,12 @@ export class AsignaturaFormComponent implements OnInit {
         error: () => {},
       });
     if (this.modoEdicion) this.cargar();
+  }
+
+  validar(campo: string): void {
+    const msg = validarCampo(campo, this.form, this.esquema);
+    if (msg) this.errores[campo] = msg;
+    else delete this.errores[campo];
   }
 
   cargar(): void {
@@ -70,8 +97,9 @@ export class AsignaturaFormComponent implements OnInit {
 
   guardar(): void {
     this.error = '';
-    if (!this.form.codigo.trim() || !this.form.nombre.trim()) {
-      this.error = 'Código y nombre son obligatorios.';
+    this.errores = validarEsquema(this.form, this.esquema);
+    if (hayErrores(this.errores)) {
+      this.error = 'Revisa los campos marcados en rojo.';
       return;
     }
     this.guardando = true;

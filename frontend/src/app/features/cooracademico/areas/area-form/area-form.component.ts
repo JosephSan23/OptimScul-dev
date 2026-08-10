@@ -1,6 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AreaService } from '../../../../core/services/area.service';
+import {
+  validarEsquema,
+  hayErrores,
+  validarCampo,
+  Esquema,
+  ErroresForm,
+} from '../../../../core/validation/form-validator';
+import { requerido, longitudMin } from '../../../../core/validation/validators';
 
 @Component({
   selector: 'app-area-form',
@@ -15,6 +23,12 @@ export class AreaFormComponent implements OnInit {
   guardando = false;
   error = '';
 
+  esquema: Esquema = {
+    codigo: [requerido('El código es obligatorio')],
+    nombre: [requerido('El nombre es obligatorio'), longitudMin(2)],
+  };
+  errores: ErroresForm = {};
+
   constructor(
     private areaService: AreaService,
     private route: ActivatedRoute,
@@ -25,6 +39,12 @@ export class AreaFormComponent implements OnInit {
     this.areaId = this.route.snapshot.paramMap.get('id');
     this.modoEdicion = !!this.areaId;
     if (this.modoEdicion) this.cargar();
+  }
+
+  validar(campo: string): void {
+    const msg = validarCampo(campo, this.form, this.esquema);
+    if (msg) this.errores[campo] = msg;
+    else delete this.errores[campo];
   }
 
   cargar(): void {
@@ -47,8 +67,9 @@ export class AreaFormComponent implements OnInit {
 
   guardar(): void {
     this.error = '';
-    if (!this.form.codigo.trim() || !this.form.nombre.trim()) {
-      this.error = 'Código y nombre son obligatorios.';
+    this.errores = validarEsquema(this.form, this.esquema);
+    if (hayErrores(this.errores)) {
+      this.error = 'Revisa los campos marcados en rojo.';
       return;
     }
     this.guardando = true;

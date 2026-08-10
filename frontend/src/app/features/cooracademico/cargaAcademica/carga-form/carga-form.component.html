@@ -19,6 +19,7 @@
       <div class="campo">
         <label>Año lectivo <span class="req">*</span></label>
         <select
+          [class.is-invalid]="errores['anioLectivoId']"
           [(ngModel)]="form.anioLectivoId"
           [ngModelOptions]="{ standalone: true }"
           (change)="cambioAnio()"
@@ -29,14 +30,17 @@
             {{ a.nombre || a.anio }}{{ a.esActual ? " (actual)" : "" }}
           </option>
         </select>
+        <small class="campo-error" *ngIf="errores['anioLectivoId']"><i class="ti ti-alert-circle"></i> {{ errores['anioLectivoId'] }}</small>
       </div>
 
       <div class="campo">
         <label>Grupo <span class="req">*</span></label>
         <select
+          [class.is-invalid]="errores['grupoId']"
           [(ngModel)]="form.grupoId"
           [ngModelOptions]="{ standalone: true }"
           [disabled]="modoEdicion"
+          (change)="validar('grupoId')"
         >
           <option value="" disabled>
             {{
@@ -49,33 +53,40 @@
             {{ g.nombre }} ({{ g.codigo }})
           </option>
         </select>
+        <small class="campo-error" *ngIf="errores['grupoId']"><i class="ti ti-alert-circle"></i> {{ errores['grupoId'] }}</small>
       </div>
 
       <div class="campo">
         <label>Asignatura <span class="req">*</span></label>
         <select
+          [class.is-invalid]="errores['asignaturaId']"
           [(ngModel)]="form.asignaturaId"
           [ngModelOptions]="{ standalone: true }"
           [disabled]="modoEdicion"
+          (change)="validar('asignaturaId')"
         >
           <option value="" disabled>Selecciona la asignatura</option>
           <option *ngFor="let a of asignaturas" [value]="a.id">
             {{ a.nombre }}
           </option>
         </select>
+        <small class="campo-error" *ngIf="errores['asignaturaId']"><i class="ti ti-alert-circle"></i> {{ errores['asignaturaId'] }}</small>
       </div>
 
       <div class="campo">
         <label>Profesor <span class="req">*</span></label>
         <select
+          [class.is-invalid]="errores['profesorId']"
           [(ngModel)]="form.profesorId"
           [ngModelOptions]="{ standalone: true }"
+          (change)="validar('profesorId')"
         >
           <option value="" disabled>Selecciona el profesor</option>
           <option *ngFor="let p of profesores" [value]="p.id">
             {{ p.nombre }} ({{ p.codigoProfesor }})
           </option>
         </select>
+        <small class="campo-error" *ngIf="errores['profesorId']"><i class="ti ti-alert-circle"></i> {{ errores['profesorId'] }}</small>
       </div>
 
       <div class="campo">
@@ -84,9 +95,12 @@
           type="number"
           min="1"
           placeholder="Vacío = la de la asignatura"
+          [class.is-invalid]="errores['intensidadHorariaSemanal']"
           [(ngModel)]="form.intensidadHorariaSemanal"
           [ngModelOptions]="{ standalone: true }"
+          (blur)="validar('intensidadHorariaSemanal')"
         />
+        <small class="campo-error" *ngIf="errores['intensidadHorariaSemanal']"><i class="ti ti-alert-circle"></i> {{ errores['intensidadHorariaSemanal'] }}</small>
       </div>
 
       <div class="campo">
@@ -95,6 +109,7 @@
           type="date"
           [(ngModel)]="form.fechaInicio"
           [ngModelOptions]="{ standalone: true }"
+          (blur)="validar('fechaFin')"
         />
       </div>
 
@@ -102,9 +117,12 @@
         <label>Fecha fin</label>
         <input
           type="date"
+          [class.is-invalid]="errores['fechaFin']"
           [(ngModel)]="form.fechaFin"
           [ngModelOptions]="{ standalone: true }"
+          (blur)="validar('fechaFin')"
         />
+        <small class="campo-error" *ngIf="errores['fechaFin']"><i class="ti ti-alert-circle"></i> {{ errores['fechaFin'] }}</small>
       </div>
 
       <div class="campo campo-full">
