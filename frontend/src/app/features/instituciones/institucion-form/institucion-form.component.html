@@ -1,17 +1,26 @@
 <div class="form-grid">
   <div>
     <label>Código *</label>
-    <input [(ngModel)]="form.codigo" [ngModelOptions]="{standalone: true}" placeholder="COL-001">
+    <input [class.is-invalid]="errores['codigo']"
+           [(ngModel)]="form.codigo" [ngModelOptions]="{standalone: true}" placeholder="COL-001"
+           (blur)="validar('codigo')">
+    <small class="campo-error" *ngIf="errores['codigo']"><i class="ti ti-alert-circle"></i> {{ errores['codigo'] }}</small>
   </div>
   <div>
     <label>Nombre *</label>
-    <input [(ngModel)]="form.nombre" [ngModelOptions]="{standalone: true}" placeholder="Nombre">
+    <input [class.is-invalid]="errores['nombre']"
+           [(ngModel)]="form.nombre" [ngModelOptions]="{standalone: true}" placeholder="Nombre"
+           (blur)="validar('nombre')">
+    <small class="campo-error" *ngIf="errores['nombre']"><i class="ti ti-alert-circle"></i> {{ errores['nombre'] }}</small>
   </div>
   <div>
     <label>Tipo *</label>
-    <select [(ngModel)]="form.tipoInstitucion" [ngModelOptions]="{standalone: true}">
+    <select [class.is-invalid]="errores['tipoInstitucion']"
+            [(ngModel)]="form.tipoInstitucion" [ngModelOptions]="{standalone: true}"
+            (change)="validar('tipoInstitucion')">
       <option *ngFor="let t of tipos" [value]="t">{{ etiquetaTipo(t) }}</option>
     </select>
+    <small class="campo-error" *ngIf="errores['tipoInstitucion']"><i class="ti ti-alert-circle"></i> {{ errores['tipoInstitucion'] }}</small>
   </div>
   <div>
     <label>NIT</label>
@@ -27,7 +36,10 @@
   </div>
   <div>
     <label>Correo de contacto</label>
-    <input [(ngModel)]="form.correoContacto" [ngModelOptions]="{standalone: true}">
+    <input [class.is-invalid]="errores['correoContacto']"
+           [(ngModel)]="form.correoContacto" [ngModelOptions]="{standalone: true}"
+           (blur)="validar('correoContacto')">
+    <small class="campo-error" *ngIf="errores['correoContacto']"><i class="ti ti-alert-circle"></i> {{ errores['correoContacto'] }}</small>
   </div>
   <div>
     <label>Dominio de correo</label>
@@ -36,7 +48,10 @@
   </div>
   <div>
     <label>Teléfono</label>
-    <input [(ngModel)]="form.telefonoContacto" [ngModelOptions]="{standalone: true}">
+    <input [class.is-invalid]="errores['telefonoContacto']"
+           [(ngModel)]="form.telefonoContacto" [ngModelOptions]="{standalone: true}"
+           (blur)="validar('telefonoContacto')">
+    <small class="campo-error" *ngIf="errores['telefonoContacto']"><i class="ti ti-alert-circle"></i> {{ errores['telefonoContacto'] }}</small>
   </div>
   <div class="form-full">
     <label>Dirección principal</label>

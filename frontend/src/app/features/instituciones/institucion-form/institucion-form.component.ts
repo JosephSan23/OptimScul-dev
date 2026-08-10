@@ -1,5 +1,18 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { InstitucionService, Institucion, InstitucionRequest } from '../../../core/services/institucion.service';
+import {
+  validarEsquema,
+  hayErrores,
+  validarCampo,
+  Esquema,
+  ErroresForm,
+} from '../../../core/validation/form-validator';
+import {
+  requerido,
+  longitudMin,
+  correo,
+  telefonoCo,
+} from '../../../core/validation/validators';
 
 @Component({
   selector: 'app-institucion-form',
@@ -20,9 +33,19 @@ export class InstitucionFormComponent implements OnInit {
   guardando = false;
   errorForm = '';
 
+  esquema: Esquema = {
+    codigo: [requerido('El código es obligatorio')],
+    nombre: [requerido('El nombre es obligatorio'), longitudMin(2)],
+    tipoInstitucion: [requerido('Selecciona el tipo')],
+    correoContacto: [correo()],
+    telefonoContacto: [telefonoCo()],
+  };
+  errores: ErroresForm = {};
+
   constructor(private institucionService: InstitucionService) {}
 
   ngOnInit(): void {
+    this.errores = {};
     // Si me pasaron una institución, precargo sus datos en el formulario
     if (this.institucion) {
       this.form = {
@@ -53,13 +76,20 @@ export class InstitucionFormComponent implements OnInit {
     return this.institucion !== null;
   }
 
+  validar(campo: string): void {
+    const msg = validarCampo(campo, this.form, this.esquema);
+    if (msg) this.errores[campo] = msg;
+    else delete this.errores[campo];
+  }
+
   guardar(): void {
-    if (!this.form.codigo?.trim() || !this.form.nombre?.trim() || !this.form.tipoInstitucion) {
-      this.errorForm = 'Código, nombre y tipo son obligatorios.';
+    this.errorForm = '';
+    this.errores = validarEsquema(this.form, this.esquema);
+    if (hayErrores(this.errores)) {
+      this.errorForm = 'Revisa los campos marcados en rojo.';
       return;
     }
     this.guardando = true;
-    this.errorForm = '';
 
     const peticion = this.esEdicion
       ? this.institucionService.editar(this.institucion!.id, this.form)
