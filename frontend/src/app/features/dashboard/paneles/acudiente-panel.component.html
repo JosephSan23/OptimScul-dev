@@ -1,0 +1,113 @@
+<div class="panel-hero">
+  <div class="panel-hero__text">
+    <p class="panel-hero__eyebrow">Panel del acudiente</p>
+    <h1 class="panel-hero__title">Hola, {{ usuario?.username }}</h1>
+    <p class="panel-hero__sub">Seguimiento académico de tus hijos</p>
+  </div>
+  <div class="panel-hero__meta">
+    <span class="panel-hero__chip" *ngIf="anioActual">
+      <i class="ti ti-calendar-event"></i> {{ anioActual.nombre || anioActual.anio }}
+    </span>
+    <span class="panel-hero__chip" *ngIf="periodoActual">
+      <i class="ti ti-clock-hour-4"></i> {{ periodoActual.nombre || ('Periodo ' + periodoActual.numero) }}
+    </span>
+  </div>
+</div>
+
+<div *ngIf="cargando" class="panel__cargando">
+  <i class="ti ti-loader-2 girando"></i> Cargando panel...
+</div>
+<div *ngIf="error" class="panel__error">{{ error }}</div>
+
+<ng-container *ngIf="!cargando && !error">
+  <div *ngIf="hijos.length === 0" class="panel__vacio">No tienes hijos vinculados a tu cuenta.</div>
+
+  <ng-container *ngIf="hijos.length > 0">
+    <!-- Resumen de todos los hijos -->
+    <div class="card" *ngIf="resumenHijos.length > 1" style="margin-bottom:24px;">
+      <div class="card__head"><h2>Mis hijos</h2></div>
+      <div class="mini-list">
+        <div class="mini-row" *ngFor="let h of resumenHijos">
+          <span class="mini-avatar">{{ iniciales(h.nombre) }}</span>
+          <div class="mini-row__main">
+            <b>{{ h.nombre }}</b>
+            <small *ngIf="h.matriculado">{{ h.grado }}<ng-container *ngIf="h.grupo"> — {{ h.grupo }}</ng-container></small>
+            <small *ngIf="!h.matriculado">Sin matrícula este año</small>
+          </div>
+          <span class="tag info" *ngIf="h.promedio != null">Prom. {{ h.promedio }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Selector de hijo -->
+    <div class="selector-bar">
+      <label for="selHijo">Ver detalle de:</label>
+      <select id="selHijo" [(ngModel)]="hijoSeleccionado" (change)="cambioHijo()">
+        <option *ngFor="let h of hijos" [value]="h.estudianteId">{{ h.nombre }}</option>
+      </select>
+    </div>
+
+    <div *ngIf="cargandoHijo" class="panel__cargando">
+      <i class="ti ti-loader-2 girando"></i> Cargando...
+    </div>
+
+    <ng-container *ngIf="!cargandoHijo">
+      <div class="kpi-grid">
+        <app-kpi-card icon="ti-users" tone="navy" label="Hijos" [value]="hijos.length"></app-kpi-card>
+        <app-kpi-card icon="ti-chart-bar" tone="blue" label="Promedio"
+          [value]="promedio" [hint]="notas?.notaAprobacion != null ? ('Aprueba con ' + notas?.notaAprobacion) : ''"></app-kpi-card>
+        <app-kpi-card icon="ti-book-2" tone="orange" label="Materias" [value]="totalMaterias"></app-kpi-card>
+        <app-kpi-card icon="ti-checklist" tone="green" label="Asistencia" [value]="asistenciaPct"></app-kpi-card>
+      </div>
+
+      <div class="panel-grid">
+        <div class="col-7">
+          <div class="card">
+            <div class="card__head">
+              <h2>Notas por materia</h2>
+              <a class="card__link" routerLink="/dashboard/acudiente/notas">Ver notas <i class="ti ti-arrow-right"></i></a>
+            </div>
+            <div *ngIf="notas && !notas.matriculado" class="panel__vacio">Sin matrícula en este año lectivo.</div>
+            <app-bar-chart *ngIf="notas?.matriculado" [items]="notasPorMateria" defaultColor="var(--data-blue)"></app-bar-chart>
+          </div>
+
+          <div class="card">
+            <div class="card__head">
+              <h2>Horario de hoy</h2>
+              <a class="card__link" routerLink="/dashboard/acudiente/horario">Ver horario</a>
+            </div>
+            <div class="today">
+              <div class="today__row" *ngFor="let f of horarioHoy">
+                <span class="today__hora">{{ f.horaInicio }}<br>{{ f.horaFin }}</span>
+                <div class="today__info">
+                  <b>{{ f.asignaturaNombre }}</b>
+                  <small>{{ f.profesorNombre }}<ng-container *ngIf="f.aula"> · {{ f.aula }}</ng-container></small>
+                </div>
+              </div>
+              <p class="today__empty" *ngIf="horarioHoy.length === 0">No hay clases programadas para hoy.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-5">
+          <div class="card">
+            <div class="card__head">
+              <h2>Asistencia</h2>
+              <a class="card__link" routerLink="/dashboard/acudiente/asistencia">Ver detalle</a>
+            </div>
+            <app-donut-chart [items]="asistenciaGlobal" centro="Registros"></app-donut-chart>
+          </div>
+
+          <div class="card">
+            <div class="card__head"><h2>Accesos rápidos</h2></div>
+            <div class="quick">
+              <a class="quick__tile" routerLink="/dashboard/acudiente/notas"><i class="ti ti-report-analytics"></i>Notas</a>
+              <a class="quick__tile" routerLink="/dashboard/acudiente/horario"><i class="ti ti-calendar-time"></i>Horario</a>
+              <a class="quick__tile" routerLink="/dashboard/acudiente/asistencia"><i class="ti ti-checklist"></i>Asistencia</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+</ng-container>

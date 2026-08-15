@@ -1,0 +1,87 @@
+<div class="panel-hero">
+  <div class="panel-hero__text">
+    <p class="panel-hero__eyebrow">Panel del docente</p>
+    <h1 class="panel-hero__title">Hola, {{ usuario?.username }}</h1>
+    <p class="panel-hero__sub">Tus clases y horario de este año</p>
+  </div>
+  <div class="panel-hero__meta">
+    <span class="panel-hero__chip" *ngIf="anioActual">
+      <i class="ti ti-calendar-event"></i> {{ anioActual.nombre || anioActual.anio }}
+    </span>
+  </div>
+</div>
+
+<div *ngIf="cargando" class="panel__cargando">
+  <i class="ti ti-loader-2 girando"></i> Cargando panel...
+</div>
+<div *ngIf="error" class="panel__error">{{ error }}</div>
+
+<ng-container *ngIf="!cargando && !error">
+  <div class="kpi-grid">
+    <app-kpi-card icon="ti-chalkboard" tone="navy" label="Mis clases"
+      [value]="clases.length"></app-kpi-card>
+    <app-kpi-card icon="ti-users" tone="blue" label="Estudiantes"
+      [value]="totalEstudiantes"></app-kpi-card>
+    <app-kpi-card icon="ti-layout-grid" tone="orange" label="Grupos"
+      [value]="gruposDistintos"></app-kpi-card>
+    <app-kpi-card icon="ti-clock" tone="green" label="Horas / semana"
+      [value]="horasSemana" unit=" h"></app-kpi-card>
+  </div>
+
+  <div class="panel-grid">
+    <div class="col-7">
+      <div class="card">
+        <div class="card__head">
+          <h2>Estudiantes por clase</h2>
+          <a class="card__link" routerLink="/dashboard/mis-clases">Mis clases <i class="ti ti-arrow-right"></i></a>
+        </div>
+        <app-bar-chart [items]="estudiantesPorClase"></app-bar-chart>
+      </div>
+
+      <div class="card">
+        <div class="card__head">
+          <h2>Clases por día<span class="card__sub">Franjas de tu horario semanal</span></h2>
+        </div>
+        <app-bar-chart [items]="clasesPorDia" defaultColor="var(--navy-700)"></app-bar-chart>
+      </div>
+    </div>
+
+    <div class="col-5">
+      <div class="card">
+        <div class="card__head">
+          <h2>Horario de hoy</h2>
+          <a class="card__link" routerLink="/dashboard/mis-clases">Ver horario</a>
+        </div>
+        <div class="today">
+          <div class="today__row" *ngFor="let f of horarioHoy">
+            <span class="today__hora">{{ f.horaInicio }}<br>{{ f.horaFin }}</span>
+            <div class="today__info">
+              <b>{{ f.asignaturaNombre }}</b>
+              <small *ngIf="f.aula || f.sedeNombre">
+                <i class="ti ti-map-pin"></i>
+                {{ f.aula || '' }}{{ f.aula && f.sedeNombre ? ' · ' : '' }}{{ f.sedeNombre || '' }}
+              </small>
+            </div>
+          </div>
+          <p class="today__empty" *ngIf="horarioHoy.length === 0">No tienes clases programadas para hoy.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card__head"><h2>Mis clases</h2></div>
+        <div class="mini-list">
+          <a class="mini-row" *ngFor="let c of clases"
+             [routerLink]="['/dashboard/mis-clases', c.cargaId]"
+             [queryParams]="{ anio: c.anioLectivoId }" style="text-decoration:none;">
+            <div class="mini-row__main">
+              <b>{{ c.asignaturaNombre }}</b>
+              <small>{{ c.gradoNombre }} — {{ c.grupoNombre }}</small>
+            </div>
+            <span class="tag info">{{ c.totalEstudiantes }} est.</span>
+          </a>
+          <p class="panel__vacio" *ngIf="clases.length === 0">No tienes clases asignadas este año.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

@@ -1,0 +1,94 @@
+<div class="panel-hero">
+  <div class="panel-hero__text">
+    <p class="panel-hero__eyebrow">Panel del estudiante</p>
+    <h1 class="panel-hero__title">Hola, {{ notas?.estudianteNombre || usuario?.username }}</h1>
+    <p class="panel-hero__sub">
+      <ng-container *ngIf="notas?.grupoNombre">{{ notas?.gradoNombre }} — {{ notas?.grupoNombre }} · </ng-container>
+      Tu resumen académico
+    </p>
+  </div>
+  <div class="panel-hero__meta">
+    <span class="panel-hero__chip" *ngIf="anioActual">
+      <i class="ti ti-calendar-event"></i> {{ anioActual.nombre || anioActual.anio }}
+    </span>
+    <span class="panel-hero__chip" *ngIf="periodoActual">
+      <i class="ti ti-clock-hour-4"></i> {{ periodoActual.nombre || ('Periodo ' + periodoActual.numero) }}
+    </span>
+  </div>
+</div>
+
+<div *ngIf="cargando" class="panel__cargando">
+  <i class="ti ti-loader-2 girando"></i> Cargando panel...
+</div>
+<div *ngIf="error" class="panel__error">{{ error }}</div>
+
+<ng-container *ngIf="!cargando && !error">
+  <div class="kpi-grid">
+    <app-kpi-card icon="ti-chart-bar" tone="navy" label="Promedio"
+      [value]="promedio" [hint]="notas?.notaAprobacion != null ? ('Aprueba con ' + notas?.notaAprobacion) : ''"></app-kpi-card>
+    <app-kpi-card icon="ti-book-2" tone="blue" label="Materias"
+      [value]="totalMaterias"></app-kpi-card>
+    <app-kpi-card icon="ti-checklist" tone="green" label="Asistencia"
+      [value]="asistenciaPct"></app-kpi-card>
+    <app-kpi-card icon="ti-clipboard-list" [tone]="pendientes > 0 ? 'orange' : 'green'" label="Actividades pendientes"
+      [value]="pendientes"></app-kpi-card>
+  </div>
+
+  <div class="panel-grid">
+    <div class="col-7">
+      <div class="card">
+        <div class="card__head">
+          <h2>Notas por materia<span class="card__sub">Periodo actual</span></h2>
+          <a class="card__link" routerLink="/dashboard/estudiante/notas">Ver notas <i class="ti ti-arrow-right"></i></a>
+        </div>
+        <div *ngIf="notas && !notas.matriculado" class="panel__vacio">No estás matriculado en este año lectivo.</div>
+        <app-bar-chart *ngIf="notas?.matriculado" [items]="notasPorMateria" defaultColor="var(--data-blue)"></app-bar-chart>
+      </div>
+
+      <div class="card">
+        <div class="card__head">
+          <h2>Próximas actividades</h2>
+          <a class="card__link" routerLink="/dashboard/estudiante/actividades">Ver todo</a>
+        </div>
+        <div class="mini-list">
+          <a class="mini-row" *ngFor="let a of proximasActividades"
+             [routerLink]="['/dashboard/estudiante/actividades', a.actividadId]" style="text-decoration:none;">
+            <div class="mini-row__main">
+              <b>{{ a.titulo }}</b>
+              <small>{{ a.asignatura }}<ng-container *ngIf="a.fechaEntrega"> · entrega {{ a.fechaEntrega | date:'d MMM' }}</ng-container></small>
+            </div>
+            <span class="badge-estado" [ngClass]="claseActividad(a.estadoEntrega)">{{ etiquetaActividad(a.estadoEntrega) }}</span>
+          </a>
+          <p class="panel__vacio" *ngIf="proximasActividades.length === 0">¡Estás al día! No tienes actividades pendientes.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-5">
+      <div class="card">
+        <div class="card__head">
+          <h2>Asistencia</h2>
+          <a class="card__link" routerLink="/dashboard/estudiante/asistencia">Ver detalle</a>
+        </div>
+        <app-donut-chart [items]="asistenciaGlobal" centro="Registros"></app-donut-chart>
+      </div>
+
+      <div class="card">
+        <div class="card__head">
+          <h2>Horario de hoy</h2>
+          <a class="card__link" routerLink="/dashboard/estudiante/horario">Ver horario</a>
+        </div>
+        <div class="today">
+          <div class="today__row" *ngFor="let f of horarioHoy">
+            <span class="today__hora">{{ f.horaInicio }}<br>{{ f.horaFin }}</span>
+            <div class="today__info">
+              <b>{{ f.asignaturaNombre }}</b>
+              <small>{{ f.profesorNombre }}<ng-container *ngIf="f.aula"> · {{ f.aula }}</ng-container></small>
+            </div>
+          </div>
+          <p class="today__empty" *ngIf="horarioHoy.length === 0">No tienes clases programadas para hoy.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

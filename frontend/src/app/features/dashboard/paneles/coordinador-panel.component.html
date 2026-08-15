@@ -1,0 +1,85 @@
+<div class="panel-hero">
+  <div class="panel-hero__text">
+    <p class="panel-hero__eyebrow">Coordinación académica</p>
+    <h1 class="panel-hero__title">Hola, {{ usuario?.username }}</h1>
+    <p class="panel-hero__sub">Resumen académico del año en curso</p>
+  </div>
+  <div class="panel-hero__meta">
+    <span class="panel-hero__chip" *ngIf="anioActual">
+      <i class="ti ti-calendar-event"></i> {{ anioActual.nombre || anioActual.anio }}
+    </span>
+  </div>
+</div>
+
+<div *ngIf="cargando" class="panel__cargando">
+  <i class="ti ti-loader-2 girando"></i> Cargando panel...
+</div>
+<div *ngIf="error" class="panel__error">{{ error }}</div>
+
+<ng-container *ngIf="!cargando && !error">
+  <div class="kpi-grid">
+    <app-kpi-card icon="ti-users" tone="navy" label="Estudiantes"
+      [value]="estudiantes.length" [hint]="estudiantesActivos + ' activos'"></app-kpi-card>
+    <app-kpi-card icon="ti-layout-grid" tone="blue" label="Grupos"
+      [value]="grupos.length"></app-kpi-card>
+    <app-kpi-card icon="ti-clipboard-check" tone="green" label="Matrículas"
+      [value]="matriculas.length" [hint]="totalMatriculados + ' matriculados'"></app-kpi-card>
+    <app-kpi-card icon="ti-book-2" tone="orange" label="Asignaturas"
+      [value]="asignaturas.length" [hint]="areas.length + ' áreas'"></app-kpi-card>
+    <app-kpi-card icon="ti-chalkboard" tone="navy" label="Carga académica"
+      [value]="cargas.length"></app-kpi-card>
+  </div>
+
+  <div class="panel-grid">
+    <div class="col-7">
+      <div class="card">
+        <div class="card__head">
+          <h2>Estudiantes por grado<span class="card__sub">Matrículas del año lectivo</span></h2>
+          <a class="card__link" routerLink="/dashboard/matriculas">Matrículas <i class="ti ti-arrow-right"></i></a>
+        </div>
+        <app-bar-chart [items]="estudiantesPorGrado"></app-bar-chart>
+      </div>
+
+      <div class="card">
+        <div class="card__head">
+          <h2>Asignaturas por área</h2>
+          <a class="card__link" routerLink="/dashboard/asignaturas">Ver todo</a>
+        </div>
+        <app-bar-chart [items]="asignaturasPorArea" defaultColor="var(--navy-700)"></app-bar-chart>
+      </div>
+    </div>
+
+    <div class="col-5">
+      <div class="card">
+        <div class="card__head"><h2>Matrículas por estado</h2></div>
+        <app-donut-chart [items]="matriculasPorEstado" centro="Matrículas"></app-donut-chart>
+      </div>
+
+      <div class="card">
+        <div class="card__head">
+          <h2>Matrículas recientes</h2>
+          <a class="card__link" routerLink="/dashboard/matriculas">Ver todo</a>
+        </div>
+        <div class="mini-list">
+          <div class="mini-row" *ngFor="let m of matriculasRecientes">
+            <div class="mini-row__main">
+              <b>{{ m.estudianteNombre }}</b>
+              <small>{{ m.gradoNombre || 'Sin grado' }}<ng-container *ngIf="m.grupoNombre"> · {{ m.grupoNombre }}</ng-container></small>
+            </div>
+            <span class="badge-estado" [ngClass]="claseEstado(m.estado)">{{ nombreEstado(m.estado) }}</span>
+          </div>
+          <p class="panel__vacio" *ngIf="matriculasRecientes.length === 0">Aún no hay matrículas este año.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:20px;">
+    <div class="card__head"><h2>Accesos rápidos</h2></div>
+    <div class="quick">
+      <a class="quick__tile" *ngFor="let a of accesos" [routerLink]="a.ruta">
+        <i class="ti {{ a.icon }}"></i>{{ a.label }}
+      </a>
+    </div>
+  </div>
+</ng-container>

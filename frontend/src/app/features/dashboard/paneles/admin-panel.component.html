@@ -1,0 +1,96 @@
+<div class="panel-hero">
+  <div class="panel-hero__text">
+    <p class="panel-hero__eyebrow">Panel administrativo</p>
+    <h1 class="panel-hero__title">Hola, {{ usuario?.username }}</h1>
+    <p class="panel-hero__sub">
+      {{ institucion?.nombre || 'Tu institución' }} · Vista general de la institución
+    </p>
+  </div>
+  <div class="panel-hero__meta">
+    <span class="panel-hero__chip" *ngIf="anioActual">
+      <i class="ti ti-calendar-event"></i> {{ anioActual.nombre || anioActual.anio }}
+    </span>
+    <span class="panel-hero__chip" *ngIf="institucion?.ciudad">
+      <i class="ti ti-map-pin"></i> {{ institucion?.ciudad }}
+    </span>
+  </div>
+</div>
+
+<div *ngIf="cargando" class="panel__cargando">
+  <i class="ti ti-loader-2 girando"></i> Cargando panel...
+</div>
+<div *ngIf="error" class="panel__error">{{ error }}</div>
+
+<ng-container *ngIf="!cargando && !error">
+  <!-- KPIs -->
+  <div class="kpi-grid">
+    <app-kpi-card icon="ti-users" tone="navy" label="Personal"
+      [value]="staff.length" [hint]="personalActivo + ' activos'"></app-kpi-card>
+    <app-kpi-card icon="ti-building" tone="blue" label="Sedes"
+      [value]="sedes.length" [hint]="sedesActivas + ' activas'"></app-kpi-card>
+    <app-kpi-card icon="ti-stairs" tone="orange" label="Grados"
+      [value]="grados.length"></app-kpi-card>
+    <app-kpi-card icon="ti-book-2" tone="green" label="Asignaturas"
+      [value]="asignaturas.length" [hint]="areas.length + ' áreas'"></app-kpi-card>
+    <app-kpi-card icon="ti-calendar-stats" tone="navy" label="Año lectivo"
+      [value]="anioActual ? (anioActual.nombre || anioActual.anio) : '—'"
+      [hint]="totalPeriodos ? (totalPeriodos + ' periodos') : ''"></app-kpi-card>
+  </div>
+
+  <!-- Gráficos -->
+  <div class="panel-grid">
+    <div class="col-7">
+      <div class="card">
+        <div class="card__head">
+          <h2>Personal por rol<span class="card__sub">Distribución del equipo</span></h2>
+          <a class="card__link" routerLink="/dashboard/staff">Ver personal <i class="ti ti-arrow-right"></i></a>
+        </div>
+        <app-bar-chart [items]="personalPorRol"></app-bar-chart>
+      </div>
+
+      <div class="card">
+        <div class="card__head">
+          <h2>Grupos por grado<span class="card__sub">Cantidad de grupos abiertos</span></h2>
+        </div>
+        <app-bar-chart [items]="gruposPorGrado" defaultColor="var(--navy-700)"></app-bar-chart>
+      </div>
+    </div>
+
+    <div class="col-5">
+      <div class="card">
+        <div class="card__head">
+          <h2>Estado del personal</h2>
+        </div>
+        <app-donut-chart [items]="personalEstado" centro="Personal"></app-donut-chart>
+      </div>
+
+      <div class="card">
+        <div class="card__head">
+          <h2>Personal reciente</h2>
+          <a class="card__link" routerLink="/dashboard/staff">Ver todo</a>
+        </div>
+        <div class="mini-list">
+          <div class="mini-row" *ngFor="let s of staffReciente">
+            <span class="mini-avatar">{{ iniciales(s) }}</span>
+            <div class="mini-row__main">
+              <b>{{ s.primerNombre }} {{ s.primerApellido }}</b>
+              <small>{{ s.rolNombre }}</small>
+            </div>
+            <span class="badge-estado" [ngClass]="claseEstado(s.estado)">{{ nombreEstado(s.estado) }}</span>
+          </div>
+          <p class="panel__vacio" *ngIf="staffReciente.length === 0">Aún no hay personal registrado.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Accesos rápidos -->
+  <div class="card" style="margin-top:20px;">
+    <div class="card__head"><h2>Accesos rápidos</h2></div>
+    <div class="quick">
+      <a class="quick__tile" *ngFor="let a of accesos" [routerLink]="a.ruta">
+        <i class="ti {{ a.icon }}"></i>{{ a.label }}
+      </a>
+    </div>
+  </div>
+</ng-container>
