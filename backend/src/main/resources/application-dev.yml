@@ -4,15 +4,17 @@ spring:
     username: optimscul
     password: optimscul1234
     driver-class-name: org.postgresql.Driver
-
+    hikari:
+      maximum-pool-size: 40      # antes eran 10 por defecto
+      minimum-idle: 10
   jpa:
     hibernate:
       ddl-auto: validate
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
+        format_sql: false
     open-in-view: false
 
   flyway:
