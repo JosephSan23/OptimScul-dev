@@ -95,7 +95,7 @@ export class GradoFormComponent implements OnInit {
       codigo: this.form.codigo,
       nombre: this.form.nombre,
       nivel: this.form.nivel,
-      orden: this.form.orden,
+      orden: this.form.orden!,
     };
     const p = this.modoEdicion
       ? this.gradoService.editar(this.gradoId!, body)
