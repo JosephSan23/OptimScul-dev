@@ -81,18 +81,16 @@ public class ConsolidadoPeriodoUseCase {
                 .filter(a -> a.getEstado() != EstadoActividad.ANULADA)
                 .toList();
 
-        Map<UUID, Map<UUID, BigDecimal>> notas = actividades.stream()
-                .collect(Collectors.toMap(
-                        ActividadAcademica::getId,
-                        actividad -> calificacionRepo.findByActividadId(actividad.getId())
-                                .stream()
-                                .filter(c -> c.getNotaObtenida() != null)
-                                .collect(Collectors.toMap(
-                                        CalificacionActividad::getEstudianteId,
-                                        CalificacionActividad::getNotaObtenida,
-                                        (a, b) -> a
-                                ))
-                ));
+        List<UUID> actividadIds = actividades.stream().map(ActividadAcademica::getId).toList();
+
+        // Una sola consulta para TODAS las calificaciones (antes: una consulta por actividad = N+1).
+        Map<UUID, Map<UUID, BigDecimal>> notas = new java.util.HashMap<>();
+        for (CalificacionActividad c : calificacionRepo.findByActividadIdIn(actividadIds)) {
+            if (c.getNotaObtenida() != null) {
+                notas.computeIfAbsent(c.getActividadId(), k -> new java.util.HashMap<>())
+                     .putIfAbsent(c.getEstudianteId(), c.getNotaObtenida());
+            }
+        }
 
         BigDecimal sumaPorcentajes = actividades.stream()
                 .map(a -> a.getPorcentaje() != null ? a.getPorcentaje() : BigDecimal.ZERO)

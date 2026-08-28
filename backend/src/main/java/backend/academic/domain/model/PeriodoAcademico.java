@@ -24,5 +24,5 @@ public class PeriodoAcademico {
     private EstadoPeriodo estado;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private Boolean boletinHabilitado;
+    private Boolean boletinHabilitado = false;
 }
