@@ -88,6 +88,66 @@ export class ChatComponent implements OnInit, OnDestroy {
     return m.remitenteId === this.miId;
   }
 
+  iniciales(nombre?: string): string {
+    if (!nombre) return '?';
+    const partes = nombre.trim().split(/\s+/);
+    const a = partes[0]?.[0] ?? '';
+    const b = partes.length > 1 ? partes[partes.length - 1][0] : '';
+    return (a + b).toUpperCase();
+  }
+
+  /** true si el mensaje i es del mismo emisor que el i-1 y el mismo día (agrupa la ráfaga). */
+  esSeguido(i: number): boolean {
+    if (i <= 0) return false;
+    const prev = this.mensajes[i - 1];
+    const act = this.mensajes[i];
+    return (
+      prev.remitenteId === act.remitenteId &&
+      this.mismoDia(prev.createdAt, act.createdAt)
+    );
+  }
+
+  /** true si hay que mostrar la hora: último de una ráfaga (cambia el emisor o es el último). */
+  mostrarHora(i: number): boolean {
+    const sig = this.mensajes[i + 1];
+    if (!sig) return true;
+    return (
+      sig.remitenteId !== this.mensajes[i].remitenteId ||
+      !this.mismoDia(this.mensajes[i].createdAt, sig.createdAt)
+    );
+  }
+
+  /** true si el mensaje i abre un nuevo día respecto al anterior. */
+  mostrarFecha(i: number): boolean {
+    if (i === 0) return true;
+    return !this.mismoDia(this.mensajes[i - 1].createdAt, this.mensajes[i].createdAt);
+  }
+
+  etiquetaFecha(m: MensajeChat): string {
+    const f = new Date(m.createdAt);
+    const hoy = new Date();
+    const ayer = new Date();
+    ayer.setDate(hoy.getDate() - 1);
+    if (this.mismoDiaFecha(f, hoy)) return 'Hoy';
+    if (this.mismoDiaFecha(f, ayer)) return 'Ayer';
+    return f.toLocaleDateString('es-CO', {
+      day: 'numeric',
+      month: 'long',
+      year: f.getFullYear() === hoy.getFullYear() ? undefined : 'numeric',
+    });
+  }
+
+  private mismoDia(a: string | Date, b: string | Date): boolean {
+    return this.mismoDiaFecha(new Date(a), new Date(b));
+  }
+  private mismoDiaFecha(a: Date, b: Date): boolean {
+    return (
+      a.getFullYear() === b.getFullYear() &&
+      a.getMonth() === b.getMonth() &&
+      a.getDate() === b.getDate()
+    );
+  }
+
   private alRecibir(m: MensajeChat): void {
     if (this.activa && m.conversacionId === this.activa.conversacionId) {
       this.agregarSiFalta(m); // dedup por id

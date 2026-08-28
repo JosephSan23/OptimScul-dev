@@ -14,4 +14,6 @@ public interface CalificacionActividadRepository {
     List<CalificacionActividad> findByActividadId(UUID actividadId);
     Optional<CalificacionActividad> findByActividadIdAndEstudianteId(UUID actividadId, UUID estudianteId);
     boolean existsByActividadId(UUID actividadId);
+        List<CalificacionActividad> findByEstudianteIdAndActividadIdIn(UUID estudianteId, List<UUID> actividadIds);
+    List<CalificacionActividad> findByActividadIdIn(List<UUID> actividadIds);
 }

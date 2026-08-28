@@ -6,7 +6,9 @@ import backend.chat.infrastructure.persistence.MensajeJpaRepository;
 import backend.chat.infrastructure.persistence.mapper.MensajeMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -46,5 +48,21 @@ public class MensajeRepositoryAdapter implements MensajeRepository {
     @Override
     public void marcarLeidos(UUID conversacionId, UUID paraUsuarioId) {
         jpa.marcarLeidos(conversacionId, paraUsuarioId);
+    }
+
+    @Override
+    public List<Mensaje> findUltimosDeConversaciones(List<UUID> conversacionIds) {
+        if (conversacionIds == null || conversacionIds.isEmpty()) return List.of();
+        return jpa.findUltimosPorConversaciones(conversacionIds).stream().map(mapper::toDomain).collect(Collectors.toList());
+    }
+
+    @Override
+    public Map<UUID, Long> contarNoLeidosPorConversacion(List<UUID> conversacionIds, UUID paraUsuarioId) {
+        if (conversacionIds == null || conversacionIds.isEmpty()) return Map.of();
+        Map<UUID, Long> out = new HashMap<>();
+        for (Object[] row : jpa.contarNoLeidosPorConversaciones(conversacionIds, paraUsuarioId)) {
+            out.put((UUID) row[0], ((Number) row[1]).longValue());
+        }
+        return out;
     }
 }

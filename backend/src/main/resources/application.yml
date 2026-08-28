@@ -11,3 +11,13 @@ spring:
       max-request-size: 100MB
 server:
   port: 8080
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: never

@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { PerfilService } from './perfil.service';
 
 
@@ -39,6 +40,11 @@ export class AuthService {
     'ADMIN_INSTITUCION', 'COORDINADOR_ACADEMICO', 'DOCENTE', 'ESTUDIANTE', 'ACUDIENTE'
   ];
 
+  /** Acceso seguro a localStorage: null cuando corre en el servidor (SSR) */
+  private get storage(): Storage | null {
+    return isPlatformBrowser(this.platformId) ? localStorage : null;
+  }
+
    /** Modos que este usuario tiene disponibles según sus roles */
   getModosDisponibles(): string[] {
     const roles = this.getRoles();
@@ -47,9 +53,8 @@ export class AuthService {
 
   /** El sombrero puesto ahora mismo */
   getModo(): string | null {
-    const guardado = localStorage.getItem(this.MODO_KEY);
+    const guardado = this.storage?.getItem(this.MODO_KEY) ?? null;
     const disponibles = this.getModosDisponibles();
-    // si lo guardado ya no es válido (cambió de roles), cae al de mayor prioridad
     if (guardado && disponibles.includes(guardado)) return guardado;
     return disponibles[0] ?? null;
   }
@@ -60,19 +65,20 @@ export class AuthService {
 
   /** El botón "Cambiar a..." llama esto */
   cambiarModo(modo: string): void {
-    if (!this.getModosDisponibles().includes(modo)) return;   // no tiene ese rol
-    localStorage.setItem(this.MODO_KEY, modo);
+    if (!this.getModosDisponibles().includes(modo)) return;
+    this.storage?.setItem(this.MODO_KEY, modo);
     this.router.navigate([this.RUTA_POR_MODO[modo] ?? '/']);
   }
 
-  constructor(private http: HttpClient, private router: Router, private perfil: PerfilService) {}
+  constructor(private http: HttpClient, private router: Router, private perfil: PerfilService,
+              @Inject(PLATFORM_ID) private platformId: Object) {}
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.API}/login`, credentials).pipe(
       tap(response => {
         this.perfil.refrescar();
-        localStorage.setItem(this.TOKEN_KEY, response.token);
-        localStorage.setItem(this.USER_KEY, JSON.stringify({
+        this.storage?.setItem(this.TOKEN_KEY, response.token);
+        this.storage?.setItem(this.USER_KEY, JSON.stringify({
           usuarioId:    response.usuarioId,
           username:     response.username,
           tipoContexto: response.tipoContexto,
@@ -87,25 +93,32 @@ export class AuthService {
     return this.getTipoContexto() === 'PLATAFORMA' && !this.tieneRol('VISITANTE');
   }
 
+  /** Ruta del dashboard de inicio según el rol/modo activo del usuario. */
+  rutaInicio(): string {
+    if (this.esSuperAdmin()) return '/dashboard/admin';
+    const modo = this.getModo();
+    return modo ? (this.RUTA_POR_MODO[modo] ?? '/dashboard/perfil') : '/dashboard/perfil';
+  }
+
   private redirigirSegunRol(tipoContexto: string, roles: string[]): void {
     if (roles.includes('VISITANTE')) { this.router.navigate(['/primeros-pasos']); return; }
     if (tipoContexto === 'PLATAFORMA') { this.router.navigate(['/dashboard/admin']); return; }
 
-    localStorage.removeItem(this.MODO_KEY);               // arranca limpio en cada login
-    const modo = this.getModo();                          // el de mayor prioridad que tenga
+    this.storage?.removeItem(this.MODO_KEY);
+    const modo = this.getModo();
     this.router.navigate([modo ? this.RUTA_POR_MODO[modo] : '/']);
   }
 
   logout(): void {
     this.perfil.refrescar();
-    localStorage.removeItem(this.TOKEN_KEY);
-    localStorage.removeItem(this.USER_KEY);
-    localStorage.removeItem(this.MODO_KEY);
+    this.storage?.removeItem(this.TOKEN_KEY);
+    this.storage?.removeItem(this.USER_KEY);
+    this.storage?.removeItem(this.MODO_KEY);
     this.router.navigate(['/login']);
   }
 
   getToken(): string | null {
-    return localStorage.getItem(this.TOKEN_KEY);
+    return this.storage?.getItem(this.TOKEN_KEY) ?? null;
   }
 
   isLoggedIn(): boolean {
@@ -120,7 +133,7 @@ export class AuthService {
   }
 
   getUsuarioActual(): any {
-    const user = localStorage.getItem(this.USER_KEY);
+    const user = this.storage?.getItem(this.USER_KEY) ?? null;
     return user ? JSON.parse(user) : null;
   }
 

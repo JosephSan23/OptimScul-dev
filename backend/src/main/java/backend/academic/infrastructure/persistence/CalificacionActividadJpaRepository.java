@@ -10,4 +10,6 @@ public interface CalificacionActividadJpaRepository extends JpaRepository<Califi
     List<CalificacionActividadEntity> findByActividadId(UUID actividadId);
     Optional<CalificacionActividadEntity> findByActividadIdAndEstudianteId(UUID actividadId, UUID estudianteId);
     boolean existsByActividadId(UUID actividadId);
+        List<CalificacionActividadEntity> findByEstudianteIdAndActividadIdIn(UUID estudianteId, List<UUID> actividadIds);
+    List<CalificacionActividadEntity> findByActividadIdIn(List<UUID> actividadIds);
 }

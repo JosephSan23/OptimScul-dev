@@ -46,17 +46,28 @@ public class ChatService {
     @Transactional(readOnly = true)
     public List<ResumenConversacion> listarConversaciones(UUID usuarioActual) {
         institucionDe(usuarioActual);
+        List<Conversacion> conversaciones = conversacionRepository.findAllDeUsuario(usuarioActual);
+        List<UUID> ids = conversaciones.stream().map(Conversacion::getId).toList();
+
+        // Batch: el ultimo mensaje de cada conversacion en UNA consulta (antes: una por conversacion).
+        Map<UUID, Mensaje> ultimoPorConv = new HashMap<>();
+        for (Mensaje m : mensajeRepository.findUltimosDeConversaciones(ids)) {
+            ultimoPorConv.put(m.getConversacionId(), m);
+        }
+        // Batch: los no leidos por conversacion en UNA consulta.
+        Map<UUID, Long> noLeidosPorConv = mensajeRepository.contarNoLeidosPorConversacion(ids, usuarioActual);
+
         List<ResumenConversacion> out = new ArrayList<>();
-        for (Conversacion c : conversacionRepository.findAllDeUsuario(usuarioActual)) {
+        for (Conversacion c : conversaciones) {
             UUID otro = c.interlocutorDe(usuarioActual);
-            Optional<Mensaje> ultimo = mensajeRepository.findUltimo(c.getId());
+            Mensaje ultimo = ultimoPorConv.get(c.getId());
             out.add(new ResumenConversacion(
                     c.getId(),
                     otro,
                     directorio.nombreCompleto(otro),
-                    ultimo.map(Mensaje::getContenido).orElse(null),
-                    ultimo.map(Mensaje::getCreatedAt).orElse(c.getUpdatedAt()),
-                    mensajeRepository.contarNoLeidos(c.getId(), usuarioActual)
+                    ultimo != null ? ultimo.getContenido() : null,
+                    ultimo != null ? ultimo.getCreatedAt() : c.getUpdatedAt(),
+                    noLeidosPorConv.getOrDefault(c.getId(), 0L)
             ));
         }
         out.sort(Comparator.comparing(ResumenConversacion::fecha,

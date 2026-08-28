@@ -1,0 +1,18 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Perfil "test" para las pruebas de INTEGRACIÓN (se activa junto con "dev").
+#
+# El esquema real (52 tablas + tipos enum de PostgreSQL) se carga en el contenedor
+# desde src/test/resources/db/base-schema.sql (volcado de la base con pg_dump).
+# Por eso aquí:
+#   - Flyway se apaga (el esquema ya viene del volcado, no de migraciones).
+#   - Hibernate NO valida ni genera esquema (ddl-auto: none): se limita a usar las
+#     tablas que ya existen.
+#
+# El resto (JWT, correo, almacenamiento, datasource → Testcontainers) lo aporta "dev".
+# ─────────────────────────────────────────────────────────────────────────────
+spring:
+  flyway:
+    enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: none

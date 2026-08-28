@@ -6,6 +6,8 @@ import backend.academic.infrastructure.persistence.ConfiguracionAcademicaJpaRepo
 import backend.academic.infrastructure.persistence.mapper.ConfiguracionAcademicaMapper;
 import org.springframework.stereotype.Component;
 
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,6 +24,7 @@ public class ConfiguracionAcademicaRepositoryAdapter implements ConfiguracionAca
     }
 
     @Override
+    @CacheEvict(cacheNames = "configAcademica", key = "#e.institucionId")
     public ConfiguracionAcademica save(ConfiguracionAcademica e) {
         return mapper.toDomain(jpa.save(mapper.toEntity(e)));
     }
@@ -42,6 +45,7 @@ public class ConfiguracionAcademicaRepositoryAdapter implements ConfiguracionAca
     }
 
     @Override
+    @Cacheable(cacheNames = "configAcademica", key = "#inst")
     public Optional<ConfiguracionAcademica> findByInstitucionId(UUID inst) {
         return jpa.findByInstitucionId(inst).map(mapper::toDomain);
     }

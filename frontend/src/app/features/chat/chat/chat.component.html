@@ -2,42 +2,64 @@
   <aside class="lista">
     <div class="lista-top">
       <h3>Mensajes</h3>
-      <button (click)="toggleContactos()">＋ Nuevo</button>
+      <button class="btn-nuevo" (click)="toggleContactos()">＋ Nuevo</button>
     </div>
 
     <div class="contactos" *ngIf="mostrarContactos">
       <div class="contacto" *ngFor="let c of contactos" (click)="iniciarCon(c)">
-        <span>{{ c.nombre }}</span>
-        <small>{{ c.rol }}</small>
+        <div class="mini-avatar">{{ iniciales(c.nombre) }}</div>
+        <div class="conv-body">
+          <span class="conv-nombre">{{ c.nombre }}</span>
+          <small class="conv-rol">{{ c.rol }}</small>
+        </div>
       </div>
     </div>
 
     <div class="conv" *ngFor="let c of conversaciones"
          [class.activa]="c.conversacionId === activa?.conversacionId"
          (click)="abrir(c)">
-      <div class="conv-nombre">
-        {{ c.interlocutorNombre }}
-        <span class="badge" *ngIf="c.noLeidos > 0">{{ c.noLeidos }}</span>
+      <div class="mini-avatar">{{ iniciales(c.interlocutorNombre) }}</div>
+      <div class="conv-body">
+        <div class="conv-row">
+          <span class="conv-nombre">{{ c.interlocutorNombre }}</span>
+        </div>
+        <div class="conv-ultimo">{{ c.ultimoMensaje || 'Sin mensajes' }}</div>
       </div>
-      <div class="conv-ultimo">{{ c.ultimoMensaje || 'Sin mensajes' }}</div>
+      <span class="badge" *ngIf="c.noLeidos > 0">{{ c.noLeidos }}</span>
     </div>
   </aside>
 
   <section class="hilo" *ngIf="activa; else vacio">
-    <header>{{ activa.interlocutorNombre }}</header>
+    <header class="hilo-head">
+      <div class="mini-avatar">{{ iniciales(activa.interlocutorNombre) }}</div>
+      <h4>{{ activa.interlocutorNombre }}</h4>
+    </header>
+
     <div class="mensajes">
-      <div class="msg" *ngFor="let m of mensajes" [class.mio]="esMio(m)">
-        <p>{{ m.contenido }}</p>
-        <small>{{ m.createdAt | date:'shortTime' }}</small>
-      </div>
+      <ng-container *ngFor="let m of mensajes; let i = index">
+        <div class="sep-fecha" *ngIf="mostrarFecha(i)">{{ etiquetaFecha(m) }}</div>
+        <div class="msg"
+             [class.mio]="esMio(m)"
+             [class.ellos]="!esMio(m)"
+             [class.seguido]="esSeguido(i)">
+          <span class="texto">{{ m.contenido }}</span>
+          <small class="hora" *ngIf="mostrarHora(i)">{{ m.createdAt | date:'shortTime' }}</small>
+        </div>
+      </ng-container>
     </div>
-    <footer>
+
+    <footer class="composer">
       <input [(ngModel)]="borrador" (keyup.enter)="enviar()" placeholder="Escribe un mensaje…" />
-      <button (click)="enviar()">Enviar</button>
+      <button class="btn-enviar" (click)="enviar()">Enviar</button>
     </footer>
   </section>
 
   <ng-template #vacio>
-    <section class="hilo vacio"><p>Selecciona una conversación</p></section>
+    <section class="hilo vacio">
+      <div class="vacio-box">
+        <div class="vacio-ico">💬</div>
+        <p>Selecciona una conversación</p>
+      </div>
+    </section>
   </ng-template>
 </div>

@@ -55,4 +55,17 @@ public class CalificacionActividadRepositoryAdapter implements CalificacionActiv
     public boolean existsByActividadId(UUID actividadId) {
         return jpa.existsByActividadId(actividadId);
     }
+
+    @Override
+    public List<CalificacionActividad> findByEstudianteIdAndActividadIdIn(UUID estudianteId, List<UUID> actividadIds) {
+        if (actividadIds == null || actividadIds.isEmpty()) return List.of();
+        return jpa.findByEstudianteIdAndActividadIdIn(estudianteId, actividadIds)
+                .stream().map(mapper::toDomain).toList();
+    }
+
+    @Override
+    public List<CalificacionActividad> findByActividadIdIn(List<UUID> actividadIds) {
+        if (actividadIds == null || actividadIds.isEmpty()) return List.of();
+        return jpa.findByActividadIdIn(actividadIds).stream().map(mapper::toDomain).toList();
+    }
 }

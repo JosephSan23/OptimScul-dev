@@ -65,6 +65,14 @@ import { EntregaActividadComponent } from './features/estudiante/actividades/ent
 import { ChatComponent } from './features/chat/chat/chat.component';
 import { PerfilComponent } from './features/perfil/perfil/perfil.component';
 
+// Dashboards de rol (componentes standalone)
+import { AdminPanelComponent } from './features/dashboard/paneles/admin-panel.component';
+import { CoordinadorPanelComponent } from './features/dashboard/paneles/coordinador-panel.component';
+import { DocentePanelComponent } from './features/dashboard/paneles/docente-panel.component';
+import { EstudiantePanelComponent } from './features/dashboard/paneles/estudiante-panel.component';
+import { AcudientePanelComponent } from './features/dashboard/paneles/acudiente-panel.component';
+import { InicioRedirectComponent } from './features/dashboard/inicio/inicio-redirect.component';
+
 
 const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -79,6 +87,7 @@ const routes: Routes = [
   component: LayoutComponent,
   canActivate: [authGuard],
   children: [
+    { path: '', component: InicioRedirectComponent, canActivate: [authGuard] },
     { path: 'perfil', component: PerfilComponent, canActivate: [authGuard] },
     { path: 'admin',          component: DashboardComponent,          canActivate: [roleGuard], data: { soloSuperAdmin: true } },
     { path: 'staff',       component: StaffListaComponent, canActivate: [roleGuard], data: { roles: ['ADMIN_INSTITUCION'] } },
@@ -140,9 +149,9 @@ const routes: Routes = [
     { path: 'solicitudes',    component: SolicitudesListaComponent,   canActivate: [roleGuard], data: { soloSuperAdmin: true } },
     { path: 'administradores',component: AdministradoresListaComponent, canActivate: [roleGuard], data: { soloSuperAdmin: true } },
 
-    { path: 'colegio',        component: DashboardComponent,          canActivate: [roleGuard], data: { roles: ['ADMIN_INSTITUCION'] } },
-    { path: 'cooracademico',      component: DashboardComponent,          canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO'] } },
-    { path: 'profesor',       component: DashboardComponent,          canActivate: [roleGuard], data: { roles: ['DOCENTE'] } },
+    { path: 'colegio',        component: AdminPanelComponent,         canActivate: [roleGuard], data: { roles: ['ADMIN_INSTITUCION'] } },
+    { path: 'cooracademico',      component: CoordinadorPanelComponent,   canActivate: [roleGuard], data: { roles: ['COORDINADOR_ACADEMICO'] } },
+    { path: 'profesor',       component: DocentePanelComponent,       canActivate: [roleGuard], data: { roles: ['DOCENTE'] } },
     { path: 'mis-clases',          component: MisClasesListComponent,   canActivate: [roleGuard], data: { roles: ['DOCENTE'] } },
     { path: 'mis-clases/:cargaId', component: ClaseDetalleComponent, canActivate: [roleGuard], data: { roles: ['DOCENTE'] } },
     { path: 'mis-clases/:cargaId/asistencia', component: AsistenciaComponent, canActivate: [roleGuard], data: { roles: ['DOCENTE'] } },
@@ -153,7 +162,7 @@ const routes: Routes = [
     { path: 'actividades/:id/calificar', component: CalificarComponent, canActivate: [roleGuard], data: { roles: ['DOCENTE'] } },
     { path: 'mis-clases/:cargaId/consolidado', component: ConsolidadoComponent, canActivate: [roleGuard], data: { roles: ['DOCENTE'] } },
 
-    { path: 'estudiante',     component: DashboardComponent,          canActivate: [roleGuard], data: { roles: ['ESTUDIANTE'] } },
+    { path: 'estudiante',     component: EstudiantePanelComponent,    canActivate: [roleGuard], data: { roles: ['ESTUDIANTE'] } },
     { path: 'estudiante/notas', component: MisNotasComponent, canActivate: [roleGuard], data: { roles: ['ESTUDIANTE'] } },
     { path: 'estudiante/horario',    component: MiHorarioComponent,    canActivate: [roleGuard], data: { roles: ['ESTUDIANTE'] } },
     { path: 'estudiante/asistencia', component: MiAsistenciaComponent, canActivate: [roleGuard], data: { roles: ['ESTUDIANTE'] } },
@@ -161,7 +170,7 @@ const routes: Routes = [
     { path: 'estudiante/actividades/:actividadId', component: EntregaActividadComponent, canActivate: [roleGuard], data: { roles: ['ESTUDIANTE'] } },
 
 
-    { path: 'acudiente',      component: DashboardComponent,          canActivate: [roleGuard], data: { roles: ['ACUDIENTE'] } },
+    { path: 'acudiente',      component: AcudientePanelComponent,     canActivate: [roleGuard], data: { roles: ['ACUDIENTE'] } },
     { path: 'acudiente/notas', component: NotasHijoComponent, canActivate: [roleGuard], data: { roles: ['ACUDIENTE'] } },
     { path: 'acudiente/horario',    component: HorarioHijoComponent,    canActivate: [roleGuard], data: { roles: ['ACUDIENTE'] } },
     { path: 'acudiente/asistencia', component: AsistenciaHijoComponent, canActivate: [roleGuard], data: { roles: ['ACUDIENTE'] } },

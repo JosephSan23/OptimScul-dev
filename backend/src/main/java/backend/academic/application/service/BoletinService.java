@@ -5,6 +5,7 @@ import backend.academic.application.port.*;
 import backend.academic.application.port.CargaAcademica.*;
 import backend.academic.application.usecase.actividad.calificacion.NotaFinalCalculator;
 import backend.academic.domain.model.ActividadAcademica;
+import backend.academic.domain.model.CalificacionActividad;
 import backend.academic.domain.model.ConfiguracionAcademica;
 import backend.enrollment.application.port.MatriculaRepository;
 import backend.enrollment.domain.model.Matricula;
@@ -83,16 +84,33 @@ public class BoletinService {
         String gradoNombre = cargas.isEmpty() ? null : cargas.get(0).getGradoNombre();
         String grupoNombre = cargas.isEmpty() ? null : cargas.get(0).getGrupoNombre();
 
-        List<MateriaNota> materias = new ArrayList<>();
+                List<MateriaNota> materias = new ArrayList<>();
         BigDecimal suma = BigDecimal.ZERO; int conNota = 0;
 
+        // 1) Traer las actividades de cada materia (una consulta por materia).
+        Map<UUID, List<ActividadAcademica>> actividadesPorCarga = new HashMap<>();
+        List<UUID> todasLasActividadesIds = new ArrayList<>();
         for (CargaResumen carga : cargas) {
             List<ActividadAcademica> acts = actividadRepo.findByCargaYPeriodo(carga.getId(), periodoId);
+            actividadesPorCarga.put(carga.getId(), acts);
+            for (ActividadAcademica a : acts) todasLasActividadesIds.add(a.getId());
+        }
+
+        // 2) Traer TODAS las calificaciones del estudiante en UNA sola consulta (adiós N+1).
+        Map<UUID, BigDecimal> notaPorActividad = new HashMap<>();
+        for (CalificacionActividad c : calificacionRepo.findByEstudianteIdAndActividadIdIn(estudianteId, todasLasActividadesIds)) {
+            if (c.getNotaObtenida() != null) {
+                notaPorActividad.put(c.getActividadId(), c.getNotaObtenida());
+            }
+        }
+
+        // 3) Calcular la nota final de cada materia usando datos ya en memoria.
+        for (CargaResumen carga : cargas) {
+            List<ActividadAcademica> acts = actividadesPorCarga.get(carga.getId());
             Map<UUID, Map<UUID, BigDecimal>> notas = new HashMap<>();
             for (ActividadAcademica a : acts) {
-                calificacionRepo.findByActividadIdAndEstudianteId(a.getId(), estudianteId)
-                        .filter(c -> c.getNotaObtenida() != null)
-                        .ifPresent(c -> notas.put(a.getId(), Map.of(estudianteId, c.getNotaObtenida())));
+                BigDecimal n = notaPorActividad.get(a.getId());
+                if (n != null) notas.put(a.getId(), Map.of(estudianteId, n));
             }
             NotaFinalCalculator.Resultado res = calculadora.calcular(acts, notas, estudianteId, cfg);
             BigDecimal notaFinal = res.notaFinal();

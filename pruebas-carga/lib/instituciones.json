@@ -1,0 +1,14 @@
+[
+  {
+    "nombre": "INST-A",
+    "anioId": "81587318-bcbf-4796-ae0b-2bfb0e61622f",
+    "periodoId": "55379b93-0fcc-4cb3-9744-6cb9afd8d7bd",
+    "usuarios": { "prefijo": "loadA-", "desde": 1, "hasta": 250, "pass": "Load1234" }
+  },
+  {
+    "nombre": "INST-B",
+    "anioId": "fa9a67bb-eee1-47e5-a0f6-3434b382a1df",
+    "periodoId": "289b1337-ac2f-4e03-825f-ade535971f44",
+    "usuarios": { "prefijo": "loadB-", "desde": 1, "hasta": 250, "pass": "Load1234" }
+  }
+]
