@@ -120,10 +120,10 @@ export class EscalaFormComponent implements OnInit {
     const body = {
       nombre: this.form.nombre,
       abreviatura: this.form.abreviatura,
-      notaMinima: this.form.notaMinima,
-      notaMaxima: this.form.notaMaxima,
+      notaMinima: this.form.notaMinima!,
+      notaMaxima: this.form.notaMaxima!,
       aprueba: this.form.aprueba,
-      orden: this.form.orden,
+      orden: this.form.orden!,
     };
     const p = this.modoEdicion
       ? this.escalaService.editar(this.escalaId!, body)
