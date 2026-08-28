@@ -1,0 +1,7 @@
+target/
+.git/
+.env
+.mvn/
+logs/
+*.md
+HELP.md
