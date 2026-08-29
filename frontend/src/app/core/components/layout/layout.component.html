@@ -50,12 +50,56 @@
     <header class="main-header">
       <div class="header-logo">
         <div class="school-logo"><i class="ti ti-building-community"></i></div>
-        <span class="school-name">Colegio<span class="accent"> San José</span></span>
+        <span class="school-name">{{ nombreInstitucion }}</span>
       </div>
 
-      <div class="search-bar">
-        <input type="text" placeholder="Buscar alumnos, cursos...">
+      <div class="search-bar" *ngIf="puedeBuscar" (click)="$event.stopPropagation()">
+        <input type="text" placeholder="Buscar alumnos, cursos..."
+               [(ngModel)]="terminoBusqueda" [ngModelOptions]="{ standalone: true }"
+               (ngModelChange)="onBuscar($event)"
+               (focus)="resultados && (panelBusquedaAbierto = true)">
         <button class="search-btn"><i class="ti ti-search"></i></button>
+
+        <div class="search-results" [class.active]="panelBusquedaAbierto">
+          <div class="sr-loading" *ngIf="buscando">Buscando…</div>
+
+          <ng-container *ngIf="!buscando && resultados as r">
+            <div class="sr-group" *ngIf="r.estudiantes.length">
+              <div class="sr-title">Estudiantes</div>
+              <div class="sr-item" *ngFor="let e of r.estudiantes" (click)="irAEstudiante(e.id)">
+                <i class="ti ti-user"></i>
+                <div class="sr-item-body">
+                  <span class="sr-item-name">{{ e.nombre }}</span>
+                  <small>{{ e.codigo }}<span *ngIf="e.documento"> · {{ e.documento }}</span></small>
+                </div>
+              </div>
+            </div>
+
+            <div class="sr-group" *ngIf="r.personal.length">
+              <div class="sr-title">Personal</div>
+              <div class="sr-item" *ngFor="let s of r.personal" (click)="irAPersonal(s.id)">
+                <i class="ti ti-briefcase"></i>
+                <div class="sr-item-body">
+                  <span class="sr-item-name">{{ s.nombre }}</span>
+                  <small>{{ s.rol }}<span *ngIf="s.documento"> · {{ s.documento }}</span></small>
+                </div>
+              </div>
+            </div>
+
+            <div class="sr-group" *ngIf="r.asignaturas.length">
+              <div class="sr-title">Asignaturas</div>
+              <div class="sr-item" *ngFor="let a of r.asignaturas" (click)="irAAsignatura(a.id)">
+                <i class="ti ti-book-2"></i>
+                <div class="sr-item-body">
+                  <span class="sr-item-name">{{ a.nombre }}</span>
+                  <small>{{ a.codigo }}</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="sr-vacio" *ngIf="!hayResultados">Sin resultados para “{{ terminoBusqueda }}”</div>
+          </ng-container>
+        </div>
       </div>
 
       <div class="header-right">

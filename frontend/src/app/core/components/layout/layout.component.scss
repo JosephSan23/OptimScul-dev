@@ -314,6 +314,7 @@
 
 /* Buscador */
 .search-bar {
+  position: relative;
   display: flex;
   align-items: center;
   background-color: var(--cream);
@@ -357,6 +358,88 @@
 
 .search-btn:hover {
   background-color: var(--orange-600);
+}
+
+/* Dropdown de resultados del buscador */
+.search-results {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  right: 0;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  box-shadow: var(--shadow-2);
+  padding: 6px;
+  max-height: 380px;
+  overflow-y: auto;
+  z-index: 50;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity .18s ease, transform .18s ease, visibility .18s;
+
+  &.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .sr-loading,
+  .sr-vacio {
+    padding: 14px 12px;
+    color: var(--ink-soft);
+    font-size: .85rem;
+    text-align: center;
+  }
+
+  .sr-group + .sr-group { border-top: 1px solid var(--line-soft); margin-top: 4px; padding-top: 4px; }
+
+  .sr-title {
+    font-size: .72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: var(--ink-soft);
+    padding: 8px 12px 4px;
+  }
+
+  .sr-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background .15s ease;
+
+    &:hover { background: var(--cream); }
+
+    i {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      background: var(--orange-100);
+      color: var(--orange-600);
+      font-size: 16px;
+    }
+
+    .sr-item-body { display: flex; flex-direction: column; min-width: 0; }
+    .sr-item-name {
+      font-weight: 600;
+      color: var(--navy-900);
+      font-size: .9rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    small { color: var(--ink-soft); font-size: .76rem; }
+  }
 }
 
 /* Derecha del header */

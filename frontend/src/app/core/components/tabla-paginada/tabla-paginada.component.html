@@ -45,8 +45,11 @@
     <button type="button" (click)="irA(paginaActual - 1)" [disabled]="paginaActual === 1">
       <i class="ti ti-chevron-left"></i>
     </button>
-    <button type="button" *ngFor="let p of paginasVisibles"
-            (click)="irA(p)" [class.activo]="p === paginaActual">{{ p }}</button>
+    <ng-container *ngFor="let p of paginasVisibles">
+      <button type="button" *ngIf="esNumero(p); else elipsis"
+              (click)="irA(p)" [class.activo]="p === paginaActual">{{ p }}</button>
+      <ng-template #elipsis><span class="paginador-elipsis">{{ p }}</span></ng-template>
+    </ng-container>
     <button type="button" (click)="irA(paginaActual + 1)" [disabled]="paginaActual === totalPaginas">
       <i class="ti ti-chevron-right"></i>
     </button>
