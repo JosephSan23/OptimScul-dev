@@ -102,8 +102,39 @@ export class TablaPaginadaComponent implements OnChanges {
     return this.filtrados.slice(inicio, inicio + this.tamanoPagina);
   }
 
-  get paginasVisibles(): number[] {
-    return Array.from({ length: this.totalPaginas }, (_, i) => i + 1);
+  /** Símbolo de elipsis usado como separador (no navegable). */
+  readonly ELIPSIS = '…';
+
+  /**
+   * Páginas a mostrar con ventana deslizante:
+   * siempre la 1 y la última, la actual con sus vecinos, y '…' en los huecos.
+   * Evita pintar decenas de botones cuando hay muchas páginas.
+   */
+  get paginasVisibles(): (number | string)[] {
+    const total = this.totalPaginas;
+    const actual = this.paginaActual;
+    const vecinos = 1; // páginas a cada lado de la actual
+
+    // Pocas páginas: se muestran todas sin elipsis.
+    if (total <= 7) {
+      return Array.from({ length: total }, (_, i) => i + 1);
+    }
+
+    const paginas: (number | string)[] = [];
+    const inicio = Math.max(2, actual - vecinos);
+    const fin = Math.min(total - 1, actual + vecinos);
+
+    paginas.push(1);
+    if (inicio > 2) paginas.push(this.ELIPSIS);
+    for (let i = inicio; i <= fin; i++) paginas.push(i);
+    if (fin < total - 1) paginas.push(this.ELIPSIS);
+    paginas.push(total);
+
+    return paginas;
+  }
+
+  esNumero(p: number | string): p is number {
+    return typeof p === 'number';
   }
 
   get desde(): number {

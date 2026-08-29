@@ -4,6 +4,9 @@ import { AuthService } from '../../services/auth.service';
 import { NotificacionService } from '../../services/notificacion.service';
 import { ChatSocketService } from '../../services/chat-socket.service';
 import { PerfilService } from '../../services/perfil.service';
+import { Subject, of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
+import { BusquedaService, ResultadoBusqueda } from '../../services/busqueda.service';
 
 @Component({
   selector: 'app-layout',
@@ -20,10 +23,42 @@ export class LayoutComponent {
   panelNotisAbierto = false;
   mostrarCambioPassword = false;
 
-  constructor(private authService: AuthService, private notis: NotificacionService, private socket: ChatSocketService, private router: Router, private perfilService: PerfilService) {}
+  // --- Cabecera: nombre del colegio ---
+  nombreInstitucion = '';
+
+  // --- Buscador global ---
+  terminoBusqueda = '';
+  resultados: ResultadoBusqueda | null = null;
+  panelBusquedaAbierto = false;
+  buscando = false;
+  private busqueda$ = new Subject<string>();
+
+  constructor(private authService: AuthService, private notis: NotificacionService, private socket: ChatSocketService, private router: Router, private perfilService: PerfilService, private busquedaService: BusquedaService) {}
 
   ngOnInit(): void {
     this.notis.contador().subscribe(r => this.noLeidas = r.noLeidas);
+
+    // Nombre del colegio del usuario logueado (cae en silencio si falla)
+    this.busquedaService.miInstitucion().subscribe({
+      next: i => this.nombreInstitucion = i.nombreCorto || i.nombre,
+      error: () => {}
+    });
+
+    // Buscador con debounce: espera a que el usuario deje de escribir
+    this.busqueda$.pipe(
+      debounceTime(250),
+      distinctUntilChanged(),
+      switchMap(q => {
+        const t = q.trim();
+        if (t.length < 2) { this.panelBusquedaAbierto = false; return of<ResultadoBusqueda | null>(null); }
+        this.buscando = true;
+        return this.busquedaService.buscar(t).pipe(catchError(() => of<ResultadoBusqueda | null>(null)));
+      })
+    ).subscribe(res => {
+      this.buscando = false;
+      this.resultados = res;
+      this.panelBusquedaAbierto = res != null;
+    });
     this.socket.conectar();
     this.socket.notificaciones.subscribe(n => {
       this.notificaciones.unshift(n);
@@ -100,6 +135,45 @@ export class LayoutComponent {
   cerrarDropdown(): void {
     this.dropdownAbierto = false;
     this.panelNotisAbierto = false;
+    this.panelBusquedaAbierto = false;
+  }
+
+  // --- Buscador ---
+  onBuscar(termino: string): void {
+    this.busqueda$.next(termino);
+  }
+
+  get hayResultados(): boolean {
+    return !!this.resultados &&
+      (this.resultados.estudiantes.length > 0 ||
+       this.resultados.personal.length > 0 ||
+       this.resultados.asignaturas.length > 0);
+  }
+
+  /** El buscador solo está disponible para quienes gestionan estudiantes/asignaturas. */
+  get puedeBuscar(): boolean {
+    return this.enModo('COORDINADOR_ACADEMICO') || this.enModo('ADMIN_INSTITUCION');
+  }
+
+  irAEstudiante(id: string): void {
+    this.cerrarBusqueda();
+    this.router.navigate(['/dashboard/estudiantes', id]);
+  }
+
+  irAPersonal(id: string): void {
+    this.cerrarBusqueda();
+    this.router.navigate(['/dashboard/staff', id]);
+  }
+
+  irAAsignatura(id: string): void {
+    this.cerrarBusqueda();
+    this.router.navigate(['/dashboard/asignaturas', id]);
+  }
+
+  cerrarBusqueda(): void {
+    this.panelBusquedaAbierto = false;
+    this.terminoBusqueda = '';
+    this.resultados = null;
   }
 
   cerrarSesion(): void {

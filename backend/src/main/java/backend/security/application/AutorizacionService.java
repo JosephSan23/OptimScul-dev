@@ -60,6 +60,15 @@ public class AutorizacionService {
         }
     }
 
+    /** Institución principal del usuario autenticado, SIN exigir un rol concreto.
+        Sirve para datos de cabecera (nombre del colegio, búsqueda) accesibles a cualquier miembro. */
+    public UUID institucionActual(UUID usuarioId) {
+        return usuarioInstitucionRepository.findByUsuarioId(usuarioId).stream()
+                .filter(v -> Boolean.TRUE.equals(v.getEsPrincipal()))
+                .findFirst().map(UsuarioInstitucion::getInstitucionId)
+                .orElseThrow(() -> new SecurityException("No perteneces a ninguna institución."));
+    }
+
     public UUID institucionDelAdmin(UUID adminId) {
         return institucionConRol(adminId, "ADMIN_INSTITUCION");
     }

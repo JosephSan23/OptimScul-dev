@@ -55,3 +55,20 @@ logs/
 *.temp
 *.bak
 *.swp
+# ─── CERTIFICADOS / CLAVES TLS (NUNCA subir claves privadas) ──────────────────
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+infra/nginx/certs/
+
+# ─── BACKUPS / DUMPS DE BASE DE DATOS (contienen hashes y datos personales) ───
+# OJO: no ignoramos *.sql en general para NO excluir las migraciones Flyway
+# (backend/src/main/resources/db/migration/*.sql deben versionarse).
+*_backup.sql
+*_dump.sql
+optimscul_backup.sql
+*.dump
+*.sql.gz
+backups/

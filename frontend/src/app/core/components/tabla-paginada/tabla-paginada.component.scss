@@ -177,7 +177,20 @@
 
   .paginador-botones {
     display: flex;
+    flex-wrap: wrap;            /* red de seguridad: nunca desborda horizontalmente */
+    justify-content: flex-end;
     gap: .35rem;
+
+    .paginador-elipsis {
+      min-width: 34px;
+      height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink-soft);
+      font-weight: 700;
+      user-select: none;
+    }
 
     button {
       min-width: 34px;
